@@ -1,0 +1,8 @@
+fileignoreconfig:
+- filename: js/chunk-vendors.deabd1cd.js
+  checksum: 69ca2db96b42bbc2bfc304031f1d6fda68a67b2a68d5a0217daf26e917a48e50
+  ignore_detectors: []
+- filename: js/chunk-vendors.deabd1cd.js.map
+  checksum: 9bf58e25884f40c8928423be6b008f65160e022baddc88afddb1fa91c3d6df4d
+  ignore_detectors: []
+scopeconfig: []
