@@ -20,15 +20,24 @@ jobs:
       uses: CultureHQ/actions-yarn@master
       with:
         args: build
-    - name: Deploy to Server
-      uses: easingthemes/ssh-deploy@v2.0.2
-      env:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          ARGS: "-rltgoDzvO --dry-run" # "--delete"
-          SOURCE: "dist/"
-          REMOTE_HOST: crisis.app
-          REMOTE_USER: ${{ secrets.FTP_USERNAME }}
-          TARGET: "/var/www/crisis.app/"
+    - name: Copy via ssh
+      uses: garygrossgarten/github-action-scp@v0.5.3
+      with:
+        local: dist/
+        remote: /var/www/crisis.app/
+        host: crisis.app
+        username: ${{ secrets.FTP_USERNAME }}
+        privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+        passphrase: ${{ secrets. DEPLOY_KEY_PASSWORD }}
+#     - name: Deploy to Server
+#       uses: easingthemes/ssh-deploy@v2.0.2
+#       env:
+#           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+#           ARGS: "-rltgoDzvO --dry-run" # "--delete"
+#           SOURCE: "dist/"
+#           REMOTE_HOST: crisis.app
+#           REMOTE_USER: ${{ secrets.FTP_USERNAME }}
+#           TARGET: "/var/www/crisis.app/"
 #     - name: Install SSH key
 #       uses: shimataro/ssh-key-action@v1
 #       with:
