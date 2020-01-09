@@ -1,8 +1,16 @@
-# crisis-app-demo
+# Crisis App
 
 ## Project setup
 ```
 yarn install
+```
+
+## Setup Database
+
+```bash
+cd sql
+INGESTOR_SQL_PASS="foo" CRISISAPP_SQL_PASS="bar" ./populate_setup.sh
+mysql -u root setup.sql
 ```
 
 ### Compiles and hot-reloads for development

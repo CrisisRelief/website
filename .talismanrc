@@ -5,3 +5,7 @@ fileignoreconfig:
 - filename: sql/setup.sql
   checksum: efc9491899fccc89ad997459594b495fcbe735c29ea336350d3f2619eeaf335e
   ignore_detectors: []
+- filename: README.md
+  checksum: 7ce0135cc8587fd6a3437e2f710aadba8adee8c41bf5a350dc8ee3885bc3d1ad
+  ignore_detectors: []
+scopeconfig: [node]
