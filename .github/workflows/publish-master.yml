@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - run: cd crisis-app-demo
+    - name: Install
+      uses: CultureHQ/actions-yarn@master
+      with:
+        args: install
+    - name: list dir
+      run: |
+        pwd
+        ls -alR
+    - name: Build
+      uses: CultureHQ/actions-yarn@master
+      with:
+        args: build
