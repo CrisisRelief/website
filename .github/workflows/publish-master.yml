@@ -16,11 +16,18 @@ jobs:
       uses: CultureHQ/actions-yarn@master
       with:
         args: install
-    - name: list dir
-      run: |
-        pwd
-        ls -alR
     - name: Build
       uses: CultureHQ/actions-yarn@master
       with:
         args: build
+    - name: Deploy by FTP
+      uses: SamKirkland/FTP-Deploy-Action@2.0.0
+      env:
+        FTP_SERVER: crisis.app
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        METHOD: ftp
+        LOCAL_DIR: dist
+        REMOTE_DIR: /var/www/crisis.app
+        ARGS: --dry-run
+#         ARGS: --delete
