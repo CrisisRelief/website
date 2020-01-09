@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: 
+    branches:
       - master
 
 jobs:
@@ -12,7 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - run: cd crisis-app-demo
     - name: Install
       uses: CultureHQ/actions-yarn@master
       with:
