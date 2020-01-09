@@ -20,14 +20,28 @@ jobs:
       uses: CultureHQ/actions-yarn@master
       with:
         args: build
-    - name: Deploy by FTP
-      uses: SamKirkland/FTP-Deploy-Action@2.0.0
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@v2.0.2
       env:
-        FTP_SERVER: crisis.app
-        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        METHOD: ftp
-        LOCAL_DIR: dist
-        REMOTE_DIR: /var/www/crisis.app
-        ARGS: --dry-run
-#         ARGS: --delete
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          ARGS: "-rltgoDzvO --dry-run" # "--delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: crisis.app
+          REMOTE_USER: ${{ secrets.FTP_USERNAME }}
+          TARGET: "/var/www/crisis.app/"
+#     - name: Install SSH key
+#       uses: shimataro/ssh-key-action@v1
+#       with:
+#         private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+#         public-key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+#         name: id_rsa # optional
+#     - name: Deploy by FTP
+#       uses: SamKirkland/FTP-Deploy-Action@2.0.0
+#       env:
+#         FTP_SERVER: crisis.app
+#         FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+#         METHOD: ftp
+#         LOCAL_DIR: dist
+#         REMOTE_DIR: /var/www/crisis.app
+#         ARGS: --dry-run --
+# #         ARGS: --delete
