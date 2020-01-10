@@ -45,7 +45,7 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap");
 
-body {
+body div {
   text-align: left;
   color: #1b2a49; /* Navy */
   font-size: 14px;
@@ -66,7 +66,7 @@ body {
   font-size: large;
 }
 
-a {
+body a {
   color: #02909e; /* Turquoise */
 }
 </style>
