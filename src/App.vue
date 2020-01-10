@@ -36,7 +36,7 @@ export default {
     };
   },
   mounted() {
-    this.results = require('./assets/organisations.json')
+    this.results = require('../public/organisations.json')
   }
 };
 </script>
