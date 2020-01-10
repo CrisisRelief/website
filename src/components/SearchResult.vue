@@ -22,7 +22,7 @@
           {{ value }}
         </a>
         <a v-if="key == 'website'" :href="value">
-          <FontAwesomeIcon icon="address-card" />Visit Website
+          <FontAwesomeIcon icon="address-card" /> Visit Website
         </a>
         <a v-if="key == 'email'" :href="`mailto:${ value }`">
           <FontAwesomeIcon icon="envelope-square" />
