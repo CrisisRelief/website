@@ -8,7 +8,7 @@
       In a natural disaster emergency, we help you find the help you need, or find where and how you can help.
     </p>
     
-    <div class="alert alert-primary w-100" role="alert">
+    <div style="text-align:center" class="alert alert-primary w-100" role="alert">
         This website is still under active development, go-live should only be a few hours away &lt;3
     </div>
     
