@@ -111,11 +111,11 @@ export default {
     color:#fff;
     margin:0 0 15px 0;
 }
-.search.form .form-item {
+.search.form .form-item, .search.form .form-submit {
     margin-bottom:15px;
     padding:0;
 }
-.search.form .form-item + .form-item {
+.search.form .form-item + .form-item, .search.form .form-item +.form-submit {
     margin-left: 15px;
 }
 .multiselect__option--highlight:after {
@@ -123,5 +123,10 @@ export default {
 }
 .multiselect__option--highlight {
   background: #02909e !important;
+}
+@media screen and (max-width:767px) {
+    .search.form .form-item + .form-item, .search.form .form-item +.form-submit {
+        margin-left: 0;
+    }
 }
 </style>
