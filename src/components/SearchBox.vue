@@ -18,7 +18,9 @@
               placeholder="What do you need? eg. food, fuel"
             />
           </div>
+        </div>
 
+        <div class="row no-gutter">
           <!-- LGA Selection -->
           <div class="col-12 col-sm-4 form-item">
             <multiselect v-model="search_lga" :options="search_lgas" label="name" track-by="value" />
@@ -35,7 +37,7 @@
           </div>
 
           <!-- Submit Button -->
-          <div class="col-12 col-sm-3">
+          <div class="col-12 col-sm-3 form-submit">
             <button type="button" class="btn btn-info">Search</button>
           </div>
         </div>
@@ -95,22 +97,26 @@ export default {
     margin:0;
 }
 .form-control {
-  height: 3em !important;
+  height: 43px !important;
 }
 .btn-info {
   width: 100%;
-  height: 100%;
+  height: 43px;
 }
 .search.form {
   background-color: #384b71;
-  padding:15px 15px 30px 15px;
+  padding:10px 15px;
 }
 .search.form h3 {
+    color:#fff;
     margin:0 0 15px 0;
 }
 .search.form .form-item {
     margin-bottom:15px;
     padding:0;
+}
+.search.form .form-item + .form-item {
+    margin-left: 15px;
 }
 .multiselect__option--highlight:after {
   background: #02909e !important;

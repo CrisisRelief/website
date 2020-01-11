@@ -28,9 +28,9 @@
           <FontAwesomeIcon icon="envelope-square" />
           {{ value }}
         </a>
-        <a v-if="key == 'address'" href="#">
-          <FontAwesomeIcon icon="directions" />
-          {{ value }}
+        <a v-if="key == 'address'" href="{{ value }}">
+          <FontAwesomeIcon icon="directions" /> Get Directions
+          
         </a>
       </div>
     </div>
@@ -84,5 +84,6 @@ h1 {
 .search-result-meta,
 .search-result-contact {
   font-weight: 600; /* semibold */
+  word-wrap: break-word;
 }
 </style>
