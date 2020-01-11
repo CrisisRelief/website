@@ -124,7 +124,7 @@ export default {
 .multiselect__option--highlight {
   background: #02909e !important;
 }
-@media screen and (max-width:767px) {
+@media screen and (max-width:575px) {
     .search.form .form-item + .form-item, .search.form .form-item +.form-submit {
         margin-left: 0;
     }
