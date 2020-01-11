@@ -1,20 +1,27 @@
 <template>
   <div id="app">
     <Header />
-    <SearchBox />
-    <div id="results">
-      <span id="hits">15 organisations</span>
-      <SearchResult
-        v-for="(result, index) in results"
-        :key="index"
-        :title="result.title"
-        :categories="result.categories"
-        :location="result.location"
-        :description="result.description"
-        :contact="result.contact"
-        :link="result.link"
-      />
+    <div class="content-wrap">
+      <SearchBox />
+      <div id="results">
+        <span id="hits">15 organisations</span>
+        <SearchResult
+          v-for="(result, index) in results"
+          :key="index"
+          :title="result.title"
+          :category="result.category"
+          :category_sub="result.category_sub"
+          :category_sub_sub="result.category_sub_sub"
+          :location="result.location"
+          :description="result.description"
+          :phone="result.phone"
+          :email="result.email"
+          :address="result.address"
+          :link="result.link"
+        />
+      </div>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -22,51 +29,30 @@
 import SearchResult from "./components/SearchResult.vue";
 import Header from "./components/Header.vue";
 import SearchBox from "./components/SearchBox.vue";
+import Footer from "./components/Footer.vue";
+import axios from "axios";
 
 export default {
   name: "app",
   components: {
     SearchResult,
     Header,
-    SearchBox
+    SearchBox,
+    Footer
   },
   data() {
     return {
-      results: [
-        {
-          title: "Animal Collective Rescue",
-          categories: ["Animals", "Boarding", "All"],
-          location: "Anywhere",
-          description:
-            "This is a joint project of many rescue groups around Australia and is a registered business name as part of the MKC.",
-          contact: {
-            phone: "(02) 6351 4515",
-            email: "info@ausecosystems.org.au",
-            address: "NSW, ARFCG, 1/382-384 Mowbray Rd, Lane Cove NSW 2066"
-          },
-          link: "#"
-        },
-        {
-          title: "Guzman Y Gomez",
-          categories: ["General assistance", "Food/drinks"],
-          location: "Anywhere",
-          description:
-            "GYG would like to invite all RFS volunteers and emergency workers, and their families to any GYG nationally on 18-19 january to have a burrito on us.",
-          contact: {
-            website: "#"
-          },
-          link: "#"
-        },
-        {
-          title: "Legal Aid NSW",
-          categories: ["General assistance", "Legal"],
-          location: "Anywhere",
-          contact: {
-            phone: "(02) 6351 4515"
-          }
-        }
-      ]
+      results: [],
+      protUrl: "https://crisis.app/"
     };
+  },
+  mounted() {
+    this.results = [];
+    axios.get(this.protUrl + "json/organisations.json").then(response => {
+      /* eslint no-console: ["error", { allow: ["log"] }] */
+      console.log(response);
+      this.results = response.data;
+    });
   }
 };
 </script>
@@ -75,16 +61,23 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap");
 
-body {
+body div {
   text-align: left;
   color: #1b2a49; /* Navy */
   font-size: 14px;
+}
+
+.content-wrap {
+  padding-bottom: 2.5rem;
 }
 
 #app {
   font-family: "Source Sans Pro", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  position: relative;
+  min-height: 100vh;
 }
 
 #results {
@@ -96,7 +89,7 @@ body {
   font-size: large;
 }
 
-a {
+body a {
   color: #02909e; /* Turquoise */
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="search-result-container">
     <hr />
-    <a v-if="link.length > 0" href="link">
+    <a v-if="link.length > 0" :href="link">
       <h1>{{ title }}</h1>
     </a>
     <h1 v-else>{{ title }}</h1>
@@ -22,7 +22,7 @@
           {{ value }}
         </a>
         <a v-if="key == 'website'" :href="value">
-          <FontAwesomeIcon icon="address-card" />Visit Website
+          <FontAwesomeIcon icon="address-card" /> Visit Website
         </a>
         <a v-if="key == 'email'" :href="`mailto:${ value }`">
           <FontAwesomeIcon icon="envelope-square" />
@@ -43,20 +43,38 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 export default {
   props: {
     title: {},
-    categories: {},
+    category: {},
+    category_sub: {},
+    category_sub_sub: {},
     location: {},
     description: {},
-    contact: {},
+    phone: {},
+    email: {},
+    address: {},
     link: {
       default: ""
     }
   },
-  components: { FontAwesomeIcon }
+  components: { FontAwesomeIcon },
+  computed: {
+    categories() {
+      return [this.category, this.category_sub, this.category_sub_sub].filter(
+        (elem) => {
+          return elem !== undefined && elem.length > 0;
+        }
+      );
+    },
+    contact() {
+      return ["phone", "email", "address"].reduce((contact, attr) => {
+        if(this[attr]) {contact[attr] = this[attr]}
+        return contact;
+      }, {});
+    }
+  }
 };
 </script>
 
 <style scoped>
-
 h1 {
   font-size: 20px;
   font-weight: 600; /* semibold */
