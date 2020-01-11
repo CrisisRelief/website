@@ -1,7 +1,7 @@
 <template>
   <div class="search-result-container">
     <hr />
-    <a v-if="link.length > 0" href="link">
+    <a v-if="link.length > 0" :href="link">
       <h1>{{ title }}</h1>
     </a>
     <h1 v-else>{{ title }}</h1>
