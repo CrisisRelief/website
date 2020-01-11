@@ -38,3 +38,13 @@ yarn run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Contributing
+
+- Please pick a card from the current sprint in [JIRA](https://firemap.atlassian.net/secure/RapidBoard.jspa?rapidView=3&projectKey=CAD&view=planning&issueLimit=100).
+- If you create a new ticket in JIRA and it's a development ticket, remember to set the `development` label.
+- We are doing [feature branching](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) so your branch name should be `CAD-XX`
+- Commit messages should ideally be `[CAD-XX][<NAME>]<GITMOJI> what you did`. E.g.: `[CAD-66][Derwent] 🚲 Bye, SQL!`
+- When you've submitted a PR, set the status of the ticket to `Review` and ask for a reviewer
+- When someone has merged the PR into master, check that it passes all of the tests in [the pipeline](https://github.com/CrisisRelief/website/actions) and deploys to prod.
+- Only then, can you set it to done.
