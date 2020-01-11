@@ -9,8 +9,11 @@ To run this project locally first you will need to install:
 ## Project setup
 
 Set the FontAwesome Pro key before installing for the first time, (or you'll get a 402 error)
+
+Get the FontAwesome Pro Key from here: https://firemap.atlassian.net/wiki/spaces/DC/pages/edit-v2/7045831?draftShareId=e185a770-7c3d-446e-9a02-9c3a411ed114
+
 ```
-export FONTAWESOME_NPM_AUTH_TOKEN=[value from Slack Dev chan]
+export FONTAWESOME_NPM_AUTH_TOKEN=XXX
 yarn install
 ```
 
