@@ -14,7 +14,7 @@ CREATE TABLE Organizations (
     contact_number TEXT,
     link TEXT
 );
-CREATE USER 'ingestor'@'localhost' IDENTIFIED BY '##INGESTOR-SQL-PASS##';
+CREATE USER 'ingestor'@'localhost' IDENTIFIED BY 'foo';
 GRANT DELETE, INSERT, UPDATE ON Directory.Organizations TO 'crisisapp'@'localhost';
-CREATE USER 'crisisapp'@'localhost' IDENTIFIED BY '##CRISISAPP-SQL-PASS##';
+CREATE USER 'crisisapp'@'localhost' IDENTIFIED BY 'bar';
 GRANT SELECT ON Directory.Organizations TO 'crisisapp'@'localhost';

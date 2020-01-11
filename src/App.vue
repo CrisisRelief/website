@@ -1,20 +1,23 @@
 <template>
   <div id="app">
     <Header />
-    <SearchBox />
-    <div id="results">
-      <span id="hits">15 organisations</span>
-      <SearchResult
-        v-for="(result, index) in results"
-        :key="index"
-        :title="result.title"
-        :categories="result.categories"
-        :location="result.location"
-        :description="result.description"
-        :contact="result.contact"
-        :link="result.link"
-      />
+    <div class="content-wrap">
+      <SearchBox />
+      <div id="results">
+        <span id="hits">15 organisations</span>
+        <SearchResult
+          v-for="(result, index) in results"
+          :key="index"
+          :title="result.title"
+          :categories="result.categories"
+          :location="result.location"
+          :description="result.description"
+          :contact="result.contact"
+          :link="result.link"
+        />
+      </div>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -22,13 +25,15 @@
 import SearchResult from "./components/SearchResult.vue";
 import Header from "./components/Header.vue";
 import SearchBox from "./components/SearchBox.vue";
+import Footer from "./components/Footer.vue";
 
 export default {
   name: "app",
   components: {
     SearchResult,
     Header,
-    SearchBox
+    SearchBox,
+    Footer
   },
   data() {
     return {
@@ -36,7 +41,7 @@ export default {
     };
   },
   mounted() {
-    this.results = require('../public/organisations.json')
+    this.results = require("../public/organisations.json");
   }
 };
 </script>
@@ -51,10 +56,17 @@ body div {
   font-size: 14px;
 }
 
+.content-wrap {
+  padding-bottom: 2.5rem;
+}
+
 #app {
   font-family: "Source Sans Pro", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  position: relative;
+  min-height: 100vh;
 }
 
 #results {

@@ -3,33 +3,34 @@ import App from './App.vue'
 import BootstrapVue from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-    faQuestionCircle,
-    faPeopleCarry,
-    faUsers,
-    faShuttleVan,
-    faLocationArrow,
-    faArrowLeft,
-    faArrowRight,
-    faTint,
-    faFireAlt,
-    faListUl,
-    faMap,
-    faBars,
-    faExternalLinkAlt,
-    faPhoneSquareAlt,
-    faEnvelopeSquare,
-    faDirections,
-    faAddressCard
+  faQuestionCircle,
+  faPeopleCarry,
+  faUsers,
+  faShuttleVan,
+  faLocationArrow,
+  faArrowLeft,
+  faArrowRight,
+  faTint,
+  faHeart,
+  faFireAlt,
+  faListUl,
+  faMap,
+  faBars,
+  faExternalLinkAlt,
+  faPhoneSquareAlt,
+  faEnvelopeSquare,
+  faDirections,
+  faAddressCard
 } from '@fortawesome/free-solid-svg-icons'
 import {
-    faUsdCircle,
-    faHomeHeart,
-    faBedEmpty,
-    faPawAlt,
-    faBoxHeart,
-    faHandHeart,
-    faCars,
-    faArrowToRight
+  faUsdCircle,
+  faHomeHeart,
+  faBedEmpty,
+  faPawAlt,
+  faBoxHeart,
+  faHandHeart,
+  faCars,
+  faArrowToRight
 } from '@fortawesome/pro-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -44,6 +45,7 @@ library.add(faBoxHeart)
 library.add(faPeopleCarry)
 library.add(faUsers)
 library.add(faHandHeart)
+library.add(faHeart)
 library.add(faCars)
 library.add(faShuttleVan)
 library.add(faArrowToRight)
