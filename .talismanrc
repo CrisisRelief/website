@@ -12,7 +12,7 @@ fileignoreconfig:
   checksum: 45ba8fbba02158e2b6358aa2fb44ea9b2991ecf7efba5417c2a63785e2e12a8e
   ignore_detectors: []
 - filename: yarn.lock
-  checksum: a34f9cb39bf1e1a041ae54d7fc7573744888a59d7d31176fad897d18489d053a
+  checksum: de5c397679a76e5646b2167947a1ec3ad6e89495b782fd2a3f1dc2bff6983477
   ignore_detectors: []
 - filename: .github/workflows/publish-master.yml
   checksum: 8e0965ae2b8f3626c3e0d977ade7424bfa6b9d4acecf487b39586dde9a94baeb

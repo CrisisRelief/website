@@ -12,10 +12,11 @@ Set the FontAwesome Pro key before installing for the first time, (or you'll get
 
 Get the FontAwesome Pro Key from here: https://firemap.atlassian.net/wiki/spaces/DC/pages/7045831/FontAwesome+Pro+Key
 
-```
+```bash
 export FONTAWESOME_NPM_AUTH_TOKEN=XXX
 scripts/set_the_bloody_fa_pro_key.sh
 yarn install
+git checkout -- .npmrc # to reset npmrc so you don't commit it
 ```
 
 Note: this is Derwent's key who has a license, just don't share this elsewhere or make this repo public. (oh shit it's public, oh well.)
