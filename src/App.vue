@@ -107,7 +107,6 @@ function sortResultsByDistance(results, regionCoords, ourLocation) {
     const [coordA, coordB] = [resultCoord(a), resultCoord(b)];
     // TODO some sensible strategy for dealing with location-less resources
     if (coordA && coordB) {
-      console.log(distance(resultCoord(a)) - distance(resultCoord(b)))
       return distance(resultCoord(a)) - distance(resultCoord(b));
     } else if (coordA) {
       return -1; 
@@ -115,7 +114,6 @@ function sortResultsByDistance(results, regionCoords, ourLocation) {
       return 1;
     }
   }
-  console.log(results);
   return results.sort(sortFunc);
 }
 
