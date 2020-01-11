@@ -3,7 +3,7 @@
     <Header />
     <div class="content-wrap">
       <SearchBox />
-      <div id="results">
+      <div id="results" class="container">
         <span id="hits">{{ results.length }} results</span>
         
         <SearchResult

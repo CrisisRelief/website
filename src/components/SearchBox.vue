@@ -4,12 +4,12 @@
           <h2>Find Resources Near You</h2>
           <p>In a natural disaster emergency, we help you find the help you need, or find where and how you can help. </p>
       </div>
-      <div class="color-background pb-3">
-        <h3 class="text-center mb-0 text-white py-4">Search for organisations</h3>
+      <div class="search form">
+        <h3>Search for organisations</h3>
 
-        <div class="row">
+        <div class="row no-gutter">
           <!-- Need Input -->
-          <div class="col-12 col-md-10">
+          <div class="col-12 col-md-10 form-item">
             <input
               type="text"
               class="form-control"
@@ -20,12 +20,12 @@
           </div>
 
           <!-- LGA Selection -->
-          <div class="col-12 col-sm-4">
+          <div class="col-12 col-sm-4 form-item">
             <multiselect v-model="search_lga" :options="search_lgas" label="name" track-by="value" />
           </div>
 
           <!-- Category -->
-          <div class="col-12 col-sm-4">
+          <div class="col-12 col-sm-4 form-item">
             <multiselect
               v-model="search_category"
               :options="search_categories"
@@ -36,7 +36,7 @@
 
           <!-- Submit Button -->
           <div class="col-12 col-sm-3">
-            <button type="button" class="btn btn-info">FIND ORGANISATIONS</button>
+            <button type="button" class="btn btn-info">Search</button>
           </div>
         </div>
       </div>
@@ -91,6 +91,9 @@ export default {
 </script>
 
 <style scoped>
+.row.no-gutter {
+    margin:0;
+}
 .form-control {
   height: 3em !important;
 }
@@ -98,10 +101,17 @@ export default {
   width: 100%;
   height: 100%;
 }
-.color-background {
+.search.form {
   background-color: #384b71;
+  padding:15px 15px 30px 15px;
 }
-
+.search.form h3 {
+    margin:0 0 15px 0;
+}
+.search.form .form-item {
+    margin-bottom:15px;
+    padding:0;
+}
 .multiselect__option--highlight:after {
   background: #02909e !important;
 }
