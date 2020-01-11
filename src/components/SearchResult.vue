@@ -1,10 +1,10 @@
 <template>
   <div class="search-result-container">
     <hr />
-    <a v-if="link.length > 0" href="link">
-      <h1>{{ title }}</h1>
+    <a v-if="link.length > 0" :href="link">
+      <h3>{{ title }}</h3>
     </a>
-    <h1 v-else>{{ title }}</h1>
+    <h3 v-else>{{ title }}</h3>
     <div class="search-result-meta">
       <div class="search-result-categories">
         <span v-for="(category, index) in categories" :key="index" class="search-result-category">
@@ -28,9 +28,9 @@
           <FontAwesomeIcon icon="envelope-square" />
           {{ value }}
         </a>
-        <a v-if="key == 'address'" href="#">
-          <FontAwesomeIcon icon="directions" />
-          {{ value }}
+        <a v-if="key == 'address'" :href="value">
+          <FontAwesomeIcon icon="directions" /> Get Directions
+          
         </a>
       </div>
     </div>
@@ -43,20 +43,38 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 export default {
   props: {
     title: {},
-    categories: {},
+    category: {},
+    category_sub: {},
+    category_sub_sub: {},
     location: {},
     description: {},
-    contact: {},
+    phone: {},
+    email: {},
+    address: {},
     link: {
       default: ""
     }
   },
-  components: { FontAwesomeIcon }
+  components: { FontAwesomeIcon },
+  computed: {
+    categories() {
+      return [this.category, this.category_sub, this.category_sub_sub].filter(
+        (elem) => {
+          return elem !== undefined && elem.length > 0;
+        }
+      );
+    },
+    contact() {
+      return ["phone", "email", "address"].reduce((contact, attr) => {
+        if(this[attr]) {contact[attr] = this[attr]}
+        return contact;
+      }, {});
+    }
+  }
 };
 </script>
 
 <style scoped>
-
 h1 {
   font-size: 20px;
   font-weight: 600; /* semibold */
@@ -66,5 +84,6 @@ h1 {
 .search-result-meta,
 .search-result-contact {
   font-weight: 600; /* semibold */
+  word-wrap: break-word;
 }
 </style>

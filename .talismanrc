@@ -6,9 +6,15 @@ fileignoreconfig:
   checksum: efc9491899fccc89ad997459594b495fcbe735c29ea336350d3f2619eeaf335e
   ignore_detectors: []
 - filename: README.md
-  checksum: 7ce0135cc8587fd6a3437e2f710aadba8adee8c41bf5a350dc8ee3885bc3d1ad
+  checksum: 31b3f9fa8dfd76098db8809f7d5cd99a430f5b0ef8b27e5aac459cc127d8c550
   ignore_detectors: []
 - filename: sql/dummy_data.sql
   checksum: 45ba8fbba02158e2b6358aa2fb44ea9b2991ecf7efba5417c2a63785e2e12a8e
+  ignore_detectors: []
+- filename: yarn.lock
+  checksum: a34f9cb39bf1e1a041ae54d7fc7573744888a59d7d31176fad897d18489d053a
+  ignore_detectors: []
+- filename: .github/workflows/publish-master.yml
+  checksum: 8e0965ae2b8f3626c3e0d977ade7424bfa6b9d4acecf487b39586dde9a94baeb
   ignore_detectors: []
 scopeconfig: [node]

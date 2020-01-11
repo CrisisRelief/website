@@ -13,8 +13,10 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/pro-solid-svg-icons": "^5.12.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
+    "axios": "^0.19.1",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.1.0",
+    "cheap-ruler": "^2.5.1",
     "core-js": "^3.4.4",
     "vue": "^2.6.11",
     "vue-multiselect": "^2.1.6"
@@ -38,7 +40,9 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": 0
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

@@ -7,25 +7,28 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-    - name: Install
-      uses: CultureHQ/actions-yarn@master
-      with:
-        args: install
-    - name: Build
-      uses: CultureHQ/actions-yarn@master
-      with:
-        args: build
-    - name: Copy via ssh
-      uses: garygrossgarten/github-action-scp@v0.5.3
-      with:
-        local: dist/
-        remote: /var/www/crisis.app/
-        host: crisis.app
-        username: ${{ secrets.FTP_USERNAME }}
-        privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-        passphrase: ${{ secrets. DEPLOY_KEY_PASSWORD }}
+      - uses: actions/checkout@master
+      - name: set the bloody FA Key
+        run: scripts/set_the_bloody_fa_pro_key.sh
+        env:
+          FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_PRO_KEY }}
+      - name: Install
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
+      - name: Build
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: build
+      - name: Copy via ssh
+        uses: garygrossgarten/github-action-scp@v0.5.3
+        with:
+          local: dist/
+          remote: /var/www/crisis.app/
+          host: crisis.app
+          username: ${{ secrets.FTP_USERNAME }}
+          privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          passphrase: ${{ secrets. DEPLOY_KEY_PASSWORD }}

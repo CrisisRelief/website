@@ -1,25 +1,27 @@
 <template>
-  <footer id="footer">
-    <ul class="list-inline py-2 pl-4">
-      <li class="list-inline-item">
-        We
-        <FontAwesomeIcon icon="heart" /> Open
-      </li>
-      <li class="list-inline-item">
-        <a
-          href="https://opendatacommons.org/licenses/odbl/1.0/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >ODBL</a>
-      </li>
-      <li class="list-inline-item">
-        <a
-          href="https://opendatacommons.org/licenses/dbcl/1.0/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >DBCL</a>
-      </li>
-    </ul>
+  <footer id="footer" class="footer">
+    <div class="container">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            We
+            <FontAwesomeIcon icon="heart" /> Open
+          </li>
+          <li class="list-inline-item">
+            <a
+              href="https://opendatacommons.org/licenses/odbl/1.0/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >ODBL</a>
+          </li>
+          <li class="list-inline-item">
+            <a
+              href="https://opendatacommons.org/licenses/dbcl/1.0/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >DBCL</a>
+          </li>
+        </ul>
+    </div>
   </footer>
 </template>
 
@@ -46,8 +48,7 @@ ul {
 }
 
 #footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+  background:#f5f5f5;
+  padding:20px 0 40px;
 }
 </style>
