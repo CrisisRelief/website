@@ -1,5 +1,5 @@
 <template>
-  <div class="container">      
+  <div class="container">
       <div class="intro">
           <h2>Find Resources Near You</h2>
           <p>In a natural disaster emergency we help you find the help you need. Listings may have errors or out-dated information, please verify services with the poster. </p>
@@ -23,7 +23,12 @@
         <div class="row no-gutter">
           <!-- LGA Selection -->
           <div class="col-12 col-sm-4 form-item">
-            <multiselect v-model="search_lga" :options="search_lgas" label="name" track-by="value" />
+            <multiselect
+                v-model="search_lga"
+                :options="search_lgas"
+                label="name" track-by="value"
+                placeholder="Local Government Area"
+            />
           </div>
 
           <!-- Category -->
@@ -33,6 +38,7 @@
               :options="search_categories"
               label="display"
               track-by="value"
+              placeholder="Category"
             />
           </div>
 
@@ -76,7 +82,7 @@ export default {
       search_categories: [
         {
           display: "Any Category",
-          valye: "any"
+          value: "any"
         },
         {
           display: "Supplies",
