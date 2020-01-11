@@ -30,6 +30,7 @@ import SearchResult from "./components/SearchResult.vue";
 import Header from "./components/Header.vue";
 import SearchBox from "./components/SearchBox.vue";
 import Footer from "./components/Footer.vue";
+import axios from "axios";
 
 export default {
   name: "app",
@@ -41,11 +42,17 @@ export default {
   },
   data() {
     return {
-      results: []
+      results: [],
+      protUrl: "https://crisis.app/"
     };
   },
   mounted() {
-    this.results = require("../public/organisations.json");
+    this.results = [];
+    axios.get(this.protUrl + "json/organisations.json").then(response => {
+      /* eslint no-console: ["error", { allow: ["log"] }] */
+      console.log(response);
+      this.results = response.data;
+    });
   }
 };
 </script>

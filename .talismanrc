@@ -11,4 +11,7 @@ fileignoreconfig:
 - filename: sql/dummy_data.sql
   checksum: 45ba8fbba02158e2b6358aa2fb44ea9b2991ecf7efba5417c2a63785e2e12a8e
   ignore_detectors: []
+- filename: yarn.lock
+  checksum: a34f9cb39bf1e1a041ae54d7fc7573744888a59d7d31176fad897d18489d053a
+  ignore_detectors: []
 scopeconfig: [node]
