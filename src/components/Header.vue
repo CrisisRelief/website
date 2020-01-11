@@ -5,8 +5,7 @@
       <span id="header-end">app</span>
     </h1>
     <p class="font-smaller">
-      Were you affected by the fire crisis in Australia? We'll help you find organisations that you can contact for
-      support.
+      In a natural disaster emergency, we help you find the help you need, or find where and how you can help.
     </p>
     <div class="alert alert-primary w-100" role="alert">
         This website is still under active development, go-live should only be a few hours away &lt;3
