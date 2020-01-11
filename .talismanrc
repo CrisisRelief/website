@@ -14,4 +14,7 @@ fileignoreconfig:
 - filename: yarn.lock
   checksum: a34f9cb39bf1e1a041ae54d7fc7573744888a59d7d31176fad897d18489d053a
   ignore_detectors: []
+- filename: .github/workflows/publish-master.yml
+  checksum: 8e0965ae2b8f3626c3e0d977ade7424bfa6b9d4acecf487b39586dde9a94baeb
+  ignore_detectors: []
 scopeconfig: [node]

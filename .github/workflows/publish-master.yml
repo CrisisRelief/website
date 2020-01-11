@@ -7,27 +7,26 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-    - name: Install
-      uses: CultureHQ/actions-yarn@master
-      with:
-        args: install
+      - uses: actions/checkout@master
+      - name: Install
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
         env:
           FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_PRO_KEY }}
-    - name: Build
-      uses: CultureHQ/actions-yarn@master
-      with:
-        args: build
-    - name: Copy via ssh
-      uses: garygrossgarten/github-action-scp@v0.5.3
-      with:
-        local: dist/
-        remote: /var/www/crisis.app/
-        host: crisis.app
-        username: ${{ secrets.FTP_USERNAME }}
-        privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-        passphrase: ${{ secrets. DEPLOY_KEY_PASSWORD }}
+      - name: Build
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: build
+      - name: Copy via ssh
+        uses: garygrossgarten/github-action-scp@v0.5.3
+        with:
+          local: dist/
+          remote: /var/www/crisis.app/
+          host: crisis.app
+          username: ${{ secrets.FTP_USERNAME }}
+          privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          passphrase: ${{ secrets. DEPLOY_KEY_PASSWORD }}
