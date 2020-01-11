@@ -16,7 +16,12 @@
 
       <!-- LGA Selection -->
       <div class="col-12 mt-3">
-        <multiselect v-model="search_lga" :options="search_lgas" label="name" track-by="value" />
+        <multiselect
+          v-model="search_lga"
+          :options="search_lgas"
+          label="name"
+          track-by="value"
+          placeholder="Local Government Area"/>
       </div>
 
       <!-- Category -->
@@ -26,6 +31,7 @@
           :options="search_categories"
           label="display"
           track-by="value"
+          placeholder="Category"
         />
       </div>
 
@@ -68,7 +74,7 @@ export default {
       search_categories: [
         {
           display: "Any Category",
-          valye: "any"
+          value: "any"
         },
         {
           display: "Supplies",
