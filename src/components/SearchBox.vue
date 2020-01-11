@@ -5,7 +5,7 @@
           <p>In a natural disaster emergency, we help you find the help you need, or find where and how you can help. </p>
       </div>
       <div class="search form">
-        <h3>Search for organisations</h3>
+        <h3>Search</h3>
 
         <div class="row no-gutter">
           <!-- Need Input -->

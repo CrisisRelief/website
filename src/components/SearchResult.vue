@@ -2,9 +2,9 @@
   <div class="search-result-container">
     <hr />
     <a v-if="link.length > 0" :href="link">
-      <h1>{{ title }}</h1>
+      <h3>{{ title }}</h3>
     </a>
-    <h1 v-else>{{ title }}</h1>
+    <h3 v-else>{{ title }}</h3>
     <div class="search-result-meta">
       <div class="search-result-categories">
         <span v-for="(category, index) in categories" :key="index" class="search-result-category">
@@ -28,7 +28,7 @@
           <FontAwesomeIcon icon="envelope-square" />
           {{ value }}
         </a>
-        <a v-if="key == 'address'" href="{{ value }}">
+        <a v-if="key == 'address'" :href="value">
           <FontAwesomeIcon icon="directions" /> Get Directions
           
         </a>
