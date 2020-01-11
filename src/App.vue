@@ -4,7 +4,8 @@
     <div class="content-wrap">
       <SearchBox />
       <div id="results">
-        <span id="hits">15 organisations</span>
+        <span id="hits">{{ results.length }} results</span>
+        
         <SearchResult
           v-for="(result, index) in results"
           :key="index"
