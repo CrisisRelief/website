@@ -5,7 +5,7 @@
       <SearchBox />
       <div id="results" class="container">
         <span id="hits">{{ results.length }} results</span>
-        
+
         <SearchResult
           v-for="(result, index) in results"
           :key="index"
@@ -51,8 +51,6 @@ export default {
   mounted() {
     this.results = [];
     axios.get(this.protUrl + "json/organisations.json").then(response => {
-      /* eslint no-console: ["error", { allow: ["log"] }] */
-      console.log(response);
       this.results = response.data;
       this.sortResults();
     });
@@ -81,9 +79,9 @@ export default {
 function sortResultsByDistance(results, regionCoords, ourLocation) {
   const ruler = cheapRuler(ourLocation[1]);
   function distance(location) {
-    return ruler.distance(location, ourLocation); 
+    return ruler.distance(location, ourLocation);
   }
-  
+
   /* For now we are just using centroids of LGAs. */
   function resultCoord(result) {
     let loc = result && result.location && String(result.location).toLowerCase();
@@ -110,7 +108,7 @@ function sortResultsByDistance(results, regionCoords, ourLocation) {
     if (coordA && coordB) {
       return distance(resultCoord(a)) - distance(resultCoord(b));
     } else if (coordA) {
-      return -1; 
+      return -1;
     } else {
       return 1;
     }

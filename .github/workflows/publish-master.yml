@@ -1,9 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - master
+on: [push]
 
 jobs:
   build:
@@ -25,6 +22,7 @@ jobs:
           args: build
       - name: Copy via ssh
         uses: garygrossgarten/github-action-scp@v0.5.3
+        if: github.ref == 'refs/heads/master'
         with:
           local: dist/
           remote: /var/www/crisis.app/
