@@ -7,10 +7,17 @@
     <p class="font-smaller">
       In a natural disaster emergency, we help you find the help you need, or find where and how you can help.
     </p>
+    <!-- Comment this div out before launch-->
     <div class="alert alert-primary w-100" role="alert">
         This website is still under active development, go-live should only be a few hours away &lt;3
     </div>
-  </nav>
+    
+    <!-- Uncomment this div before launch
+    <div style="text-align:center" class="alert alert-primary w-100" role="alert">
+        This website is still under active development, go-live should only be a few hours away &lt;3
+    </div>
+    -->
+</nav>
 </template>
 
 <style scoped>
