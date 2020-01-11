@@ -13,7 +13,7 @@
     </div>
     
     <div style="text-align:center" class="alert alert-primary w-100" role="alert">
-     Disclaimer. This is a community-sourced directory moderated by volunteers.  We do our best to make sure information is accurate.  Information may change or become out-of-date. Please verify.
+     Disclaimer</br>This is community-sourced and run by volunteers.</br>We try to keep it up to date and accurate. Things change quickly in a crisis. Information may be out-of-date.</br>Please verify.
     </div>
     
 </nav>
