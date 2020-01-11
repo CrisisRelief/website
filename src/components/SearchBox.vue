@@ -1,10 +1,14 @@
 <template>
-  <div class="container-fluid color-background pb-3">
-    <h5 class="text-center mb-0 text-white py-4">Search for organisations</h5>
+  <div class="intro">
+      <h2>Find Resources Near You</h2>
+      <p>In a natural disaster emergency, we help you find the help you need, or find where and how you can help. </p>
+  </div>
+  <div class="container color-background pb-3">
+    <h3 class="text-center mb-0 text-white py-4">Search for organisations</h3>
 
     <div class="row">
       <!-- Need Input -->
-      <div class="col-12">
+      <div class="col-12 col-md-10">
         <input
           type="text"
           class="form-control"
@@ -15,12 +19,12 @@
       </div>
 
       <!-- LGA Selection -->
-      <div class="col-12 mt-3">
+      <div class="col-12 col-sm-4">
         <multiselect v-model="search_lga" :options="search_lgas" label="name" track-by="value" />
       </div>
 
       <!-- Category -->
-      <div class="col-12 mt-3">
+      <div class="col-12 col-sm-4">
         <multiselect
           v-model="search_category"
           :options="search_categories"
@@ -30,7 +34,7 @@
       </div>
 
       <!-- Submit Button -->
-      <div class="col-12 mt-3">
+      <div class="col-12 col-sm-3">
         <button type="button" class="btn btn-info">FIND ORGANISATIONS</button>
       </div>
     </div>
