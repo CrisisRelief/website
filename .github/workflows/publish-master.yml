@@ -16,6 +16,8 @@ jobs:
       uses: CultureHQ/actions-yarn@master
       with:
         args: install
+        env:
+          FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_PRO_KEY }}
     - name: Build
       uses: CultureHQ/actions-yarn@master
       with:
