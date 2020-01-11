@@ -2,7 +2,7 @@
   <footer id="footer" class="footer">
     <div class="container">
         <p>Disclaimer: We are volunteers. We try for accuracy, but listings may have errors or out-dated information. Please make sure to personally verify information. </p>
-        <ul class="list-inline py-2 pl-4">
+        <ul class="list-inline">
           <li class="list-inline-item">
             We
             <FontAwesomeIcon icon="heart" /> Open
@@ -50,5 +50,6 @@ ul {
 
 #footer {
   background:#f5f5f5;
+  padding:20px 0 40px;
 }
 </style>

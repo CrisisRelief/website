@@ -1,43 +1,45 @@
 <template>
-  <div class="intro">
-      <h2>Find Resources Near You</h2>
-      <p>In a natural disaster emergency, we help you find the help you need, or find where and how you can help. </p>
-  </div>
-  <div class="container color-background pb-3">
-    <h3 class="text-center mb-0 text-white py-4">Search for organisations</h3>
-
-    <div class="row">
-      <!-- Need Input -->
-      <div class="col-12 col-md-10">
-        <input
-          type="text"
-          class="form-control"
-          v-model="input_need"
-          id="search_need"
-          placeholder="What do you need? eg. food, fuel"
-        />
+  <div class="container">      
+      <div class="intro">
+          <h2>Find Resources Near You</h2>
+          <p>In a natural disaster emergency, we help you find the help you need, or find where and how you can help. </p>
       </div>
+      <div class="color-background pb-3">
+        <h3 class="text-center mb-0 text-white py-4">Search for organisations</h3>
 
-      <!-- LGA Selection -->
-      <div class="col-12 col-sm-4">
-        <multiselect v-model="search_lga" :options="search_lgas" label="name" track-by="value" />
-      </div>
+        <div class="row">
+          <!-- Need Input -->
+          <div class="col-12 col-md-10">
+            <input
+              type="text"
+              class="form-control"
+              v-model="input_need"
+              id="search_need"
+              placeholder="What do you need? eg. food, fuel"
+            />
+          </div>
 
-      <!-- Category -->
-      <div class="col-12 col-sm-4">
-        <multiselect
-          v-model="search_category"
-          :options="search_categories"
-          label="display"
-          track-by="value"
-        />
-      </div>
+          <!-- LGA Selection -->
+          <div class="col-12 col-sm-4">
+            <multiselect v-model="search_lga" :options="search_lgas" label="name" track-by="value" />
+          </div>
 
-      <!-- Submit Button -->
-      <div class="col-12 col-sm-3">
-        <button type="button" class="btn btn-info">FIND ORGANISATIONS</button>
+          <!-- Category -->
+          <div class="col-12 col-sm-4">
+            <multiselect
+              v-model="search_category"
+              :options="search_categories"
+              label="display"
+              track-by="value"
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <div class="col-12 col-sm-3">
+            <button type="button" class="btn btn-info">FIND ORGANISATIONS</button>
+          </div>
+        </div>
       </div>
-    </div>
   </div>
 </template>
 
