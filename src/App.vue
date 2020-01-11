@@ -9,10 +9,14 @@
           v-for="(result, index) in results"
           :key="index"
           :title="result.title"
-          :categories="result.categories"
+          :category="result.category"
+          :category_sub="result.category_sub"
+          :category_sub_sub="result.category_sub_sub"
           :location="result.location"
           :description="result.description"
-          :contact="result.contact"
+          :phone="result.phone"
+          :email="result.email"
+          :address="result.address"
           :link="result.link"
         />
       </div>

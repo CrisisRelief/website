@@ -43,20 +43,38 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 export default {
   props: {
     title: {},
-    categories: {},
+    category: {},
+    category_sub: {},
+    category_sub_sub: {},
     location: {},
     description: {},
-    contact: {},
+    phone: {},
+    email: {},
+    address: {},
     link: {
       default: ""
     }
   },
-  components: { FontAwesomeIcon }
+  components: { FontAwesomeIcon },
+  computed: {
+    categories() {
+      return [this.category, this.category_sub, this.category_sub_sub].filter(
+        (elem) => {
+          return elem !== undefined && elem.length > 0;
+        }
+      );
+    },
+    contact() {
+      return ["phone", "email", "address"].reduce((contact, attr) => {
+        if(this[attr]) {contact[attr] = this[attr]}
+        return contact;
+      }, {});
+    }
+  }
 };
 </script>
 
 <style scoped>
-
 h1 {
   font-size: 20px;
   font-weight: 600; /* semibold */
