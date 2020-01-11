@@ -14,7 +14,7 @@
     
     <!-- Uncomment this div before launch
     <div style="text-align:center" class="alert alert-primary w-100" role="alert">
-        This website is still under active development, go-live should only be a few hours away &lt;3
+    Disclaimer: While every effort is being made to ensure the information is accurate, this is a community-sourced directory moderated by volunteers. Information may be incomplete, inaccurate, or out-of-date. Please verify.
     </div>
     -->
 </nav>
