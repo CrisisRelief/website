@@ -14,6 +14,7 @@ Get the FontAwesome Pro Key from here: https://firemap.atlassian.net/wiki/spaces
 
 ```
 export FONTAWESOME_NPM_AUTH_TOKEN=XXX
+scripts/set_the_bloody_fa_pro_key.sh
 yarn install
 ```
 
