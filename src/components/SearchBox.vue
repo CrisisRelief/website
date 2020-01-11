@@ -2,7 +2,7 @@
   <div class="container">      
       <div class="intro">
           <h2>Find Resources Near You</h2>
-          <p>In a natural disaster emergency, we help you find the help you need, or find where and how you can help. </p>
+          <p>In a natural disaster emergency we help you find the help you need. We try for accuracy, but listings may have errors or out-dated information. Please verify services before using. </p>
       </div>
       <div class="search form">
         <h3>Search</h3>

@@ -1,7 +1,6 @@
 <template>
   <footer id="footer" class="footer">
     <div class="container">
-        <p>Disclaimer: We are volunteers. We try for accuracy, but listings may have errors or out-dated information. Please make sure to personally verify information. </p>
         <ul class="list-inline">
           <li class="list-inline-item">
             We
