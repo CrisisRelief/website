@@ -78,10 +78,10 @@ export default {
       const locations = [];
       this.rawData.forEach(org => {
         if (org.category && !categories.includes(org.category)) {
-          categories.push(org.category);
+          categories.push(org.category)
         }
         if (org.location && !locations.includes(org.location)) {
-          locations.push(org.location);
+          locations.push(org.location)
         }
       });
       this.filterOptions.locations = locations;
@@ -137,8 +137,9 @@ export default {
             "email",
             "address",
             "link"
-          ]
-        });
+          ],
+          shouldSort: true,
+        })
         orgs = fuse.search(search_term);
       }
       return orgs;
