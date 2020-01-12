@@ -71,16 +71,16 @@ export default {
   methods: {
     refreshFilterOptions() {
       const categories = [];
-      const lgas = [];
+      const locations = [];
       this.rawData.forEach((org) => {
         if(org.category && !categories.includes(org.category)) {
           categories.push(org.category)
         };
-        if(org.lga && !lgas.includes(org.lga)) {
-          lgas.push(org.lga)
+        if(org.location && !locations.includes(org.location)) {
+          locations.push(org.location)
         };
       });
-      this.filterOptions.locations = lgas;
+      this.filterOptions.locations = locations;
       this.filterOptions.categories = categories;
     },
     refreshResults() {
@@ -112,7 +112,7 @@ export default {
           if (search_term && ! searchContains(JSON.stringify(org), search_term)) {
             return false;
           }
-          if (search_location && ! searchCmp(org.lga, search_location)) {
+          if (search_location && ! searchCmp(org.location, search_location)) {
             return false;
           }
           if (search_category && ! searchCmp(org.category, search_category)) {
@@ -125,7 +125,6 @@ export default {
     },
     onSearchBoxUpdate(params) {
       this.filterParams = params;
-      console.log(this.filterParams);
       this.refreshResults()
     }
   }
