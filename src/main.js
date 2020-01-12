@@ -33,6 +33,9 @@ import {
   faArrowToRight
 } from '@fortawesome/pro-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VueGtag from "vue-gtag";
+
+Vue.use(VueGtag, {config: { id: "UA-156077638-1" }})
 
 Vue.use(BootstrapVue)
 
