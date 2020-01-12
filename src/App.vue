@@ -2,11 +2,17 @@
   <div id="app">
     <Header />
     <div class="content-wrap">
-      <SearchBox
-        @updated="onSearchBoxUpdate"
-        :search_locations="filterOptions.locations"
-        :search_categories="filterOptions.categories"
-      />
+      <div class="container">
+        <div class="intro">
+          <h2>Find Resources Near You</h2>
+          <p>In a natural disaster emergency, we help you find help or where and how you can help. Listings may have errors or out-dated information, please verify services with the poster.</p>
+        </div>
+        <SearchBox
+          @updated="onSearchBoxUpdate"
+          :search_locations="filterOptions.locations"
+          :search_categories="filterOptions.categories"
+        />
+      </div>
       <div id="results" class="container">
         <span id="hits">
           <span v-if="results.length > 0">{{ results.length }} results</span>
@@ -78,10 +84,10 @@ export default {
       const locations = [];
       this.rawData.forEach(org => {
         if (org.category && !categories.includes(org.category)) {
-          categories.push(org.category)
+          categories.push(org.category);
         }
         if (org.location && !locations.includes(org.location)) {
-          locations.push(org.location)
+          locations.push(org.location);
         }
       });
       this.filterOptions.locations = locations;
@@ -108,7 +114,9 @@ export default {
       return orgs;
     },
     filterOrgs(orgs) {
-      if(! this.filterParams) { return orgs; }
+      if (!this.filterParams) {
+        return orgs;
+      }
       const search_term = this.filterParams["search_term"];
       const search_location = this.filterParams["search_location"];
       const search_category = this.filterParams["search_category"];
@@ -138,8 +146,8 @@ export default {
             "address",
             "link"
           ],
-          shouldSort: true,
-        })
+          shouldSort: true
+        });
         orgs = fuse.search(search_term);
       }
       return orgs;
