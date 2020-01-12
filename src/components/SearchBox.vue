@@ -8,24 +8,23 @@
         <h3>Search</h3>
 
         <div class="row no-gutter">
-          <!-- Need Input -->
+          <!-- Search Term Input -->
           <div class="col-12 col-md-10 form-item">
             <input
               type="text"
               class="form-control"
-              v-model="input_need"
-              id="search_need"
+              v-model="search_term"
               placeholder="What do you need? eg. food, fuel"
             />
           </div>
         </div>
 
         <div class="row no-gutter">
-          <!-- LGA Selection -->
+          <!-- Location Selection -->
           <div class="col-12 col-sm-4 form-item">
             <multiselect
-                v-model="search_lga"
-                :options="search_lgas"
+                v-model="search_location"
+                :options="search_locations"
                 label="name" track-by="value"
                 placeholder="Local Government Area"
             />
@@ -44,7 +43,7 @@
 
           <!-- Submit Button -->
           <div class="col-12 col-sm-3 form-submit">
-            <button type="button" class="btn btn-info">Search</button>
+            <button type="button" class="btn btn-info" v-on:click="onClickSearch">Search</button>
           </div>
         </div>
       </div>
@@ -58,10 +57,10 @@ export default {
   components: { Multiselect },
   data() {
     return {
-      input_need: null,
-      search_lga: null,
+      search_term: "",
+      search_location: null,
       search_category: null,
-      search_lgas: [
+      search_locations: [
         {
           name: "Ballarat",
           value: 1
@@ -94,6 +93,15 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    onClickSearch(event) {
+      this.$emit('updated', {
+        search_location: this.search_location,
+        search_category: this.search_category,
+        search_term: this.serach_term
+      });
+    }
   }
 };
 </script>

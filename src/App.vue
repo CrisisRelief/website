@@ -2,7 +2,7 @@
   <div id="app">
     <Header />
     <div class="content-wrap">
-      <SearchBox />
+      <SearchBox @updated="onSearchBoxUpdate" />
       <div id="results" class="container">
         <span id="hits">{{ results.length }} results</span>
 
@@ -43,40 +43,73 @@ export default {
   },
   data() {
     return {
+      rawData: [],
       results: [],
       protUrl: "https://crisis.app/",
-      regionCoords: undefined
+      regionCoords: undefined,
+      filterParams: {},
     };
   },
   mounted() {
-    this.results = [];
-    axios.get(this.protUrl + "json/organisations.json").then(response => {
-      this.results = response.data;
-      this.sortResults();
-    });
     axios.get('/region-coords.json').then(response => {
       this.regionCoords = response.data;
-      this.sortResults();
+      this.refreshResults();
+    });
+    axios.get(this.protUrl + "json/organisations.json").then(response => {
+      this.rawData = response.data;
+      this.refreshResults();
     });
   },
   methods: {
-    sortResults() {
-      if (navigator.geolocation && this.regionCoords && this.results) {
+    refreshResults() {
+      this.results = [
+        this.maybeSortOrgsByDistance,
+        this.filterOrgs,
+      ].reduceRight((orgs, fn) => fn(orgs), this.rawData);
+    },
+    maybeSortOrgsByDistance(orgs) {
+      if (navigator.geolocation && this.regionCoords && orgs) {
         // Can't get user's actual geolocation unless in a proper HTTPS environment, and they authorise it.
 
         // navigator.geolocation.getCurrentPosition(position => {
-        //   this.results = sortResultsByDistance(response.data, this.regionCoords, position)
+        //   this.results = sortOrgsByDistance(response.data, this.regionCoords, position)
         // }, error => {
         //   console.error(error);
         // });
         const position = [145,-37];
-        this.results = sortResultsByDistance(this.results, this.regionCoords, position);
+        return sortOrgsByDistance(orgs, this.regionCoords, position);
       }
+      return orgs
+    },
+    filterOrgs(orgs) {
+      console.log(this.filterParams);
+      if ( this.filterParams ) {
+        const search_term = this.filterParams['search_term']
+        const search_location = this.filterParams['search_location']
+        const search_category = this.filterParams['search_category']
+        return orgs.filter((org) => {
+          if (search_term) {
+            // console.log('term', search_term, org);
+          }
+          if (search_location) {
+            // console.log('location', search_location, org);
+          }
+          if (search_category) {
+            // console.log('category', search_category, org);
+          }
+          return true;
+        })
+      }
+      return orgs
+    },
+    onSearchBoxUpdate(params) {
+      this.filterParams = params;
+      this.refreshResults()
     }
   }
 }
 
-function sortResultsByDistance(results, regionCoords, ourLocation) {
+function sortOrgsByDistance(results, regionCoords, ourLocation) {
   const ruler = cheapRuler(ourLocation[1]);
   function distance(location) {
     return ruler.distance(location, ourLocation);
