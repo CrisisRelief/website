@@ -5,10 +5,9 @@
           <span id="header-start">CRISIS</span>
           <span id="header-end">app</span>
         </h1>
-        <div style="text-align:center" class="alert alert-primary w-100" role="alert">
+        <!-- <div style="text-align:center" class="alert alert-primary w-100" role="alert">
             This website is still under active development, go-live should only be a few hours away &lt;3
-        </div>
-
+        </div> -->
     </nav>
 </header>
 </template>
