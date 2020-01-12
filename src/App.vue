@@ -35,7 +35,9 @@ import Header from "./components/Header.vue";
 import SearchBox from "./components/SearchBox.vue";
 import Footer from "./components/Footer.vue";
 import axios from "axios";
-import cheapRuler from 'cheap-ruler';
+import cheapRuler from "cheap-ruler";
+import Fuse from "fuse.js";
+
 export default {
   name: "app",
   components: {
@@ -58,7 +60,7 @@ export default {
     };
   },
   mounted() {
-    axios.get('/region-coords.json').then(response => {
+    axios.get("/region-coords.json").then(response => {
       this.regionCoords = response.data;
       this.refreshResults();
     });
@@ -72,22 +74,22 @@ export default {
     refreshFilterOptions() {
       const categories = [];
       const locations = [];
-      this.rawData.forEach((org) => {
-        if(org.category && !categories.includes(org.category)) {
-          categories.push(org.category)
-        };
-        if(org.location && !locations.includes(org.location)) {
-          locations.push(org.location)
-        };
+      this.rawData.forEach(org => {
+        if (org.category && !categories.includes(org.category)) {
+          categories.push(org.category);
+        }
+        if (org.location && !locations.includes(org.location)) {
+          locations.push(org.location);
+        }
       });
       this.filterOptions.locations = locations;
       this.filterOptions.categories = categories;
     },
     refreshResults() {
-      this.results = [
-        this.sortOrgs,
-        this.filterOrgs,
-      ].reduceRight((orgs, fn) => fn(orgs), this.rawData);
+      this.results = [this.sortOrgs, this.filterOrgs].reduceRight(
+        (orgs, fn) => fn(orgs),
+        this.rawData
+      );
     },
     sortOrgs(orgs) {
       if (navigator.geolocation && this.regionCoords && orgs) {
@@ -98,44 +100,55 @@ export default {
         // }, error => {
         //   console.error(error);
         // });
-        const position = [145,-37];
+        const position = [145, -37];
         return sortOrgsByDistance(orgs, this.regionCoords, position);
       }
-      return orgs
+      return orgs;
     },
     filterOrgs(orgs) {
-      if ( this.filterParams ) {
-        const search_term = this.filterParams['search_term']
-        const search_location = this.filterParams['search_location']
-        const search_category = this.filterParams['search_category']
-        return orgs.filter((org) => {
-          if (search_term && ! searchContains(JSON.stringify(org), search_term)) {
+      const search_term = this.filterParams["search_term"];
+      const search_location = this.filterParams["search_location"];
+      const search_category = this.filterParams["search_category"];
+      if (search_location || search_category) {
+        return orgs.filter(org => {
+          if (search_location && !searchCmp(org.location, search_location)) {
             return false;
           }
-          if (search_location && ! searchCmp(org.location, search_location)) {
-            return false;
-          }
-          if (search_category && ! searchCmp(org.category, search_category)) {
+          if (search_category && !searchCmp(org.category, search_category)) {
             return false;
           }
           return true;
-        })
+        });
       }
-      return orgs
+      if (search_term) {
+        const fuse = new Fuse(orgs, {
+          keys: [
+            "title",
+            "category",
+            "category_sub",
+            "category_sub_sub",
+            "location",
+            "lga",
+            "description",
+            "phone",
+            "email",
+            "address",
+            "link"
+          ]
+        });
+        orgs = fuse.search(search_term);
+      }
+      return orgs;
     },
     onSearchBoxUpdate(params) {
       this.filterParams = params;
-      this.refreshResults()
+      this.refreshResults();
     }
   }
-}
+};
 
 function searchCmp(a, b) {
   return a.toLowerCase().trim() == b.toLowerCase().trim();
-}
-
-function searchContains(a, b) {
-  return a.toLowerCase().trim().indexOf(b.toLowerCase().trim()) !== -1 ;
 }
 
 function sortOrgsByDistance(results, regionCoords, ourLocation) {
@@ -146,17 +159,19 @@ function sortOrgsByDistance(results, regionCoords, ourLocation) {
 
   /* For now we are just using centroids of LGAs. */
   function resultCoord(result) {
-    let loc = result && result.location && String(result.location).toLowerCase();
-    loc = {
-      act: 'australian capital territory',
-      vic: 'victoria',
-      nsw: 'new south wales',
-      tas: 'tasmania',
-      wa: 'western australia',
-      sa: 'south australia',
-      nt: 'northern territory',
-      qld: 'queensland'
-    }[loc] || loc;
+    let loc =
+      result && result.location && String(result.location).toLowerCase();
+    loc =
+      {
+        act: "australian capital territory",
+        vic: "victoria",
+        nsw: "new south wales",
+        tas: "tasmania",
+        wa: "western australia",
+        sa: "south australia",
+        nt: "northern territory",
+        qld: "queensland"
+      }[loc] || loc;
     if (loc && regionCoords[loc]) {
       return regionCoords[loc].lngLat;
     } else if (loc) {
@@ -177,7 +192,6 @@ function sortOrgsByDistance(results, regionCoords, ourLocation) {
   }
   return results.sort(sortFunc);
 }
-
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

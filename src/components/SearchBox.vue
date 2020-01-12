@@ -64,7 +64,7 @@ export default {
     };
   },
   methods: {
-    onClickSearch(event) {
+    onClickSearch() {
       this.$emit("updated", {
         search_location: this.search_location,
         search_category: this.search_category,
