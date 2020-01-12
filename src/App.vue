@@ -48,21 +48,12 @@ export default {
     return {
       rawData: [],
       results: [],
-      protUrl: "https://crisis.app/",
+      prodUrl: "https://crisis.app/",
       regionCoords: undefined,
       filterParams: {},
       filterOptions: {
-        categories: [
-          { value: "any" },
-          { value: "supplies" },
-          { value: "services" }
-        ],
-        locations: [
-          { value: "Ballarat" },
-          { value: "Broken Hill" },
-          { value: "Hepburn" },
-          { value: "Wendouree" }
-        ]
+        categories: [],
+        locations: []
       }
     };
   },
@@ -71,7 +62,7 @@ export default {
       this.regionCoords = response.data;
       this.refreshResults();
     });
-    axios.get(this.protUrl + "json/organisations.json").then(response => {
+    axios.get(this.prodUrl + "json/organisations.json").then(response => {
       this.rawData = response.data;
       this.refreshResults();
       this.refreshFilterOptions();
@@ -89,16 +80,16 @@ export default {
           lgas.push(org.lga)
         };
       });
-      this.filterOptions.locations = lgas.map((x) => {return {value: x}});
-      this.filterOptions.categories = categories.map((x) => {return {value: x}});
+      this.filterOptions.locations = lgas;
+      this.filterOptions.categories = categories;
     },
     refreshResults() {
       this.results = [
-        this.maybeSortOrgsByDistance,
+        this.sortOrgs,
         this.filterOrgs,
       ].reduceRight((orgs, fn) => fn(orgs), this.rawData);
     },
-    maybeSortOrgsByDistance(orgs) {
+    sortOrgs(orgs) {
       if (navigator.geolocation && this.regionCoords && orgs) {
         // Can't get user's actual geolocation unless in a proper HTTPS environment, and they authorise it.
 
@@ -118,13 +109,13 @@ export default {
         const search_location = this.filterParams['search_location']
         const search_category = this.filterParams['search_category']
         return orgs.filter((org) => {
-          if (search_term) {
-            // TODO
-          }
-          if (search_location && ! stringCmp(org.lga, search_location.value)) {
+          if (search_term && ! searchContains(JSON.stringify(org), search_term)) {
             return false;
           }
-          if (search_category && ! stringCmp(org.category, search_category.value)) {
+          if (search_location && ! searchCmp(org.lga, search_location)) {
+            return false;
+          }
+          if (search_category && ! searchCmp(org.category, search_category)) {
             return false;
           }
           return true;
@@ -134,13 +125,18 @@ export default {
     },
     onSearchBoxUpdate(params) {
       this.filterParams = params;
+      console.log(this.filterParams);
       this.refreshResults()
     }
   }
 }
 
-function stringCmp(a, b) {
+function searchCmp(a, b) {
   return a.toLowerCase().trim() == b.toLowerCase().trim();
+}
+
+function searchContains(a, b) {
+  return a.toLowerCase().trim().indexOf(b.toLowerCase().trim()) !== -1 ;
 }
 
 function sortOrgsByDistance(results, regionCoords, ourLocation) {

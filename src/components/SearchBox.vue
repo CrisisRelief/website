@@ -25,8 +25,6 @@
           <multiselect
             v-model="search_location"
             :options="search_locations"
-            label="value"
-            track-by="value"
             placeholder="Local Government Area"
           />
         </div>
@@ -36,8 +34,6 @@
           <multiselect
             v-model="search_category"
             :options="search_categories"
-            label="value"
-            track-by="value"
             placeholder="Category"
           />
         </div>
@@ -72,7 +68,7 @@ export default {
       this.$emit("updated", {
         search_location: this.search_location,
         search_category: this.search_category,
-        search_term: this.serach_term
+        search_term: this.search_term
       });
     }
   }
