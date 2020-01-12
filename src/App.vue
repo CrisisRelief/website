@@ -2,10 +2,13 @@
   <div id="app">
     <Header />
     <div class="content-wrap">
-      <SearchBox @updated="onSearchBoxUpdate" />
+      <SearchBox
+        @updated="onSearchBoxUpdate"
+        :search_locations="filterOptions.locations"
+        :search_categories="filterOptions.categories"
+      />
       <div id="results" class="container">
         <span id="hits">{{ results.length }} results</span>
-
         <SearchResult
           v-for="(result, index) in results"
           :key="index"
@@ -13,7 +16,7 @@
           :category="result.category"
           :category_sub="result.category_sub"
           :category_sub_sub="result.category_sub_sub"
-          :location="result.location"
+          :location="result.lga"
           :description="result.description"
           :phone="result.phone"
           :email="result.email"
@@ -48,6 +51,19 @@ export default {
       protUrl: "https://crisis.app/",
       regionCoords: undefined,
       filterParams: {},
+      filterOptions: {
+        categories: [
+          { value: "any" },
+          { value: "supplies" },
+          { value: "services" }
+        ],
+        locations: [
+          { value: "Ballarat" },
+          { value: "Broken Hill" },
+          { value: "Hepburn" },
+          { value: "Wendouree" }
+        ]
+      }
     };
   },
   mounted() {
@@ -58,9 +74,24 @@ export default {
     axios.get(this.protUrl + "json/organisations.json").then(response => {
       this.rawData = response.data;
       this.refreshResults();
+      this.refreshFilterOptions();
     });
   },
   methods: {
+    refreshFilterOptions() {
+      const categories = [];
+      const lgas = [];
+      this.rawData.forEach((org) => {
+        if(org.category && !categories.includes(org.category)) {
+          categories.push(org.category)
+        };
+        if(org.lga && !lgas.includes(org.lga)) {
+          lgas.push(org.lga)
+        };
+      });
+      this.filterOptions.locations = lgas.map((x) => {return {value: x}});
+      this.filterOptions.categories = categories.map((x) => {return {value: x}});
+    },
     refreshResults() {
       this.results = [
         this.maybeSortOrgsByDistance,
@@ -82,20 +113,19 @@ export default {
       return orgs
     },
     filterOrgs(orgs) {
-      console.log(this.filterParams);
       if ( this.filterParams ) {
         const search_term = this.filterParams['search_term']
         const search_location = this.filterParams['search_location']
         const search_category = this.filterParams['search_category']
         return orgs.filter((org) => {
           if (search_term) {
-            // console.log('term', search_term, org);
+            // TODO
           }
-          if (search_location) {
-            // console.log('location', search_location, org);
+          if (search_location && ! stringCmp(org.lga, search_location.value)) {
+            return false;
           }
-          if (search_category) {
-            // console.log('category', search_category, org);
+          if (search_category && ! stringCmp(org.category, search_category.value)) {
+            return false;
           }
           return true;
         })
@@ -107,6 +137,10 @@ export default {
       this.refreshResults()
     }
   }
+}
+
+function stringCmp(a, b) {
+  return a.toLowerCase().trim() == b.toLowerCase().trim();
 }
 
 function sortOrgsByDistance(results, regionCoords, ourLocation) {
