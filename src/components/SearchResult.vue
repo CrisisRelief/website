@@ -16,21 +16,20 @@
     </div>
     <div class="search-result-description" v-html="description"></div>
     <div class="search-result-contact">
-      <div v-for="(value, key, index) in contact" :key="index">
-        <a v-if="key == 'phone'" :href="`tel:${ value }`">
+      <div v-for="(item, key, index) in contact" :key="index">
+        <a v-if="key == 'phone'" :href="`tel:${ item.href }`">
           <FontAwesomeIcon icon="phone-square-alt" />
-          {{ value }}
+          {{ item.human }}
         </a>
-        <a v-if="key == 'website'" :href="value">
+        <a v-if="key == 'link'" :href="item.href">
           <FontAwesomeIcon icon="address-card" /> Visit Website
         </a>
-        <a v-if="key == 'email'" :href="`mailto:${ value }`">
+        <a v-if="key == 'email'" :href="`mailto:${ item.href }`">
           <FontAwesomeIcon icon="envelope-square" />
-          {{ value }}
+          {{ item.human }}
         </a>
-        <a v-if="key == 'address'" :href="value">
+        <a v-if="key == 'address'" :href="item.href">
           <FontAwesomeIcon icon="directions" /> Get Directions
-          
         </a>
       </div>
     </div>
@@ -65,8 +64,21 @@ export default {
       );
     },
     contact() {
-      return ["phone", "email", "address"].reduce((contact, attr) => {
-        if(this[attr]) {contact[attr] = this[attr]}
+      return ["phone", "email", "address", "link"].reduce((contact, attr) => {
+        var human = this[attr]
+        var href=human
+        if(human) {
+          if(attr == "phone") {
+            href = human.replace(/[^0-9]/, '');
+          }
+          if(attr == "address") {
+            href = 'http://maps.google.com/?q=' + encodeURI(human);
+          }
+          contact[attr] = {
+            href: href,
+            human: human
+          }
+        }
         return contact;
       }, {});
     }
