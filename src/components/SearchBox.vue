@@ -25,7 +25,7 @@
           <multiselect
             v-model="search_location"
             :options="search_locations"
-            placeholder="Local Government Area"
+            placeholder="Location"
           />
         </div>
 
