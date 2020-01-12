@@ -2,10 +2,13 @@
   <div id="app">
     <Header />
     <div class="content-wrap">
-      <SearchBox />
+      <SearchBox
+        @updated="onSearchBoxUpdate"
+        :search_locations="filterOptions.locations"
+        :search_categories="filterOptions.categories"
+      />
       <div id="results" class="container">
         <span id="hits">{{ results.length }} results</span>
-
         <SearchResult
           v-for="(result, index) in results"
           :key="index"
@@ -13,7 +16,7 @@
           :category="result.category"
           :category_sub="result.category_sub"
           :category_sub_sub="result.category_sub_sub"
-          :location="result.location"
+          :location="result.lga"
           :description="result.description"
           :phone="result.phone"
           :email="result.email"
@@ -43,40 +46,104 @@ export default {
   },
   data() {
     return {
+      rawData: [],
       results: [],
       protUrl: "https://crisis.app/",
-      regionCoords: undefined
+      regionCoords: undefined,
+      filterParams: {},
+      filterOptions: {
+        categories: [
+          { value: "any" },
+          { value: "supplies" },
+          { value: "services" }
+        ],
+        locations: [
+          { value: "Ballarat" },
+          { value: "Broken Hill" },
+          { value: "Hepburn" },
+          { value: "Wendouree" }
+        ]
+      }
     };
   },
   mounted() {
-    this.results = [];
-    axios.get(this.protUrl + "json/organisations.json").then(response => {
-      this.results = response.data;
-      this.sortResults();
-    });
     axios.get('/region-coords.json').then(response => {
       this.regionCoords = response.data;
-      this.sortResults();
+      this.refreshResults();
+    });
+    axios.get(this.protUrl + "json/organisations.json").then(response => {
+      this.rawData = response.data;
+      this.refreshResults();
+      this.refreshFilterOptions();
     });
   },
   methods: {
-    sortResults() {
-      if (navigator.geolocation && this.regionCoords && this.results) {
+    refreshFilterOptions() {
+      const categories = [];
+      const lgas = [];
+      this.rawData.forEach((org) => {
+        if(org.category && !categories.includes(org.category)) {
+          categories.push(org.category)
+        };
+        if(org.lga && !lgas.includes(org.lga)) {
+          lgas.push(org.lga)
+        };
+      });
+      this.filterOptions.locations = lgas.map((x) => {return {value: x}});
+      this.filterOptions.categories = categories.map((x) => {return {value: x}});
+    },
+    refreshResults() {
+      this.results = [
+        this.maybeSortOrgsByDistance,
+        this.filterOrgs,
+      ].reduceRight((orgs, fn) => fn(orgs), this.rawData);
+    },
+    maybeSortOrgsByDistance(orgs) {
+      if (navigator.geolocation && this.regionCoords && orgs) {
         // Can't get user's actual geolocation unless in a proper HTTPS environment, and they authorise it.
 
         // navigator.geolocation.getCurrentPosition(position => {
-        //   this.results = sortResultsByDistance(response.data, this.regionCoords, position)
+        //   this.results = sortOrgsByDistance(response.data, this.regionCoords, position)
         // }, error => {
         //   console.error(error);
         // });
         const position = [145,-37];
-        this.results = sortResultsByDistance(this.results, this.regionCoords, position);
+        return sortOrgsByDistance(orgs, this.regionCoords, position);
       }
+      return orgs
+    },
+    filterOrgs(orgs) {
+      if ( this.filterParams ) {
+        const search_term = this.filterParams['search_term']
+        const search_location = this.filterParams['search_location']
+        const search_category = this.filterParams['search_category']
+        return orgs.filter((org) => {
+          if (search_term) {
+            // TODO
+          }
+          if (search_location && ! stringCmp(org.lga, search_location.value)) {
+            return false;
+          }
+          if (search_category && ! stringCmp(org.category, search_category.value)) {
+            return false;
+          }
+          return true;
+        })
+      }
+      return orgs
+    },
+    onSearchBoxUpdate(params) {
+      this.filterParams = params;
+      this.refreshResults()
     }
   }
 }
 
-function sortResultsByDistance(results, regionCoords, ourLocation) {
+function stringCmp(a, b) {
+  return a.toLowerCase().trim() == b.toLowerCase().trim();
+}
+
+function sortOrgsByDistance(results, regionCoords, ourLocation) {
   const ruler = cheapRuler(ourLocation[1]);
   function distance(location) {
     return ruler.distance(location, ourLocation);
