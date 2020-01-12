@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - dev
 
 jobs:
   build:
@@ -25,11 +25,11 @@ jobs:
           args: build
       - name: Copy via ssh
         uses: garygrossgarten/github-action-scp@v0.5.3
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/dev'
         with:
           local: dist/
-          remote: /var/www/crisis.app/
-          host: crisis.app
+          remote: /var/www/dev/
+          host: dev.crisis.app
           username: ${{ secrets.FTP_USERNAME }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           passphrase: ${{ secrets. DEPLOY_KEY_PASSWORD }}
