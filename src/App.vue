@@ -8,7 +8,10 @@
         :search_categories="filterOptions.categories"
       />
       <div id="results" class="container">
-        <span id="hits">{{ results.length }} results</span>
+        <span id="hits">
+          <span v-if="results.length > 0">{{ results.length }} results</span>
+          <span v-else-if="filterParams">No results</span>
+        </span>
         <SearchResult
           v-for="(result, index) in results"
           :key="index"
@@ -52,7 +55,7 @@ export default {
       results: [],
       prodUrl: "https://crisis.app/",
       regionCoords: undefined,
-      filterParams: {},
+      filterParams: null,
       filterOptions: {
         categories: [],
         locations: []
@@ -66,7 +69,6 @@ export default {
     });
     axios.get(this.prodUrl + "json/organisations.json").then(response => {
       this.rawData = response.data;
-      this.refreshResults();
       this.refreshFilterOptions();
     });
   },
@@ -106,6 +108,7 @@ export default {
       return orgs;
     },
     filterOrgs(orgs) {
+      if(! this.filterParams) { return orgs; }
       const search_term = this.filterParams["search_term"];
       const search_location = this.filterParams["search_location"];
       const search_category = this.filterParams["search_category"];
