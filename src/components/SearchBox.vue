@@ -10,6 +10,7 @@
             class="form-control"
             v-model="search_term"
             placeholder="What do you need? eg. food, fuel"
+            v-on:keyup.enter="onClickSearch"
           />
         </div>
       </div>
