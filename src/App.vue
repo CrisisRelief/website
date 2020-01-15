@@ -175,6 +175,7 @@ export default {
       const path = this.get_uri_from_state();
       window.history.pushState(params, document.title, path);
       this.$gtag.pageview({page_path: path});
+      this.$gtag.event('searchQueryParams', JSON.stringify(params));
       this.$gtag.event('searchQuery', params);
       const search_term = params["search_term"];
       const search_location = params["search_location"];
@@ -187,6 +188,12 @@ export default {
       }
       if(search_category){
         this.$gtag.event('submitSearchCategory', {category: search_category});
+      }
+      if(this.results.length == 0) {
+        this.$gtag.event('noResults');
+      }
+      if(this.results.length) {
+        this.$gtag.event('results', this.results.length);
       }
     },
     onSearchBoxUpdate(params) {
