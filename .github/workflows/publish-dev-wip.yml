@@ -1,4 +1,4 @@
-name: publish to dev
+name: publish to dev (v2 WIP)
 
 on:
   push:
