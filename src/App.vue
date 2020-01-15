@@ -59,7 +59,7 @@ export default {
     return {
       rawData: [],
       results: [],
-      prodUrl: "https://crisis.app/",
+      orgJSONURI: 'https://' + process.env.VUE_APP_HOSTNAME + '/' + process.env.VUE_APP_ORG_JSON_PATH,
       regionCoords: undefined,
       filterParams: null,
       filterOptions: {
@@ -73,7 +73,8 @@ export default {
       this.regionCoords = response.data;
       this.refreshResults();
     });
-    axios.get(this.prodUrl + "json/organisations.json").then(response => {
+    axios.get(this.orgJSONURI).then(response => {
+      console.log("loading org json from", this.orgJSONURI);
       this.rawData = response.data;
       this.refreshFilterOptions();
     });
