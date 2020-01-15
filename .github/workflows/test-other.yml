@@ -1,0 +1,26 @@
+name: Test all branches not dev or master
+
+on:
+  push:
+    branches-ignore:
+      - master
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+      - name: set the bloody FA Key
+        run: scripts/set_the_bloody_fa_pro_key.sh
+        env:
+          FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_PRO_KEY }}
+      - name: Install
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
+      - name: Build
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: build
