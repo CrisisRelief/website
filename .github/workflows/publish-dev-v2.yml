@@ -1,0 +1,19 @@
+name: publish to dev
+
+on:
+  push:
+    branches:
+      - feature/CAD-36
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Install dependencies
+        run: ./batect install
+        env:
+          FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_PRO_KEY }}
+      - name: Build
+        run: ./batect build
