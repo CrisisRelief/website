@@ -19,3 +19,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Terraform generated files
+*.tfstate
+infra/tfplan
+.terraform
+

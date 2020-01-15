@@ -18,8 +18,8 @@ containers:
     working_directory: /app
     environment:
       BUCKET_NAME: terraform-bucket
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      TF_VAR_aws_access_key: ${AWS_ACCESS_KEY_ID}
+      TF_VAR_aws_secret_key: ${AWS_SECRET_ACCESS_KEY}
 
 tasks:
   setup:
@@ -44,22 +44,29 @@ tasks:
       command: yarn run build
 
   init-terraform:
-    description: Initialise and plan terraform
+    description: Initialise terraform
     run:
       container: terraform-env
-      command: init
+      command: terraform init
 
   plan-terraform:
     description: Initialise and plan terraform
     run:
       container: terraform-env
-      command: plan -out=tfplan
+      command: terraform plan -out=tfplan
     prerequisites:
       - init-terraform
 
   validate-terraform:
+    description: Validate terraform script
     run:
       container: terraform-env
-      command: validate
+      command: terraform validate
     prerequisites:
       - init-terraform
+
+  apply-terraform:
+    description: Apply terraform
+    run:
+      container: terraform-env
+      command: terraform apply "tfplan"

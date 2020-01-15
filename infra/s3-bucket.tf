@@ -1,9 +1,9 @@
 # AWS S3 bucket for static hosting
 resource "aws_s3_bucket" "website" {
-  bucket = "${var.website_bucket_name}"
+  bucket = var.website_bucket_name
   acl = "public-read"
 
-  tags {
+  tags = {
     Name = "Website"
     Environment = "dev"
   }
@@ -45,6 +45,6 @@ resource "aws_s3_bucket" "website_redirect" {
   acl = "public-read"
 
   website {
-    redirect_all_requests_to = "${var.website_bucket_name}"
+    redirect_all_requests_to = var.website_bucket_name
   }
 }
