@@ -1,4 +1,3 @@
-
 containers:
   build-env:
     image: node:11.4.0
@@ -9,16 +8,26 @@ containers:
     working_directory: /app
     environment:
       PORT: 8352
- 
+
+  terraform-env:
+    build_directory: ./infra
+    volumes:
+      - local: ./infra
+        container: /app
+        options: cached
+    working_directory: /app
+    environment:
+      BUCKET_NAME: terraform-bucket
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
 
 tasks:
-  setup: 
+  setup:
     run:
       container: build-env
       command: scripts/set_the_bloody_fa_pro_key.sh
       environment:
         FONTAWESOME_NPM_AUTH_TOKEN: ${FONTAWESOME_NPM_AUTH_TOKEN}
-      
 
   install:
     description: Download dependencies need to run the application and tests.
@@ -33,3 +42,24 @@ tasks:
     run:
       container: build-env
       command: yarn run build
+
+  init-terraform:
+    description: Initialise and plan terraform
+    run:
+      container: terraform-env
+      command: init
+
+  plan-terraform:
+    description: Initialise and plan terraform
+    run:
+      container: terraform-env
+      command: plan -out=tfplan
+    prerequisites:
+      - init-terraform
+
+  validate-terraform:
+    run:
+      container: terraform-env
+      command: validate
+    prerequisites:
+      - init-terraform
