@@ -9,7 +9,6 @@ containers:
     working_directory: /app
     environment:
       PORT: 8352
-      FONTAWESOME_NPM_AUTH_TOKEN: ${FONTAWESOME_NPM_AUTH_TOKEN:-''}
  
 
 tasks:
@@ -17,13 +16,15 @@ tasks:
     run:
       container: build-env
       command: scripts/set_the_bloody_fa_pro_key.sh
+      environment:
+        FONTAWESOME_NPM_AUTH_TOKEN: ${FONTAWESOME_NPM_AUTH_TOKEN}
       
 
   install:
     description: Download dependencies need to run the application and tests.
     run:
       container: build-env
-      command: sh -c 'yarn install && git checkout -- .npmrc'
+      command: scripts/install.sh
     prerequisites:
       - setup
 
