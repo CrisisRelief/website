@@ -1,0 +1,34 @@
+
+containers:
+  build-env:
+    image: node:11.4.0
+    volumes:
+      - local: .
+        container: /app
+        options: cached
+    working_directory: /app
+    environment:
+      PORT: 8352
+      FONTAWESOME_NPM_AUTH_TOKEN: ${FONTAWESOME_NPM_AUTH_TOKEN:-''}
+ 
+
+tasks:
+  setup: 
+    run:
+      container: build-env
+      command: scripts/set_the_bloody_fa_pro_key.sh
+      
+
+  install:
+    description: Download dependencies need to run the application and tests.
+    run:
+      container: build-env
+      command: sh -c 'yarn install && git checkout -- .npmrc'
+    prerequisites:
+      - setup
+
+  build:
+    description: Compiles and minifies for production
+    run:
+      container: build-env
+      command: yarn run build

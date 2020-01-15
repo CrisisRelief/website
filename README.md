@@ -14,34 +14,50 @@ Get the FontAwesome Pro Key from here: https://firemap.atlassian.net/wiki/spaces
 
 ```bash
 export FONTAWESOME_NPM_AUTH_TOKEN=XXX
-scripts/set_the_bloody_fa_pro_key.sh
-yarn install
-git checkout -- .npmrc # to reset npmrc so you don't commit it
 ```
 
 Note: this is Derwent's key who has a license, just don't share this elsewhere or make this repo public. (oh shit it's public, oh well.)
 
+Use batect to setup using the above key and install dependencies.
+
+```bash
+./batect install
+```
+
+For more information on batect, check out the [batect GitHub page](https://github.com/charleskorn/batect/)
+
 ### Compiles and hot-reloads for development
+
 ```
 yarn run serve
 ```
 
 ### Compiles and minifies for production
+
 ```
 yarn run build
 ```
 
+or
+
+```
+./batect build
+```
+
 ### Run your tests
+
 ```
 yarn run test
 ```
 
 ### Lints and fixes files
+
 ```
 yarn run lint
 ```
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Contributing
