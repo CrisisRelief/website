@@ -127,3 +127,23 @@ export default {
   }
 }
 </style>
+<style>
+.search.form .multiselect__option--highlight:after {
+  background: #02909e !important;
+}
+.search.form .multiselect__option--highlight {
+  background: #02909e !important;
+}
+.search.form .multiselect__option--highlight::after {
+    background:none!important;
+    content: "";
+}
+.search.form .multiselect__option--selected.multiselect__option--highlight::after {
+    content: "\f00d";
+    font-family: "Font Awesome 5 Pro";
+}
+.search.form .multiselect__option--selected::after {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Pro";
+}
+</style>
