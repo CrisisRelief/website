@@ -73,16 +73,19 @@ export default {
       this.regionCoords = response.data;
       this.refreshResults();
     });
+    axios.get("/australian_postcodes.json").then(response => {
+      this.locationCoords = response.data;
+      this.refreshLocationFilterOptions();
+    });
     axios.get(this.orgJSONURI).then(response => {
       console.log("loading org json from", this.orgJSONURI);
       this.rawData = response.data;
-      this.refreshFilterOptions();
+      this.refreshCatFilterOptions();
     });
   },
   methods: {
-    refreshFilterOptions() {
+    refreshCatFilterOptions() {
       const categories = {};
-      const locations = [];
       this.rawData.forEach(org => {
         if (org.category && !Object.keys(categories).includes(org.category)) {
           categories[org.category] = {}
@@ -93,36 +96,22 @@ export default {
         if (org.category_sub_sub && !categories[org.category][org.category_sub].includes(org.category_sub_sub)) {
           categories[org.category][org.category_sub].push(org.category_sub_sub)
         }
-        if (org.location && !locations.includes(org.location)) {
-          locations.push(org.location);
-        }
       });
-      console.log(JSON.stringify(categories, null, 2));
       const category_options = Object.entries(categories).map((entry) => {
-        console.log("CAT: " + JSON.stringify(entry, null, 2));
         const sub_categories = []
         if(Object.entries(entry[1]).length === 0) {
           entry[1][entry[0]] = []
           entry[1][entry[0]].push("")
         }
         Object.entries(entry[1]).forEach((sub_entry) => {
-          console.log("SUBCAT: " + JSON.stringify(sub_entry, null, 2));
           if(sub_entry[1].length === 0) {
-            console.log("SUBCAT: pushing")
             sub_entry[1].push("")
           }
-          console.log("CAT: " + JSON.stringify(sub_entry[1], null, 2));
           sub_entry[1].forEach((sub_sub_entry) => {
-            console.log("SUBSUBCAT: " + JSON.stringify(sub_sub_entry, null, 2));
-            var concat = sub_entry[0]
-            if (sub_sub_entry) {
-              concat += ' > ' + sub_sub_entry
-            }
             sub_categories.push({
               category: entry[0],
               subcategory_1: sub_entry[0],
               subcategory_2: sub_sub_entry,
-              concat: concat
             })
           })
         })
@@ -131,12 +120,44 @@ export default {
           subcategories: sub_categories
         }
       });
-      console.log(JSON.stringify(category_options,  null, 2));
-      this.filterOptions.locations = locations;
       this.filterOptions.categories = category_options;
     },
+    refreshLocationFilterOptions() {
+      const locations = {};
+      this.locationCoords.forEach(loc => {
+        if (loc.state && !Object.keys(locations).includes(loc.state)) {
+          locations[loc.state] = []
+        }
+        if (loc.locality && !locations[loc.state].includes(loc.locality)) {
+          locations[loc.state].push({
+            postcode: loc.postcode,
+            locality: loc.locality,
+            lag: loc.lat,
+            long: loc.long
+          });
+        }
+      });
+      const location_options = Object.entries(locations).map((entry) => {
+        const sub_locations = []
+        if(Object.entries(entry[1]).length === 0) {
+          entry[1][entry[0]] = []
+          entry[1][entry[0]].push("")
+        }
+        entry[1].forEach((sub_entry) => {
+          sub_locations.push({
+            location: entry[0],
+            ...sub_entry,
+          })
+        })
+        return {
+          location: entry[0],
+          sublocations: sub_locations
+        }
+      });
+      this.filterOptions.locations = location_options;
+    },
     refreshResults() {
-      this.results = [this.sortOrgs, this.filterOrgs].reduceRight(
+      this.results = [this.sortOrgs, this.searchOrgs, this.filterOrgs].reduceRight(
         (orgs, fn) => fn(orgs),
         this.rawData
       );
@@ -159,20 +180,40 @@ export default {
       if (!this.filterParams) {
         return orgs;
       }
-      const search_term = this.filterParams["search_term"];
-      const search_location = this.filterParams["search_location"];
       const search_category = this.filterParams["search_category"];
-      if (search_location || search_category) {
+      if (!search_category) {
+        return orgs;
+      }
+
+      var categories = [search_category]
+      if (search_category instanceof Array) {
+        categories = search_category
+      }
+      if (categories) {
         return orgs.filter(org => {
-          if (search_location && !searchCmp(org.location, search_location)) {
-            return false;
-          }
-          if (search_category && !searchCmp(org.category, search_category)) {
+          if (!this.orgInCategories(org, categories)) {
             return false;
           }
           return true;
         });
       }
+    },
+    orgInCategories(org, categories) {
+      var result = false
+      categories.forEach((category_spec) => {
+        if (org.category != category_spec.category) { return }
+        if (org.category_sub != category_spec.subcategory_1) { return }
+        if (org.category_sub_sub != category_spec.subcategory_2) { return }
+        result = true
+      })
+      return result
+    },
+    searchOrgs(orgs) {
+      if (!this.filterParams) {
+        return orgs;
+      }
+      const search_term = this.filterParams["search_term"];
+
       if (search_term) {
         const fuse = new Fuse(orgs, {
           keys: [
@@ -194,19 +235,40 @@ export default {
       }
       return orgs;
     },
-    get_uri_from_state() {
-      var uri_components = []
-      const search_term = this.filterParams["search_term"];
-      const search_location = this.filterParams["search_location"];
-      const search_category = this.filterParams["search_category"];
+    getHumanSearchTerm() {
+      var search_term = this.filterParams["search_term"];
       if(search_term){
-        uri_components.push('q=' + encodeURI(search_term))
+        search_term = search_term
+      }
+      return search_term
+    },
+    getHumanSearchLocation() {
+      var search_location = this.filterParams["search_location"];
+      if(search_location){
+        search_location = JSON.stringify(search_location)
+      }
+      return search_location
+    },
+    getHumanSearchCategory() {
+      var search_category = this.filterParams["search_category"];
+      if(search_category){
+        search_category = JSON.stringify(search_category)
+      }
+      return search_category
+    },
+    getUriFromState() {
+      var uri_components = []
+      const search_term = this.getHumanSearchTerm()
+      const search_location = this.getHumanSearchLocation()
+      const search_category = this.getHumanSearchCategory()
+      if (search_term) {
+        uri_components.push('q=' + encodeURIComponent(search_term))
       }
       if(search_location){
-        uri_components.push('loc=' + encodeURI(search_location))
+        uri_components.push('loc=' + encodeURIComponent(search_location))
       }
       if(search_category){
-        uri_components.push('cat=' + encodeURI(search_category))
+        uri_components.push('cat=' + encodeURIComponent(search_category))
       }
       return '/?' + uri_components.join('&')
     },
@@ -214,14 +276,14 @@ export default {
       var params = Object.assign({}, this.filterParams);
       // console.log(params);
       if(!params){ return }
-      const path = this.get_uri_from_state();
+      const path = this.getUriFromState();
       window.history.pushState(params, document.title, path);
       this.$gtag.pageview({page_path: path});
       this.$gtag.event('searchQueryParams', JSON.stringify(params));
       this.$gtag.event('searchQuery', params);
-      const search_term = params["search_term"];
-      const search_location = params["search_location"];
-      const search_category = params["search_category"];
+      const search_term = this.getHumanSearchTerm()
+      const search_location = this.getHumanSearchLocation()
+      const search_category = this.getHumanSearchCategory()
       if(search_term){
         this.$gtag.event('submitSearchTerm', {label: search_term});
       }
@@ -239,6 +301,7 @@ export default {
       }
     },
     onSearchBoxUpdate(params) {
+      console.log("onSearchBoxUpdate", JSON.stringify(params));
       this.filterParams = params;
       this.refreshResults();
       this.trackSearchQuery();
