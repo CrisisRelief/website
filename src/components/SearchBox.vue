@@ -20,7 +20,10 @@
         <div class="col-12 col-sm-4 form-item">
           <multiselect
             v-model="search_location"
-            :options="search_locations"
+            :options="location_options"
+            :group-select="true"
+            group-values="sublocations"
+            group-label="location"
             placeholder="Location"
           />
         </div>
@@ -29,7 +32,11 @@
         <div class="col-12 col-sm-4 form-item">
           <multiselect
             v-model="search_category"
-            :options="search_categories"
+            :options="category_options"
+            :group-select="true"
+            group-values="subcategories"
+            group-label="category"
+            label="concat"
             placeholder="Category"
           />
         </div>
@@ -48,8 +55,8 @@ import Multiselect from "vue-multiselect";
 export default {
   components: { Multiselect },
   props: {
-    search_locations: { },
-    search_categories: { }
+    location_options: { },
+    category_options: { }
   },
   data() {
     return {

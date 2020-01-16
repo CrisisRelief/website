@@ -9,8 +9,8 @@
         </div>
         <SearchBox
           @updated="onSearchBoxUpdate"
-          :search_locations="filterOptions.locations"
-          :search_categories="filterOptions.categories"
+          :location_options="filterOptions.locations"
+          :category_options="filterOptions.categories"
         />
       </div>
       <div id="results" class="container">
@@ -81,18 +81,59 @@ export default {
   },
   methods: {
     refreshFilterOptions() {
-      const categories = [];
+      const categories = {};
       const locations = [];
       this.rawData.forEach(org => {
-        if (org.category && !categories.includes(org.category)) {
-          categories.push(org.category);
+        if (org.category && !Object.keys(categories).includes(org.category)) {
+          categories[org.category] = {}
+        }
+        if (org.category_sub && !Object.keys(categories[org.category]).includes(org.category_sub)) {
+          categories[org.category][org.category_sub] = [];
+        }
+        if (org.category_sub_sub && !categories[org.category][org.category_sub].includes(org.category_sub_sub)) {
+          categories[org.category][org.category_sub].push(org.category_sub_sub)
         }
         if (org.location && !locations.includes(org.location)) {
           locations.push(org.location);
         }
       });
+      console.log(JSON.stringify(categories, null, 2));
+      const category_options = Object.entries(categories).map((entry) => {
+        console.log("CAT: " + JSON.stringify(entry, null, 2));
+        const sub_categories = []
+        if(Object.entries(entry[1]).length === 0) {
+          entry[1][entry[0]] = []
+          entry[1][entry[0]].push("")
+        }
+        Object.entries(entry[1]).forEach((sub_entry) => {
+          console.log("SUBCAT: " + JSON.stringify(sub_entry, null, 2));
+          if(sub_entry[1].length === 0) {
+            console.log("SUBCAT: pushing")
+            sub_entry[1].push("")
+          }
+          console.log("CAT: " + JSON.stringify(sub_entry[1], null, 2));
+          sub_entry[1].forEach((sub_sub_entry) => {
+            console.log("SUBSUBCAT: " + JSON.stringify(sub_sub_entry, null, 2));
+            var concat = sub_entry[0]
+            if (sub_sub_entry) {
+              concat += ' > ' + sub_sub_entry
+            }
+            sub_categories.push({
+              category: entry[0],
+              subcategory_1: sub_entry[0],
+              subcategory_2: sub_sub_entry,
+              concat: concat
+            })
+          })
+        })
+        return {
+          category: entry[0],
+          subcategories: sub_categories
+        }
+      });
+      console.log(JSON.stringify(category_options,  null, 2));
       this.filterOptions.locations = locations;
-      this.filterOptions.categories = categories;
+      this.filterOptions.categories = category_options;
     },
     refreshResults() {
       this.results = [this.sortOrgs, this.filterOrgs].reduceRight(
