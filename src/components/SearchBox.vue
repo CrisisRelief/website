@@ -98,11 +98,26 @@ export default {
 .search.form .form-item + .form-submit {
   margin-left: 15px;
 }
-.multiselect__option--highlight:after {
+.search.form .multiselect__input:focus {
+    border-bottom: 2px solid #02909e;
+    padding:0;    
+}
+.search.form .multiselect__option--highlight:after {
   background: #02909e !important;
 }
-.multiselect__option--highlight {
+.search.form .multiselect__option--highlight {
   background: #02909e !important;
+}
+.search.form .multiselect__option--highlight::after {
+    content: "";
+}
+.search.form .multiselect__option--selected.multiselect__option--highlight::after {
+    content: "\f00d";
+    font-family: "Font Awesome 5 Pro";
+}
+.search.form .multiselect__option--selected::after {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Pro";
 }
 @media screen and (max-width: 575px) {
   .search.form .form-item + .form-item,
