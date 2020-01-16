@@ -26,6 +26,7 @@
             group-label="location"
             label="location"
             :custom-label="locationLabel"
+            :multiple="true"
             placeholder="Location"
           />
         </div>
@@ -40,6 +41,7 @@
             group-label="category"
             label="concat"
             :custom-label="categoryLabel"
+            :multiple="true"
             placeholder="Category"
             :multiple="true"
           />
@@ -144,11 +146,30 @@ export default {
 }
 </style>
 <style>
+.search.form .multiselect__element {
+  display:block;
+}
+.search.form .multiselect__element .multiselect__option {
+  background: none;
+  display:block;
+  padding:10px 40px 10px 30px;
+  white-space:normal;
+}
+.search.form .multiselect__element .multiselect__option.multiselect__option--group {
+    background:none;
+    color: #02909e;
+    padding-left:20px;
+}
+.search.form .multiselect__input:focus {
+  border-bottom: 2px solid #02909e;
+  padding:0;    
+}
 .search.form .multiselect__option--highlight:after {
   background: #02909e !important;
 }
 .search.form .multiselect__option--highlight {
   background: #02909e !important;
+  color:#fff !important;
 }
 .search.form .multiselect__option--highlight::after {
     background:none!important;
@@ -157,26 +178,7 @@ export default {
 .search.form .multiselect__option--selected.multiselect__option--highlight::after {
     content: "\f00d";
     font-family: "Font Awesome 5 Pro";
-}
-.search.form .multiselect__option--selected::after {
-    content: "\f00c";
-    font-family: "Font Awesome 5 Pro";
-}
-</style>
-<style>
-.search.form .multiselect__option--highlight:after {
-  background: #02909e !important;
-}
-.search.form .multiselect__option--highlight {
-  background: #02909e !important;
-}
-.search.form .multiselect__option--highlight::after {
-    background:none!important;
-    content: "";
-}
-.search.form .multiselect__option--selected.multiselect__option--highlight::after {
-    content: "\f00d";
-    font-family: "Font Awesome 5 Pro";
+    margin-right: 2px;
 }
 .search.form .multiselect__option--selected::after {
     content: "\f00c";
