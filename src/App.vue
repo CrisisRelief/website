@@ -11,6 +11,9 @@
           @updated="onSearchBoxUpdate"
           :location_options="filterOptions.locations"
           :category_options="filterOptions.categories"
+          :search_location="filterParams.search_location"
+          :search_category="filterParams.search_category"
+          :search_term="filterParams.search_term"
         />
       </div>
       <div id="results" class="container">
@@ -61,31 +64,68 @@ export default {
       results: [],
       orgJSONURI: 'https://' + process.env.VUE_APP_HOSTNAME + '/' + process.env.VUE_APP_ORG_JSON_PATH,
       regionCoords: undefined,
-      filterParams: null,
+      filterParams: {
+        category: {},
+        location: {}
+      },
       filterOptions: {
         categories: [],
         locations: []
-      }
+      },
+      showResults: false
     };
   },
   mounted() {
-    axios.get("/region-coords.json").then(response => {
-      this.regionCoords = response.data;
-      this.refreshResults();
-    });
-    axios.get("/australian_postcodes.json").then(response => {
-      this.locationCoords = response.data;
-      this.refreshLocationFilterOptions();
-    });
-    axios.get(this.orgJSONURI).then(response => {
-      console.log("loading org json from", this.orgJSONURI);
-      this.rawData = response.data;
-      this.refreshCatFilterOptions();
-    });
+    this.checkUri();
+    var promises = [
+      axios.get("/region-coords.json").then(response => {
+        this.regionCoords = response.data;
+      }),
+      axios.get("/australian_postcodes.json").then(response => {
+        this.locationCoords = response.data;
+        this.refreshLocationFilterOptions();
+      }),
+      axios.get(this.orgJSONURI).then(response => {
+        console.log("loading org json from", this.orgJSONURI);
+        this.rawData = response.data;
+        this.refreshCatFilterOptions();
+      })
+    ]
+    async function callAfterAwait(promises, cb) {
+      await Promise.all(promises)
+      cb()
+    }
+    callAfterAwait(promises, this.refreshResults)
   },
   methods: {
+    checkUri(){
+      const params = Object.assign({}, this.filterParams);
+      const uri = window.location.href.split('?');
+      if (uri.length === 2)
+      {
+        const queryParameters = uri[1].split('&');
+        queryParameters.forEach( queryParameter => {
+          const queryKeyAndValue = queryParameter.split('=');
+          const queryValue = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+          if(queryKeyAndValue[0] === 'q'){
+            params["search_term"] = decodeURIComponent(queryValue);
+            this.showResults = true
+          }
+          if(queryKeyAndValue[0] === 'loc'){
+            params["search_location"] = JSON.parse(decodeURIComponent(queryValue));
+            this.showResults = true
+          }
+          if(queryKeyAndValue[0] === 'cat'){
+            params["search_category"] = JSON.parse(decodeURIComponent(queryValue));
+            this.showResults = true
+          }
+        });
+        this.filterParams = params;
+      }
+    },
     refreshCatFilterOptions() {
-      const categories = {};
+      const categories = [];
+      const locations = [];
       this.rawData.forEach(org => {
         if (org.category && !Object.keys(categories).includes(org.category)) {
           categories[org.category] = {}
@@ -157,6 +197,7 @@ export default {
       this.filterOptions.locations = location_options;
     },
     refreshResults() {
+      if ( !this.showResults ) { return }
       this.results = [this.sortOrgs, this.searchOrgs, this.filterOrgs].reduceRight(
         (orgs, fn) => fn(orgs),
         this.rawData
@@ -214,7 +255,6 @@ export default {
     sortOrgs(orgs) {
       const position = this.getSearchPosition()
       if (position && position[0] && position[1] && orgs.length) {
-        console.log('orgs', JSON.stringify(orgs, null, 2))
         var orgsWithPosition = []
         var orgsWithOutPosition = []
         orgs.forEach((org) => {
@@ -324,7 +364,6 @@ export default {
     },
     trackSearchQuery() {
       var params = Object.assign({}, this.filterParams);
-      // console.log(params);
       if(!params){ return }
       const path = this.getUriFromState();
       window.history.pushState(params, document.title, path);
@@ -353,6 +392,7 @@ export default {
     onSearchBoxUpdate(params) {
       console.log("onSearchBoxUpdate", JSON.stringify(params));
       this.filterParams = params;
+      this.showResults = true
       this.refreshResults();
       this.trackSearchQuery();
     }
