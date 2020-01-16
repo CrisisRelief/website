@@ -162,17 +162,71 @@ export default {
         this.rawData
       );
     },
-    sortOrgs(orgs) {
-      if (navigator.geolocation && this.regionCoords && orgs) {
-        // Can't get user's actual geolocation unless in a proper HTTPS environment, and they authorise it.
+    geocodeState(state) {
+      var loc = String(state).toLowerCase();
+      loc =
+        {
+          act: "australian capital territory",
+          vic: "victoria",
+          nsw: "new south wales",
+          tas: "tasmania",
+          wa: "western australia",
+          sa: "south australia",
+          nt: "northern territory",
+          qld: "queensland"
+        }[loc] || loc;
+      if (loc && this.regionCoords[loc]) {
+        return this.regionCoords[loc].lngLat;
+      } else if (loc) {
+        // console.log(`Couldn't geocode ${loc}`);
+      }
+    },
+    getSearchPosition() {
+      var position = [145, -37];
+      if (!this.filterParams) {
+        return null;
+      }
+      const search_location = this.filterParams["search_location"];
+      if (search_location) {
+        var location = search_location
+        if (search_location instanceof Array) {
+          location = search_location[0]
+        }
+        console.log(`location ${JSON.stringify(location)}`)
+        if (location.lat && location.long) {
+          position = [location.long, location.lat]
+        } else if (location.location) {
+          position = this.geocodeState(location.location)
+        }
+      }
 
-        // navigator.geolocation.getCurrentPosition(position => {
-        //   this.results = sortOrgsByDistance(response.data, this.regionCoords, position)
-        // }, error => {
-        //   console.error(error);
-        // });
-        const position = [145, -37];
-        return sortOrgsByDistance(orgs, this.regionCoords, position);
+      // if (navigator.geolocation && this.regionCoords) {
+      //   // Can't get user's actual geolocation unless in a proper HTTPS environment, and they authorise it.
+
+      //   // navigator.geolocation.getCurrentPosition(position => {
+      //   //   this.results = sortOrgsByDistance(response.data, this.regionCoords, position)
+      //   // }, error => {
+      //   //   console.error(error);
+      //   // });
+      // }
+      return position
+    },
+    sortOrgs(orgs) {
+      const position = this.getSearchPosition()
+      if (position && position[0] && position[1] && orgs.length) {
+        console.log('orgs', JSON.stringify(orgs, null, 2))
+        var orgsWithPosition = []
+        var orgsWithOutPosition = []
+        orgs.forEach((org) => {
+          if(org.lat && org.long) {
+            orgsWithPosition.push(org);
+          } else {
+            orgsWithOutPosition.push(org);
+          }
+        })
+        orgsWithPosition = sortOrgsByDistance(orgsWithPosition, this.regionCoords, position)
+        var result = orgsWithPosition.concat(orgsWithOutPosition)
+        return result
       }
       return orgs;
     },
@@ -313,24 +367,8 @@ function sortOrgsByDistance(results, regionCoords, ourLocation) {
 
   /* For now we are just using centroids of LGAs. */
   function resultCoord(result) {
-    let loc =
-      result && result.location && String(result.location).toLowerCase();
-    loc =
-      {
-        act: "australian capital territory",
-        vic: "victoria",
-        nsw: "new south wales",
-        tas: "tasmania",
-        wa: "western australia",
-        sa: "south australia",
-        nt: "northern territory",
-        qld: "queensland"
-      }[loc] || loc;
-    if (loc && regionCoords[loc]) {
-      return regionCoords[loc].lngLat;
-    } else if (loc) {
-      // console.log(`Couldn't geocode ${loc}`);
-    }
+    const response = [result.long, result.lat]
+    return response
   }
 
   function sortFunc(a, b) {
