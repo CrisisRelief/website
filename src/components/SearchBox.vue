@@ -119,6 +119,7 @@ export default {
   display:block;
 }
 .search.form .multiselect__element .multiselect__option {
+  background: none;
   display:block;
   padding:10px 40px 10px 30px;
   white-space:normal;
@@ -137,6 +138,7 @@ export default {
 }
 .search.form .multiselect__option--highlight {
   background: #02909e !important;
+  color:#fff;
 }
 .search.form .multiselect__option--highlight::after {
     background:none!important;
@@ -149,5 +151,6 @@ export default {
 .search.form .multiselect__option--selected::after {
     content: "\f00c";
     font-family: "Font Awesome 5 Pro";
+    margin-right: 2px;
 }
 </style>
