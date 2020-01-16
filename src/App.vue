@@ -65,24 +65,31 @@ export default {
       filterOptions: {
         categories: [],
         locations: []
-      }
+      },
+      showResults: false
     };
   },
   mounted() {
-    axios.get("/region-coords.json").then(response => {
-      this.regionCoords = response.data;
-      this.refreshResults();
-    });
-    axios.get("/australian_postcodes.json").then(response => {
-      this.locationCoords = response.data;
-      this.refreshLocationFilterOptions();
-    });
-    axios.get(this.orgJSONURI).then(response => {
-      console.log("loading org json from", this.orgJSONURI);
-      this.rawData = response.data;
-      this.refreshCatFilterOptions();
-      this.checkUri();
-    });
+    this.checkUri();
+    var promises = [
+      axios.get("/region-coords.json").then(response => {
+        this.regionCoords = response.data;
+      }),
+      axios.get("/australian_postcodes.json").then(response => {
+        this.locationCoords = response.data;
+        this.refreshLocationFilterOptions();
+      }),
+      axios.get(this.orgJSONURI).then(response => {
+        console.log("loading org json from", this.orgJSONURI);
+        this.rawData = response.data;
+        this.refreshCatFilterOptions();
+      })
+    ]
+    async function callAfterAwait(promises, cb) {
+      await Promise.all(promises)
+      cb()
+    }
+    callAfterAwait(promises, this.refreshResults)
   },
   methods: {
     checkUri(){
@@ -96,12 +103,15 @@ export default {
           const queryValue = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
           if(queryKeyAndValue[0] === 'q'){
             params["search_term"] = decodeURIComponent(queryValue);
+            this.showResults = true
           }
           if(queryKeyAndValue[0] === 'loc'){
             params["search_location"] = JSON.parse(decodeURIComponent(queryValue));
+            this.showResults = true
           }
           if(queryKeyAndValue[0] === 'cat'){
             params["search_category"] = JSON.parse(decodeURIComponent(queryValue));
+            this.showResults = true
           }
         });
         this.filterParams = params;
@@ -181,6 +191,7 @@ export default {
       this.filterOptions.locations = location_options;
     },
     refreshResults() {
+      if ( !this.showResults ) { return }
       this.results = [this.sortOrgs, this.searchOrgs, this.filterOrgs].reduceRight(
         (orgs, fn) => fn(orgs),
         this.rawData
@@ -376,6 +387,7 @@ export default {
     onSearchBoxUpdate(params) {
       console.log("onSearchBoxUpdate", JSON.stringify(params));
       this.filterParams = params;
+      this.showResults = true
       this.refreshResults();
       this.trackSearchQuery();
     }
