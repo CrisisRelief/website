@@ -109,6 +109,7 @@ export default {
   background: #02909e !important;
 }
 .search.form .multiselect__option--highlight::after {
+    background:none!important;
     content: "";
 }
 .search.form .multiselect__option--selected.multiselect__option--highlight::after {
