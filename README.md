@@ -14,7 +14,7 @@ Get the FontAwesome Pro Key from here: https://firemap.atlassian.net/wiki/spaces
 
 ```bash
 export FONTAWESOME_NPM_AUTH_TOKEN=XXX
-scripts/set_the_bloody_fa_pro_key.sh
+scripts/set_the_bloody_fa_pro_key.sh # if ur on windows just replace !!!FA PRO KEY HERE!!! manually in .npmrc
 yarn install
 git checkout -- .npmrc # to reset npmrc so you don't commit it
 ```
