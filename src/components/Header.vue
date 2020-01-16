@@ -1,13 +1,19 @@
 <template>
 <header>
     <nav class="navbar navbar-light bg-light">
-        <h1 class="navbar-brand mb-0">
-          <span id="header-start">CRISIS</span>
-          <span id="header-end">app</span>
-        </h1>
-        <!-- <div style="text-align:center" class="alert alert-primary w-100" role="alert">
-            This website is still under active development, go-live should only be a few hours away &lt;3
-        </div> -->
+      <h1 class="navbar-brand mb-0">
+        <span id="header-start">CRISIS</span>
+        <span id="header-end">app</span>
+      </h1>
+      <!-- <div style="text-align:center" class="alert alert-primary w-100" role="alert">
+          This website is still under active development, go-live should only be a few hours away &lt;3
+      </div> -->
+      <div id="links">
+        <ul>
+          <li><router-link to="/about">About</router-link></li>
+          <li><router-link to="/">Search</router-link></li>
+        </ul>
+      </div>
     </nav>
 </header>
 </template>
