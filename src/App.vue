@@ -108,15 +108,10 @@ export default {
             sub_entry[1].push("")
           }
           sub_entry[1].forEach((sub_sub_entry) => {
-            var concat = sub_entry[0]
-            if (sub_sub_entry) {
-              concat += ' > ' + sub_sub_entry
-            }
             sub_categories.push({
               category: entry[0],
               subcategory_1: sub_entry[0],
               subcategory_2: sub_sub_entry,
-              concat: concat
             })
           })
         })
@@ -142,9 +137,7 @@ export default {
           });
         }
       });
-      console.log(JSON.stringify(locations, null, 2));
       const location_options = Object.entries(locations).map((entry) => {
-        console.log("LOC: " + JSON.stringify(entry, null, 2));
         const sub_locations = []
         if(Object.entries(entry[1]).length === 0) {
           entry[1][entry[0]] = []
@@ -161,11 +154,10 @@ export default {
           sublocations: sub_locations
         }
       });
-      console.log(JSON.stringify(location_options,  null, 2));
       this.filterOptions.locations = location_options;
     },
     refreshResults() {
-      this.results = [this.sortOrgs, this.filterOrgs].reduceRight(
+      this.results = [this.sortOrgs, this.searchOrgs, this.filterOrgs].reduceRight(
         (orgs, fn) => fn(orgs),
         this.rawData
       );
@@ -188,20 +180,40 @@ export default {
       if (!this.filterParams) {
         return orgs;
       }
-      const search_term = this.filterParams["search_term"];
-      const search_location = this.filterParams["search_location"];
       const search_category = this.filterParams["search_category"];
-      if (search_location || search_category) {
+      if (!search_category) {
+        return orgs;
+      }
+
+      var categories = [search_category]
+      if (search_category instanceof Array) {
+        categories = search_category
+      }
+      if (categories) {
         return orgs.filter(org => {
-          if (search_location && !searchCmp(org.location, search_location)) {
-            return false;
-          }
-          if (search_category && !searchCmp(org.category, search_category)) {
+          if (!this.orgInCategories(org, categories)) {
             return false;
           }
           return true;
         });
       }
+    },
+    orgInCategories(org, categories) {
+      var result = false
+      categories.forEach((category_spec) => {
+        if (org.category != category_spec.category) { return }
+        if (org.category_sub != category_spec.subcategory_1) { return }
+        if (org.category_sub_sub != category_spec.subcategory_2) { return }
+        result = true
+      })
+      return result
+    },
+    searchOrgs(orgs) {
+      if (!this.filterParams) {
+        return orgs;
+      }
+      const search_term = this.filterParams["search_term"];
+
       if (search_term) {
         const fuse = new Fuse(orgs, {
           keys: [

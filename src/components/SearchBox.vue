@@ -39,7 +39,9 @@
             group-values="subcategories"
             group-label="category"
             label="concat"
+            :custom-label="categoryLabel"
             placeholder="Category"
+            :multiple="true"
           />
         </div>
 
@@ -87,6 +89,16 @@ export default {
       }
       return components.join(' - ')
       // return location.locality
+    },
+    categoryLabel(category) {
+      const components = []
+      if (category.subcategory_1) {
+        components.push(category.subcategory_1)
+      }
+      if (category.subcategory_2) {
+        components.push(category.subcategory_2)
+      }
+      return components.join(' > ')
     }
   }
 };
