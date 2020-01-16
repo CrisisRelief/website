@@ -76,9 +76,32 @@ export default {
     axios.get(this.prodUrl + "json/organisations.json").then(response => {
       this.rawData = response.data;
       this.refreshFilterOptions();
+      this.checkUri();
     });
   },
   methods: {
+    checkUri(){
+      const params = Object.assign({}, this.filterParams);
+      const uri = window.location.href.split('?');
+      if (uri.length === 2)
+      {
+        const queryParameters = uri[1].split('&');
+        queryParameters.forEach( queryParameter => {
+          const queryKeyAndValue = queryParameter.split('=');
+          if(queryKeyAndValue[0] === 'q'){
+            params["search_term"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+          }
+          if(queryKeyAndValue[0] === 'loc'){
+            params["search_location"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+          }
+          if(queryKeyAndValue[0] === 'cat'){
+            params["search_category"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+          }
+        });
+        this.filterParams = params;
+      }
+      this.refreshResults()
+    },
     refreshFilterOptions() {
       const categories = [];
       const locations = [];
@@ -153,7 +176,7 @@ export default {
       return orgs;
     },
     get_uri_from_state() {
-      var uri_components = []
+      var uri_components = [];
       const search_term = this.filterParams["search_term"];
       const search_location = this.filterParams["search_location"];
       const search_category = this.filterParams["search_category"];
@@ -170,7 +193,6 @@ export default {
     },
     trackSearchQuery() {
       var params = Object.assign({}, this.filterParams);
-      // console.log(params);
       if(!params){ return }
       const path = this.get_uri_from_state();
       window.history.pushState(params, document.title, path);
