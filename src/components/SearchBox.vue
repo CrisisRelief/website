@@ -1,6 +1,6 @@
 <template>
     <div class="search form">
-      <h3>Search</h3>
+      <h3 id="search-label">Search</h3>
 
       <div class="row no-gutter">
         <!-- Search Term Input -->
@@ -10,6 +10,7 @@
             class="form-control"
             v-model="search_term"
             placeholder="What do you need? eg. food, fuel"
+            aria-labelledby="search-label"
             v-on:keyup.enter="onClickSearch"
           />
         </div>
@@ -18,7 +19,9 @@
       <div class="row no-gutter">
         <!-- Location Selection -->
         <div class="col-12 col-sm-4 form-item">
+          <label class="visually-hidden" for="location-select">Location</label>
           <multiselect
+            id="location-select"
             v-model="search_location"
             :options="search_locations"
             placeholder="Location"
@@ -27,7 +30,9 @@
 
         <!-- Category -->
         <div class="col-12 col-sm-4 form-item">
+          <label class="visually-hidden" for="category-select">Category</label>
           <multiselect
+            id="category-select"
             v-model="search_category"
             :options="search_categories"
             placeholder="Category"
@@ -125,5 +130,19 @@ export default {
   .search.form .form-item + .form-submit {
     margin-left: 0;
   }
+}
+/*
+  A style for visually hiding elements but keeping them
+  available for screen readers and other assistive technologies
+*/
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 </style>
