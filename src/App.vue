@@ -95,18 +95,17 @@ export default {
           const queryKeyAndValue = queryParameter.split('=');
           const queryValue = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
           if(queryKeyAndValue[0] === 'q'){
-            params["search_term"] = queryValue;
+            params["search_term"] = decodeURIComponent(queryValue);
           }
           if(queryKeyAndValue[0] === 'loc'){
-            params["search_location"] = queryValue;
+            params["search_location"] = JSON.parse(decodeURIComponent(queryValue));
           }
           if(queryKeyAndValue[0] === 'cat'){
-            params["search_category"] = queryValue;
+            params["search_category"] = JSON.parse(decodeURIComponent(queryValue));
           }
         });
         this.filterParams = params;
       }
-      this.refreshResults()
     },
     refreshCatFilterOptions() {
       const categories = [];
