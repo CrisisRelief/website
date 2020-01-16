@@ -43,7 +43,6 @@
             :custom-label="categoryLabel"
             :multiple="true"
             placeholder="Category"
-            :multiple="true"
           />
         </div>
 
@@ -162,7 +161,7 @@ export default {
 }
 .search.form .multiselect__input:focus {
   border-bottom: 2px solid #02909e;
-  padding:0;    
+  padding:0;
 }
 .search.form .multiselect__option--highlight:after {
   background: #02909e !important;
