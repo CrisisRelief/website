@@ -37,8 +37,8 @@
 
 
 <script>
-import SearchResult from "./SearchResult.vue";
-import SearchBox from "./SearchBox.vue";
+import SearchResult from "../components/SearchResult.vue";
+import SearchBox from "../components/SearchBox.vue";
 import axios from "axios";
 import cheapRuler from "cheap-ruler";
 import Fuse from "fuse.js";
@@ -66,7 +66,7 @@ export default {
     };
   },
   mounted() {
-    this.checkUri();
+    // this.checkUri();
     var promises = [
       axios.get("/region-coords.json").then(response => {
         this.regionCoords = response.data;

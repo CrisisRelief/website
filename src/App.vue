@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <Header />
-    <SearchPage />
+    <div id="links">
+      <router-link to="/about">About</router-link>
+      <router-link to="/">Search</router-link>
+    </div>
+    <router-view></router-view>
     <Footer />
   </div>
 </template>
@@ -9,15 +13,19 @@
 <script>
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
-import SearchPage from "./components/SearchPage.vue";
 
 export default {
   name: "app",
   components: {
     Header,
-    SearchPage,
     Footer
   },
+  computed: {
+    fragment() {
+      console.log(this.$route.params)
+      return this.$route.params
+    }
+  }
 }
 
 
