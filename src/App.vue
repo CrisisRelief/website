@@ -88,14 +88,15 @@ export default {
         const queryParameters = uri[1].split('&');
         queryParameters.forEach( queryParameter => {
           const queryKeyAndValue = queryParameter.split('=');
+          const queryValue = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
           if(queryKeyAndValue[0] === 'q'){
-            params["search_term"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+            params["search_term"] = queryValue;
           }
           if(queryKeyAndValue[0] === 'loc'){
-            params["search_location"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+            params["search_location"] = queryValue;
           }
           if(queryKeyAndValue[0] === 'cat'){
-            params["search_category"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+            params["search_category"] = queryValue;
           }
         });
         this.filterParams = params;
