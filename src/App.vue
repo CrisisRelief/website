@@ -81,11 +81,35 @@ export default {
       console.log("loading org json from", this.orgJSONURI);
       this.rawData = response.data;
       this.refreshCatFilterOptions();
+      this.checkUri();
     });
   },
   methods: {
-    refreshCatFilterOptions() {
-      const categories = {};
+    checkUri(){
+      const params = Object.assign({}, this.filterParams);
+      const uri = window.location.href.split('?');
+      if (uri.length === 2)
+      {
+        const queryParameters = uri[1].split('&');
+        queryParameters.forEach( queryParameter => {
+          const queryKeyAndValue = queryParameter.split('=');
+          if(queryKeyAndValue[0] === 'q'){
+            params["search_term"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+          }
+          if(queryKeyAndValue[0] === 'loc'){
+            params["search_location"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+          }
+          if(queryKeyAndValue[0] === 'cat'){
+            params["search_category"] = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
+          }
+        });
+        this.filterParams = params;
+      }
+      this.refreshResults()
+    },
+    refreshFilterOptions() {
+      const categories = [];
+      const locations = [];
       this.rawData.forEach(org => {
         if (org.category && !Object.keys(categories).includes(org.category)) {
           categories[org.category] = {}
@@ -324,7 +348,6 @@ export default {
     },
     trackSearchQuery() {
       var params = Object.assign({}, this.filterParams);
-      // console.log(params);
       if(!params){ return }
       const path = this.getUriFromState();
       window.history.pushState(params, document.title, path);
