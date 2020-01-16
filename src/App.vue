@@ -236,11 +236,7 @@ export default {
       return orgs;
     },
     getHumanSearchTerm() {
-      var search_term = this.filterParams["search_term"];
-      if(search_term){
-        search_term = search_term
-      }
-      return search_term
+      return this.filterParams["search_term"];
     },
     getHumanSearchLocation() {
       var search_location = this.filterParams["search_location"];
@@ -308,10 +304,6 @@ export default {
     }
   }
 };
-
-function searchCmp(a, b) {
-  return a.toLowerCase().trim() == b.toLowerCase().trim();
-}
 
 function sortOrgsByDistance(results, regionCoords, ourLocation) {
   const ruler = cheapRuler(ourLocation[1]);
