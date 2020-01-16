@@ -26,7 +26,6 @@
             group-label="location"
             label="location"
             :custom-label="locationLabel"
-            :multiple="true"
             placeholder="Location"
           />
         </div>
@@ -41,7 +40,6 @@
             group-label="category"
             label="concat"
             :custom-label="categoryLabel"
-            :multiple="true"
             placeholder="Category"
           />
         </div>
