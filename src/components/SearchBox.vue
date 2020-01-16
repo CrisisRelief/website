@@ -131,7 +131,7 @@ export default {
 }
 .search.form .multiselect__option--highlight {
   background: #02909e !important;
-  color:#fff;
+  color:#fff !important;
 }
 .search.form .multiselect__option--highlight::after {
     background:none!important;
@@ -140,10 +140,10 @@ export default {
 .search.form .multiselect__option--selected.multiselect__option--highlight::after {
     content: "\f00d";
     font-family: "Font Awesome 5 Pro";
+    margin-right: 2px;
 }
 .search.form .multiselect__option--selected::after {
     content: "\f00c";
     font-family: "Font Awesome 5 Pro";
-    margin-right: 2px;
 }
 </style>
