@@ -102,6 +102,14 @@ export default {
     border-bottom: 2px solid #02909e;
     padding:0;    
 }
+@media screen and (max-width: 575px) {
+  .search.form .form-item + .form-item,
+  .search.form .form-item + .form-submit {
+    margin-left: 0;
+  }
+}
+</style>
+<style>
 .search.form .multiselect__option--highlight:after {
   background: #02909e !important;
 }
@@ -119,11 +127,5 @@ export default {
 .search.form .multiselect__option--selected::after {
     content: "\f00c";
     font-family: "Font Awesome 5 Pro";
-}
-@media screen and (max-width: 575px) {
-  .search.form .form-item + .form-item,
-  .search.form .form-item + .form-submit {
-    margin-left: 0;
-  }
 }
 </style>
