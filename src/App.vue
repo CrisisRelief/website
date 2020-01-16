@@ -1,10 +1,6 @@
 <template>
   <div id="app">
     <Header />
-    <div id="links">
-      <router-link to="/about">About</router-link>
-      <router-link to="/">Search</router-link>
-    </div>
     <router-view></router-view>
     <Footer />
   </div>
