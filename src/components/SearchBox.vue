@@ -8,7 +8,7 @@
           <input
             type="text"
             class="form-control"
-            v-model="search_term"
+            v-model="value.term"
             placeholder="What do you need? eg. food, fuel"
             v-on:keyup.enter="onClickSearch"
           />
@@ -19,7 +19,7 @@
         <!-- Location Selection -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
-            v-model="search_location"
+            v-model="value.location"
             :options="location_options"
             :group-select="true"
             group-values="sublocations"
@@ -33,7 +33,7 @@
         <!-- Category -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
-            v-model="search_category"
+            v-model="value.category"
             :options="category_options"
             :group-select="true"
             group-values="subcategories"
@@ -60,17 +60,38 @@ export default {
   props: {
     location_options: { },
     category_options: { },
-    search_location: { },
-    search_category: { },
-    search_term: "",
+    value: {
+      type: Object,
+      default() {
+        return {
+          location: {},
+          term: "",
+          category: {}
+        }
+      }
+    }
+  },
+  computed: {
+    internal: {
+      get() { return this.value },
+      set(newValue) {this.$emit('input', newValue)}
+    }
   },
   methods: {
+    // onUpdateSearchTerm(value) {
+    //   console.log('onUpdateSearchTerm')
+    //   this.value.term = value;
+    // },
+    // onUpdateSearchLocation(value) {
+    //   console.log('onUpdateSearchLocation')
+    //   this.value.location = value;
+    // },
+    // onUpdateSearchCategory(value) {
+    //   console.log('onUpdateSearchCategory')
+    //   this.value.category = value;
+    // },
     onClickSearch() {
-      this.$emit("updated", {
-        search_location: this.search_location,
-        search_category: this.search_category,
-        search_term: this.search_term
-      });
+      this.$emit("updated", this.value);
     },
     locationLabel(location) {
       const components = []
