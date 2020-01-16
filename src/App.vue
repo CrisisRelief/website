@@ -235,19 +235,40 @@ export default {
       }
       return orgs;
     },
-    get_uri_from_state() {
-      var uri_components = []
-      const search_term = this.filterParams["search_term"];
-      const search_location = this.filterParams["search_location"];
-      const search_category = this.filterParams["search_category"];
+    getHumanSearchTerm() {
+      var search_term = this.filterParams["search_term"];
       if(search_term){
-        uri_components.push('q=' + encodeURI(search_term))
+        search_term = search_term
+      }
+      return search_term
+    },
+    getHumanSearchLocation() {
+      var search_location = this.filterParams["search_location"];
+      if(search_location){
+        search_location = JSON.stringify(search_location)
+      }
+      return search_location
+    },
+    getHumanSearchCategory() {
+      var search_category = this.filterParams["search_category"];
+      if(search_category){
+        search_category = JSON.stringify(search_category)
+      }
+      return search_category
+    },
+    getUriFromState() {
+      var uri_components = []
+      const search_term = this.getHumanSearchTerm()
+      const search_location = this.getHumanSearchLocation()
+      const search_category = this.getHumanSearchCategory()
+      if (search_term) {
+        uri_components.push('q=' + encodeURIComponent(search_term))
       }
       if(search_location){
-        uri_components.push('loc=' + encodeURI(search_location))
+        uri_components.push('loc=' + encodeURIComponent(search_location))
       }
       if(search_category){
-        uri_components.push('cat=' + encodeURI(search_category))
+        uri_components.push('cat=' + encodeURIComponent(search_category))
       }
       return '/?' + uri_components.join('&')
     },
@@ -255,14 +276,14 @@ export default {
       var params = Object.assign({}, this.filterParams);
       // console.log(params);
       if(!params){ return }
-      const path = this.get_uri_from_state();
+      const path = this.getUriFromState();
       window.history.pushState(params, document.title, path);
       this.$gtag.pageview({page_path: path});
       this.$gtag.event('searchQueryParams', JSON.stringify(params));
       this.$gtag.event('searchQuery', params);
-      const search_term = params["search_term"];
-      const search_location = params["search_location"];
-      const search_category = params["search_category"];
+      const search_term = this.getHumanSearchTerm()
+      const search_location = this.getHumanSearchLocation()
+      const search_category = this.getHumanSearchCategory()
       if(search_term){
         this.$gtag.event('submitSearchTerm', {label: search_term});
       }
