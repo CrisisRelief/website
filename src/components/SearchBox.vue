@@ -24,6 +24,8 @@
             :group-select="true"
             group-values="sublocations"
             group-label="location"
+            label="location"
+            :custom-label="locationLabel"
             placeholder="Location"
           />
         </div>
@@ -72,6 +74,19 @@ export default {
         search_category: this.search_category,
         search_term: this.search_term
       });
+    },
+    locationLabel(location) {
+      const components = []
+      if (location.postcode) {
+        // components.push('<pre class="location-postcode">' + location.postcode + "<pre/>")
+        components.push(location.postcode)
+      }
+      if (location.locality) {
+        // components.push('<pre class="location-locality">' + location.locality + "<pre/>");
+        components.push(location.locality)
+      }
+      return components.join(' - ')
+      // return location.locality
     }
   }
 };
@@ -107,7 +122,7 @@ export default {
 }
 .search.form .multiselect__input:focus {
     border-bottom: 2px solid #02909e;
-    padding:0;    
+    padding:0;
 }
 @media screen and (max-width: 575px) {
   .search.form .form-item + .form-item,

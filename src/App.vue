@@ -73,16 +73,19 @@ export default {
       this.regionCoords = response.data;
       this.refreshResults();
     });
+    axios.get("/australian_postcodes.json").then(response => {
+      this.locationCoords = response.data;
+      this.refreshLocationFilterOptions();
+    });
     axios.get(this.orgJSONURI).then(response => {
       console.log("loading org json from", this.orgJSONURI);
       this.rawData = response.data;
-      this.refreshFilterOptions();
+      this.refreshCatFilterOptions();
     });
   },
   methods: {
-    refreshFilterOptions() {
+    refreshCatFilterOptions() {
       const categories = {};
-      const locations = [];
       this.rawData.forEach(org => {
         if (org.category && !Object.keys(categories).includes(org.category)) {
           categories[org.category] = {}
@@ -93,27 +96,18 @@ export default {
         if (org.category_sub_sub && !categories[org.category][org.category_sub].includes(org.category_sub_sub)) {
           categories[org.category][org.category_sub].push(org.category_sub_sub)
         }
-        if (org.location && !locations.includes(org.location)) {
-          locations.push(org.location);
-        }
       });
-      console.log(JSON.stringify(categories, null, 2));
       const category_options = Object.entries(categories).map((entry) => {
-        console.log("CAT: " + JSON.stringify(entry, null, 2));
         const sub_categories = []
         if(Object.entries(entry[1]).length === 0) {
           entry[1][entry[0]] = []
           entry[1][entry[0]].push("")
         }
         Object.entries(entry[1]).forEach((sub_entry) => {
-          console.log("SUBCAT: " + JSON.stringify(sub_entry, null, 2));
           if(sub_entry[1].length === 0) {
-            console.log("SUBCAT: pushing")
             sub_entry[1].push("")
           }
-          console.log("CAT: " + JSON.stringify(sub_entry[1], null, 2));
           sub_entry[1].forEach((sub_sub_entry) => {
-            console.log("SUBSUBCAT: " + JSON.stringify(sub_sub_entry, null, 2));
             var concat = sub_entry[0]
             if (sub_sub_entry) {
               concat += ' > ' + sub_sub_entry
@@ -131,9 +125,44 @@ export default {
           subcategories: sub_categories
         }
       });
-      console.log(JSON.stringify(category_options,  null, 2));
-      this.filterOptions.locations = locations;
       this.filterOptions.categories = category_options;
+    },
+    refreshLocationFilterOptions() {
+      const locations = {};
+      this.locationCoords.forEach(loc => {
+        if (loc.state && !Object.keys(locations).includes(loc.state)) {
+          locations[loc.state] = []
+        }
+        if (loc.locality && !locations[loc.state].includes(loc.locality)) {
+          locations[loc.state].push({
+            postcode: loc.postcode,
+            locality: loc.locality,
+            lag: loc.lat,
+            long: loc.long
+          });
+        }
+      });
+      console.log(JSON.stringify(locations, null, 2));
+      const location_options = Object.entries(locations).map((entry) => {
+        console.log("LOC: " + JSON.stringify(entry, null, 2));
+        const sub_locations = []
+        if(Object.entries(entry[1]).length === 0) {
+          entry[1][entry[0]] = []
+          entry[1][entry[0]].push("")
+        }
+        entry[1].forEach((sub_entry) => {
+          sub_locations.push({
+            location: entry[0],
+            ...sub_entry,
+          })
+        })
+        return {
+          location: entry[0],
+          sublocations: sub_locations
+        }
+      });
+      console.log(JSON.stringify(location_options,  null, 2));
+      this.filterOptions.locations = location_options;
     },
     refreshResults() {
       this.results = [this.sortOrgs, this.filterOrgs].reduceRight(
@@ -239,6 +268,7 @@ export default {
       }
     },
     onSearchBoxUpdate(params) {
+      console.log("onSearchBoxUpdate", JSON.stringify(params));
       this.filterParams = params;
       this.refreshResults();
       this.trackSearchQuery();
