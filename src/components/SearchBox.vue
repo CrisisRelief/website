@@ -24,6 +24,7 @@
             :group-select="true"
             group-values="sublocations"
             group-label="location"
+            :multiple="true"
             placeholder="Location"
           />
         </div>
@@ -37,6 +38,7 @@
             group-values="subcategories"
             group-label="category"
             label="concat"
+            :multiple="true"
             placeholder="Category"
           />
         </div>
@@ -105,10 +107,6 @@ export default {
 .search.form .form-item + .form-submit {
   margin-left: 15px;
 }
-.search.form .multiselect__input:focus {
-    border-bottom: 2px solid #02909e;
-    padding:0;    
-}
 @media screen and (max-width: 575px) {
   .search.form .form-item + .form-item,
   .search.form .form-item + .form-submit {
@@ -117,26 +115,23 @@ export default {
 }
 </style>
 <style>
-.search.form .multiselect__option--highlight:after {
-  background: #02909e !important;
+.search.form .multiselect__element {
+  display:block;
 }
-.search.form .multiselect__option--highlight {
-  background: #02909e !important;
+.search.form .multiselect__element .multiselect__option {
+  display:block;
+  padding:10px 40px 10px 30px;
+  white-space:normal;
 }
-.search.form .multiselect__option--highlight::after {
-    background:none!important;
-    content: "";
+.search.form .multiselect__element .multiselect__option.multiselect__option--group {
+    background:none;
+    color: #02909e;
+    padding-left:20px;
 }
-.search.form .multiselect__option--selected.multiselect__option--highlight::after {
-    content: "\f00d";
-    font-family: "Font Awesome 5 Pro";
+.search.form .multiselect__input:focus {
+  border-bottom: 2px solid #02909e;
+  padding:0;    
 }
-.search.form .multiselect__option--selected::after {
-    content: "\f00c";
-    font-family: "Font Awesome 5 Pro";
-}
-</style>
-<style>
 .search.form .multiselect__option--highlight:after {
   background: #02909e !important;
 }
