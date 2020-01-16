@@ -11,6 +11,9 @@
           @updated="onSearchBoxUpdate"
           :location_options="filterOptions.locations"
           :category_options="filterOptions.categories"
+          :search_location="filterParams.search_location"
+          :search_category="filterParams.search_category"
+          :search_term="filterParams.search_term"
         />
       </div>
       <div id="results" class="container">
@@ -61,7 +64,10 @@ export default {
       results: [],
       orgJSONURI: 'https://' + process.env.VUE_APP_HOSTNAME + '/' + process.env.VUE_APP_ORG_JSON_PATH,
       regionCoords: undefined,
-      filterParams: null,
+      filterParams: {
+        category: {},
+        location: {}
+      },
       filterOptions: {
         categories: [],
         locations: []
@@ -249,7 +255,6 @@ export default {
     sortOrgs(orgs) {
       const position = this.getSearchPosition()
       if (position && position[0] && position[1] && orgs.length) {
-        console.log('orgs', JSON.stringify(orgs, null, 2))
         var orgsWithPosition = []
         var orgsWithOutPosition = []
         orgs.forEach((org) => {

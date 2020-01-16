@@ -59,14 +59,10 @@ export default {
   components: { Multiselect },
   props: {
     location_options: { },
-    category_options: { }
-  },
-  data() {
-    return {
-      search_term: "",
-      search_location: null,
-      search_category: null
-    };
+    category_options: { },
+    search_location: { },
+    search_category: { },
+    search_term: "",
   },
   methods: {
     onClickSearch() {
