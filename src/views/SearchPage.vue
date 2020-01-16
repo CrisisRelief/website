@@ -42,6 +42,7 @@ import SearchBox from "../components/SearchBox.vue";
 import axios from "axios";
 import cheapRuler from "cheap-ruler";
 import Fuse from "fuse.js";
+import Url from 'url-parse';
 
 export default {
   components: {
@@ -65,8 +66,30 @@ export default {
       showResults: false
     };
   },
+  computed: {
+    uriSearchTerm() {
+      return this.$route.query.q
+    },
+    searchTermString() {
+      return this.filterParams["term"];
+    },
+    searchLocationString() {
+      var search_location = this.filterParams["location"];
+      if(search_location){
+        search_location = JSON.stringify(search_location)
+      }
+      return search_location
+    },
+    searchCategoryString() {
+      var search_category = this.filterParams["category"];
+      if(search_category){
+        search_category = JSON.stringify(search_category)
+      }
+      return search_category
+    },
+  },
   mounted() {
-    // this.checkUri();
+    this.checkUri();
     var promises = [
       axios.get("/region-coords.json").then(response => {
         this.regionCoords = response.data;
@@ -89,31 +112,29 @@ export default {
   },
   methods: {
     checkUri(){
-      const params = Object.assign({}, this.filterParams);
-      const uri = window.location.href.split('?');
-      if (uri.length === 2)
-      {
-        const queryParameters = uri[1].split('&');
-        queryParameters.forEach( queryParameter => {
-          const queryKeyAndValue = queryParameter.split('=');
-          const queryValue = queryKeyAndValue[1] ? queryKeyAndValue[1].replace(/%20/g, " ") : null;
-          if(queryKeyAndValue[0] === 'q'){
-            params["term"] = decodeURIComponent(queryValue);
-            this.showResults = true
-          }
-          if(queryKeyAndValue[0] === 'loc'){
-            params["location"] = JSON.parse(decodeURIComponent(queryValue));
-            this.showResults = true
-          }
-          if(queryKeyAndValue[0] === 'cat'){
-            params["category"] = JSON.parse(decodeURIComponent(queryValue));
-            this.showResults = true
-          }
-        });
-        this.filterParams = params;
-      }
+      const href = window.location.href;
+      const queryStr = href.split('?')[1];
+      if (!queryStr) { return }
+      // console.log(`queryStr ${queryStr}`)
+      let queryParams = queryStr.split('&').reduce((result, hash) => {
+        // console.log(`hash ${hash}`)
+        let [key, val] = hash.split('=')
+        result[key] = unescape(val)
+        return result
+      }, {})
+
+      Object.entries({
+        q: {filterKey: 'term', parse: false},
+        loc: {filterKey: 'location', parse: true},
+        cat: {filterKey: 'category', parse: true}
+      }).forEach(([queryKey, {filterKey, parse}]) => {
+        if (queryParams[queryKey]) {
+          this.filterParams[filterKey] = parse ? JSON.parse(queryParams[queryKey]) : queryParams[queryKey]
+        }
+      })
     },
     refreshCatFilterOptions() {
+      // TODO: rewrite with lodash
       const categories = [];
       this.rawData.forEach(org => {
         if (org.category && !Object.keys(categories).includes(org.category)) {
@@ -161,7 +182,7 @@ export default {
           locations[loc.state].push({
             postcode: loc.postcode,
             locality: loc.locality,
-            lag: loc.lat,
+            lat: loc.lat,
             long: loc.long
           });
         }
@@ -218,6 +239,7 @@ export default {
       }
       const search_location = this.filterParams["location"];
       if (search_location) {
+        console.log(`search_location ${search_location}`)
         var location = search_location
         if (search_location instanceof Array) {
           location = search_location[0]
@@ -253,9 +275,8 @@ export default {
             orgsWithOutPosition.push(org);
           }
         })
-        orgsWithPosition = sortOrgsByDistance(orgsWithPosition, this.regionCoords, position)
-        var result = orgsWithPosition.concat(orgsWithOutPosition)
-        return result
+        orgsWithPosition = sortOrgsByDistance(orgsWithPosition, position)
+        return orgsWithPosition.concat(orgsWithOutPosition)
       }
       return orgs;
     },
@@ -318,77 +339,41 @@ export default {
       }
       return orgs;
     },
-    getHumanSearchTerm() {
-      return this.filterParams["term"];
-    },
-    getHumanSearchLocation() {
-      var search_location = this.filterParams["location"];
-      if(search_location){
-        search_location = JSON.stringify(search_location)
-      }
-      return search_location
-    },
-    getHumanSearchCategory() {
-      var search_category = this.filterParams["category"];
-      if(search_category){
-        search_category = JSON.stringify(search_category)
-      }
-      return search_category
-    },
-    getUriFromState() {
-      var uri_components = []
-      const search_term = this.getHumanSearchTerm()
-      const search_location = this.getHumanSearchLocation()
-      const search_category = this.getHumanSearchCategory()
+    updateWindowLocation() {
+      const newQuery = Object.assign({}, this.$route.query)
+      const search_term = this.searchTermString
+      const search_location = this.searchLocationString
+      const search_category = this.searchCategoryString
       if (search_term) {
-        uri_components.push('q=' + encodeURIComponent(search_term))
+        newQuery['q'] = search_term
       }
       if(search_location){
-        uri_components.push('loc=' + encodeURIComponent(search_location))
+        newQuery['loc'] = search_location
       }
       if(search_category){
-        uri_components.push('cat=' + encodeURIComponent(search_category))
+        newQuery['cat'] = search_category
       }
-      return '/?' + uri_components.join('&')
+      console.log(`newQuery ${JSON.stringify(newQuery)}`)
+      this.$router.replace({
+        query: newQuery
+      })
     },
     trackSearchQuery() {
-      var params = Object.assign({}, this.filterParams);
-      if(!params){ return }
-      const path = this.getUriFromState();
-      window.history.pushState(params, document.title, path);
-      this.$gtag.pageview({page_path: path});
-      this.$gtag.event('searchQueryParams', JSON.stringify(params));
-      this.$gtag.event('searchQuery', params);
-      const search_term = this.getHumanSearchTerm()
-      const search_location = this.getHumanSearchLocation()
-      const search_category = this.getHumanSearchCategory()
-      if(search_term){
-        this.$gtag.event('submitSearchTerm', {label: search_term});
-      }
-      if(search_location){
-        this.$gtag.event('submitSearchLocation', {label: search_location});
-      }
-      if(search_category){
-        this.$gtag.event('submitSearchCategory', {category: search_category});
-      }
-      if(this.results.length == 0) {
-        this.$gtag.event('noResults');
-      }
-      if(this.results.length) {
-        this.$gtag.event('results', this.results.length);
-      }
+      this.$gtag.pageview({page_path: window.location.href});
     },
     onSearchBoxUpdate(params) {
       console.log("onSearchBoxUpdate", JSON.stringify(params));
       this.filterParams = params;
       this.showResults = true
       this.refreshResults();
+      this.updateWindowLocation();
       this.trackSearchQuery();
     }
   }
 };
 
-function sortOrgsByDistance(results, regionCoords, ourLocation) {
+function sortOrgsByDistance(results, ourLocation) {
+  // console.log(`sortOrgsByDistance ${JSON.stringify(results)} ${JSON.stringify(ourLocation)}`)
   const ruler = cheapRuler(ourLocation[1]);
   function distance(location) {
     return ruler.distance(location, ourLocation);
