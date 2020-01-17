@@ -1,6 +1,6 @@
 fileignoreconfig:
 - filename: yarn.lock
-  checksum: 7112620157b0c49fc3a429fc9f52af3faae56974666801594954f984a6c50624
+  checksum: c2215e16423a70f9b83d950072ea9ddad3392cd46595da5f9d392c85723c7c9c
   ignore_detectors: []
 - filename: sql/setup.sql
   checksum: efc9491899fccc89ad997459594b495fcbe735c29ea336350d3f2619eeaf335e
@@ -20,4 +20,16 @@ fileignoreconfig:
 - filename: yarn.lock
   checksum: fc902058263a5198c42310c6a2a3cf295b024524fdb8232c0f9fd888ef6daf91
   ignore_detectors: []
-scopeconfig: [node]
+- filename: .env
+  checksum: 2328bb76f0f3aa4a83fc5b768f08e6abfa363aef347688c1197c20c5d87d6641
+  ignore_detectors: []
+- filename: .env.development
+  checksum: 7c86e6892de9ebc09c133fd2be9c7b029de451db293f4a69e9f62234e18377b1
+  ignore_detectors: []
+- filename: yarn.lock
+  checksum: c2215e16423a70f9b83d950072ea9ddad3392cd46595da5f9d392c85723c7c9c
+  ignore_detectors: []
+- filename: yarn.lock
+  checksum: e8f2ca48ea6c412d6af792c70ae329b37c007b897df2193f1e292a3303825d3c
+  ignore_detectors: []
+scopeconfig: []

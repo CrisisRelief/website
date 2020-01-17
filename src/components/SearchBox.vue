@@ -8,7 +8,7 @@
           <input
             type="text"
             class="form-control"
-            v-model="search_term"
+            v-model="value.term"
             placeholder="What do you need? eg. food, fuel"
             v-on:keyup.enter="onClickSearch"
           />
@@ -19,8 +19,13 @@
         <!-- Location Selection -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
-            v-model="search_location"
-            :options="search_locations"
+            v-model="value.location"
+            :options="location_options"
+            :group-select="true"
+            group-values="sublocations"
+            group-label="location"
+            label="location"
+            :custom-label="locationLabel"
             placeholder="Location"
           />
         </div>
@@ -28,8 +33,13 @@
         <!-- Category -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
-            v-model="search_category"
-            :options="search_categories"
+            v-model="value.category"
+            :options="category_options"
+            :group-select="true"
+            group-values="subcategories"
+            group-label="category"
+            label="concat"
+            :custom-label="categoryLabel"
             placeholder="Category"
           />
         </div>
@@ -48,23 +58,63 @@ import Multiselect from "vue-multiselect";
 export default {
   components: { Multiselect },
   props: {
-    search_locations: { },
-    search_categories: { }
+    location_options: { },
+    category_options: { },
+    value: {
+      type: Object,
+      default() {
+        return {
+          location: {},
+          term: "",
+          category: {}
+        }
+      }
+    }
   },
-  data() {
-    return {
-      search_term: "",
-      search_location: null,
-      search_category: null
-    };
+  computed: {
+    internal: {
+      get() { return this.value },
+      set(newValue) {this.$emit('input', newValue)}
+    }
   },
   methods: {
+    // onUpdateSearchTerm(value) {
+    //   console.log('onUpdateSearchTerm')
+    //   this.value.term = value;
+    // },
+    // onUpdateSearchLocation(value) {
+    //   console.log('onUpdateSearchLocation')
+    //   this.value.location = value;
+    // },
+    // onUpdateSearchCategory(value) {
+    //   console.log('onUpdateSearchCategory')
+    //   this.value.category = value;
+    // },
     onClickSearch() {
-      this.$emit("updated", {
-        search_location: this.search_location,
-        search_category: this.search_category,
-        search_term: this.search_term
-      });
+      this.$emit("updated", this.value);
+    },
+    locationLabel(location) {
+      const components = []
+      if (location.postcode) {
+        // components.push('<pre class="location-postcode">' + location.postcode + "<pre/>")
+        components.push(location.postcode)
+      }
+      if (location.locality) {
+        // components.push('<pre class="location-locality">' + location.locality + "<pre/>");
+        components.push(location.locality)
+      }
+      return components.join(' - ')
+      // return location.locality
+    },
+    categoryLabel(category) {
+      const components = []
+      if (category.subcategory_1) {
+        components.push(category.subcategory_1)
+      }
+      if (category.subcategory_2) {
+        components.push(category.subcategory_2)
+      }
+      return components.join(' > ')
     }
   }
 };
@@ -100,29 +150,52 @@ export default {
 }
 .search.form .multiselect__input:focus {
     border-bottom: 2px solid #02909e;
-    padding:0;    
-}
-.search.form .multiselect__option--highlight:after {
-  background: #02909e !important;
-}
-.search.form .multiselect__option--highlight {
-  background: #02909e !important;
-}
-.search.form .multiselect__option--highlight::after {
-    content: "";
-}
-.search.form .multiselect__option--selected.multiselect__option--highlight::after {
-    content: "\f00d";
-    font-family: "Font Awesome 5 Pro";
-}
-.search.form .multiselect__option--selected::after {
-    content: "\f00c";
-    font-family: "Font Awesome 5 Pro";
+    padding:0;
 }
 @media screen and (max-width: 575px) {
   .search.form .form-item + .form-item,
   .search.form .form-item + .form-submit {
     margin-left: 0;
   }
+}
+</style>
+<style>
+.search.form .multiselect__element {
+  display:block;
+}
+.search.form .multiselect__element .multiselect__option {
+  background: none;
+  display:block;
+  padding:10px 40px 10px 30px;
+  white-space:normal;
+}
+.search.form .multiselect__element .multiselect__option.multiselect__option--group {
+    background:none;
+    color: #02909e;
+    padding-left:20px;
+}
+.search.form .multiselect__input:focus {
+  border-bottom: 2px solid #02909e;
+  padding:0;
+}
+.search.form .multiselect__option--highlight:after {
+  background: #02909e !important;
+}
+.search.form .multiselect__option--highlight {
+  background: #02909e !important;
+  color:#fff !important;
+}
+.search.form .multiselect__option--highlight::after {
+    background:none!important;
+    content: "";
+}
+.search.form .multiselect__option--selected.multiselect__option--highlight::after {
+    content: "\f00d";
+    font-family: "Font Awesome 5 Pro";
+    margin-right: 2px;
+}
+.search.form .multiselect__option--selected::after {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Pro";
 }
 </style>
