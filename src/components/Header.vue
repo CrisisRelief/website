@@ -7,7 +7,6 @@
       <!-- <div style="text-align:center" class="alert alert-primary w-100" role="alert">
           This website is still under active development, go-live should only be a few hours away &lt;3
       </div> -->
-      <div class="menu-toggle" aria-label="click here to open the menu"><span></span><span></span><span></span></div>
       <div id="links" class="menu" role="navigation">
         <Slide right>
           <router-link to="/about">About</router-link>
@@ -39,6 +38,14 @@ nav h1 {
 nav h1 img {
     max-width:250px;
 }
+#header-start {
+  color: #02909e;
+}
+#header-end {
+  color: #384b71;
+}
+</style>
+<style>
 .bm-overlay {
     background:none;
 }
@@ -50,13 +57,6 @@ nav h1 img {
     width: 100vw;
     height: 100vh;
     z-index: 9;
-
-}
-#header-start {
-  color: #02909e;
-}
-#header-end {
-  color: #384b71;
 }
 .links .bm-burger-button {
     height:20px;
