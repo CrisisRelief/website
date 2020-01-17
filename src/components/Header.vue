@@ -2,8 +2,7 @@
 <header>
     <nav class="navbar navbar-light bg-light">
       <h1 class="navbar-brand mb-0">
-        <span id="header-start">CRISIS</span>
-        <span id="header-end">app</span>
+        <a href="/" style="border:none"><img src="<%= BASE_URL %>images/logo.png" alt="Crisis App"></a>
       </h1>
       <!-- <div style="text-align:center" class="alert alert-primary w-100" role="alert">
           This website is still under active development, go-live should only be a few hours away &lt;3
