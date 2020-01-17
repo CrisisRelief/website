@@ -13,7 +13,7 @@
         <ul>
           <li><router-link to="/about">About</router-link></li>
           <li><router-link to="/">Search</router-link></li>
-          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</li>
+          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</a></li>
         </ul>
       </div>
     </nav>
