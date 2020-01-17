@@ -154,8 +154,8 @@ export default {
       const category_options = Object.entries(categories).map((entry) => {
         const sub_categories = []
         if(Object.entries(entry[1]).length === 0) {
-          entry[1][entry[0]] = []
-          entry[1][entry[0]].push("")
+          entry[1][''] = []
+          entry[1][''].push("")
         }
         Object.entries(entry[1]).forEach((sub_entry) => {
           if(sub_entry[1].length === 0) {

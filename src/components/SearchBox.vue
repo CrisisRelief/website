@@ -114,6 +114,9 @@ export default {
       if (category.subcategory_2) {
         components.push(category.subcategory_2)
       }
+      if (components.length == 0) {
+        components.push(category.category)
+      }
       return components.join(' > ')
     }
   }
