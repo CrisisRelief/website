@@ -340,7 +340,9 @@ export default {
             "address",
             "link"
           ],
-          shouldSort: true
+          shouldSort: true,
+          // tokenize: true,
+          threshold: 0.3
         });
         let result = fuse.search(search_term);
         return result
