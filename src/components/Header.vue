@@ -27,32 +27,37 @@ nav h1 {
   font-size: xx-large;
   font-weight: bold;
 }
+nav h1 img {
+    max-width:250px;
+}
+.bm-overlay {
+    background:none;
+}
+.bm-overlay::before {
+    content: "";
+    background: #000;
+    opacity: 0.7;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9;
 
+}
 #header-start {
   color: #02909e;
 }
 #header-end {
   color: #384b71;
 }
-.menu-toggle {
-    position: absolute;
-    right: 30px;
+.links .bm-burger-button {
+    height:20px;
+    top:25px;
 }
-.menu-toggle span {
-    height: 4px;
-    width: 35px;
+.links .bm-burger-button .bm-burger-bars {
     background: #02909e;
-    display: block;
-    margin-bottom: 4px;
     border-radius: 45px;
 }
-.menu {
-    background: #f8f9fa;
-    display:none;
-    padding: 10px 30px;
-    position: absolute;
-    right: 15px;
-    text-align: left;
-    top: 100%;
+.bm-item-list .bm-menu a:hover {
+    color:#fff;
 }
 </style>
