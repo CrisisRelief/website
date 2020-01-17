@@ -12,6 +12,7 @@
           <router-link to="/about">About</router-link>
           <router-link to="/">Search</router-link>
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</a>
+          <a href="https://firemap.atlassian.net/servicedesk/customer/portal/2">Support Portal</a>
         </Slide>
       </div>
     </nav>
@@ -44,6 +45,10 @@ nav h1 img {
 #header-end {
   color: #384b71;
 }
+.bm-item-list a {
+  color: #fff;
+}
+
 </style>
 <style>
 .bm-overlay {
