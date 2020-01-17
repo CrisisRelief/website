@@ -9,24 +9,15 @@
       </div> -->
       <div class="menu-toggle" aria-label="click here to open the menu"><span></span><span></span><span></span></div>
       <div id="links" class="menu" role="navigation">
-        <Slide right>
-          <router-link to="/about">About</router-link>
-          <router-link to="/">Search</router-link>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</a>
-        </Slide>
+        <ul>
+          <li><router-link to="/about">About</router-link></li>
+          <li><router-link to="/">Search</router-link></li>
+          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</a></li>
+        </ul>
       </div>
     </nav>
 </header>
 </template>
-
-<script>
-import { Slide } from 'vue-burger-menu'
-export default {
-  components: {
-    Slide
-  }
-}
-</script>
 
 <style scoped>
 header {
@@ -36,32 +27,37 @@ nav h1 {
   font-size: xx-large;
   font-weight: bold;
 }
+nav h1 img {
+    max-width:250px;
+}
+.bm-overlay {
+    background:none;
+}
+.bm-overlay::before {
+    content: "";
+    background: #000;
+    opacity: 0.7;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9;
 
+}
 #header-start {
   color: #02909e;
 }
 #header-end {
   color: #384b71;
 }
-/* .menu-toggle {
-    position: absolute;
-    right: 30px;
+.links .bm-burger-button {
+    height:20px;
+    top:25px;
 }
-.menu-toggle span {
-    height: 4px;
-    width: 35px;
+.links .bm-burger-button .bm-burger-bars {
     background: #02909e;
-    display: block;
-    margin-bottom: 4px;
     border-radius: 45px;
 }
-.menu {
-    background: #f8f9fa;
-    display:none;
-    padding: 10px 30px;
-    position: absolute;
-    right: 15px;
-    text-align: left;
-    top: 100%;
-} */
+.bm-item-list .bm-menu a:hover {
+    color:#fff;
+}
 </style>
