@@ -58,11 +58,11 @@ nav h1 img {
     height: 100vh;
     z-index: 9;
 }
-.links .bm-burger-button {
+.menu .bm-burger-button {
     height:20px;
     top:25px;
 }
-.links .bm-burger-button .bm-burger-bars {
+.menu .bm-burger-button .bm-burger-bars {
     background: #02909e;
     border-radius: 45px;
 }
