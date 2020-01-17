@@ -19,9 +19,12 @@
     "cheap-ruler": "^2.5.1",
     "core-js": "^3.4.4",
     "fuse.js": "^3.4.6",
+    "geolib": "^3.2.1",
     "vue": "^2.6.11",
+    "vue-burger-menu": "^2.0.3",
     "vue-gtag": "^1.1.2",
-    "vue-multiselect": "^2.1.6"
+    "vue-multiselect": "^2.1.6",
+    "vue-router": "^3.1.5"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-pro": "^5.12.0",
