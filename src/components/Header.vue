@@ -10,15 +10,24 @@
       </div> -->
       <div class="menu-toggle" aria-label="click here to open the menu"><span></span><span></span><span></span></div>
       <div id="links" class="menu" role="navigation">
-        <ul>
-          <li><router-link to="/about">About</router-link></li>
-          <li><router-link to="/">Search</router-link></li>
-          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</a></li>
-        </ul>
+        <Slide right>
+          <router-link to="/about">About</router-link>
+          <router-link to="/">Search</router-link>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</a>
+        </Slide>
       </div>
     </nav>
 </header>
 </template>
+
+<script>
+import { Slide } from 'vue-burger-menu'
+export default {
+  components: {
+    Slide
+  }
+}
+</script>
 
 <style scoped>
 header {
@@ -35,7 +44,7 @@ nav h1 {
 #header-end {
   color: #384b71;
 }
-.menu-toggle {
+/* .menu-toggle {
     position: absolute;
     right: 30px;
 }
@@ -55,5 +64,5 @@ nav h1 {
     right: 15px;
     text-align: left;
     top: 100%;
-}
+} */
 </style>
