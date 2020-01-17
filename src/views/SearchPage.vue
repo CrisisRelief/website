@@ -68,9 +68,6 @@ export default {
     };
   },
   computed: {
-    uriSearchTerm() {
-      return this.$route.query.q
-    },
     searchTermString() {
       return this.filterParams["term"];
     },
