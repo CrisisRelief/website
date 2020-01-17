@@ -44,7 +44,6 @@ import SearchBox from "../components/SearchBox.vue";
 import axios from "axios";
 import cheapRuler from "cheap-ruler";
 import Fuse from "fuse.js";
-import Url from 'url-parse';
 
 export default {
   components: {
