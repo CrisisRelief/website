@@ -237,12 +237,10 @@ export default {
       }
       const search_location = this.filterParams["location"];
       if (search_location) {
-        console.log(`search_location ${search_location}`)
         var location = search_location
         if (search_location instanceof Array) {
           location = search_location[0]
         }
-        console.log(`location ${JSON.stringify(location)}`)
         if (location.lat && location.long) {
           position = [location.long, location.lat]
         } else if (location.location) {
@@ -283,22 +281,24 @@ export default {
         return orgs;
       }
       const search_category = this.filterParams["category"];
-      if (!search_category) {
-        return orgs;
-      }
-
-      var categories = [search_category]
-      if (search_category instanceof Array) {
+      var categories;
+      if (!search_category || search_category == null) { return orgs }
+      else if (search_category instanceof Array) {
+        if (!search_category.length) { return orgs }
         categories = search_category
       }
-      if (categories) {
-        return orgs.filter(org => {
-          if (!this.orgInCategories(org, categories)) {
-            return false;
-          }
-          return true;
-        });
+      else {
+        if (!Object.entries(search_category).length) { return orgs }
+        categories = [search_category]
       }
+
+      let result = orgs.filter(org => {
+        if (!this.orgInCategories(org, categories)) {
+          return false;
+        }
+        return true;
+      });
+      return result
     },
     orgInCategories(org, categories) {
       var result = false
@@ -351,7 +351,6 @@ export default {
       if(search_category){
         newQuery['cat'] = search_category
       }
-      console.log(`newQuery ${JSON.stringify(newQuery)}`)
       this.$router.replace({
         query: newQuery
       })
