@@ -64,7 +64,8 @@ export default {
         categories: [],
         locations: []
       },
-      showResults: false
+      showResults: false,
+      showSubSubCategories: false
     };
   },
   computed: {
@@ -140,9 +141,14 @@ export default {
         }
         if (org.category_sub && !Object.keys(categories[org.category]).includes(org.category_sub)) {
           categories[org.category][org.category_sub] = [];
+          if (!this.showSubSubCategories) {
+            categories[org.category][org.category_sub].push('')
+          }
         }
         if (org.category_sub_sub && !categories[org.category][org.category_sub].includes(org.category_sub_sub)) {
-          categories[org.category][org.category_sub].push(org.category_sub_sub)
+          if (this.showSubSubCategories) {
+            categories[org.category][org.category_sub].push(org.category_sub_sub)
+          }
         }
       });
       const category_options = Object.entries(categories).map((entry) => {
@@ -308,7 +314,7 @@ export default {
         if (!category_spec || !Object.entries(category_spec).length) { return }
         if (org.category != category_spec.category) { return }
         if (org.category_sub != category_spec.subcategory_1) { return }
-        if (org.category_sub_sub != category_spec.subcategory_2) { return }
+        if (this.showSubSubCategories && org.category_sub_sub != category_spec.subcategory_2) { return }
         result = true
       })
       return result
