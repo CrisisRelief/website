@@ -8,10 +8,12 @@
       <!-- <div style="text-align:center" class="alert alert-primary w-100" role="alert">
           This website is still under active development, go-live should only be a few hours away &lt;3
       </div> -->
-      <div id="links">
+      <div class="menu-toggle" aria-label="click here to open the menu"><span></span><span></span><span></span></div>
+      <div id="links" class="menu" role="navigation">
         <ul>
           <li><router-link to="/about">About</router-link></li>
           <li><router-link to="/">Search</router-link></li>
+          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</li>
         </ul>
       </div>
     </nav>
@@ -33,4 +35,41 @@ nav h1 {
 #header-end {
   color: #384b71;
 }
+.menu-toggle {
+    position: absolute;
+    right: 30px;
+}
+.menu-toggle span {
+    height: 4px;
+    width: 35px;
+    background: #02909e;
+    display: block;
+    margin-bottom: 4px;
+    border-radius: 45px;
+}
+.menu {
+    background: #f8f9fa;
+    display:none;
+    padding: 10px 30px;
+    position: absolute;
+    right: 15px;
+    text-align: left;
+    top: 100%;
+}
+.menu ul {
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+.menu ul li {
+    margin-bottom:10px;
+}
+.menu-open .menu {
+    display:block;
+}
 </style>
+<script>
+$(".menu-toggle").click(function() {
+  $("body").toggleClass("menu-open");
+});
+</script>
