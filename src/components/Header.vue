@@ -56,20 +56,4 @@ nav h1 {
     text-align: left;
     top: 100%;
 }
-.menu ul {
-    list-style-type:none;
-    margin:0;
-    padding:0;
-}
-.menu ul li {
-    margin-bottom:10px;
-}
-.menu-open .menu {
-    display:block;
-}
 </style>
-<script>
-$(".menu-toggle").click(function() {
-  $("body").toggleClass("menu-open");
-});
-</script>
