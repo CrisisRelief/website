@@ -170,25 +170,10 @@ export default {
     },
     trackSearchQuery() {
       var params = Object.assign({}, this.filterParams);
-      // console.log(params);
       if(!params){ return }
       const path = this.get_uri_from_state();
       window.history.pushState(params, document.title, path);
       this.$gtag.pageview({page_path: path});
-      this.$gtag.event('searchQueryParams', JSON.stringify(params));
-      this.$gtag.event('searchQuery', params);
-      const search_term = params["search_term"];
-      const search_location = params["search_location"];
-      const search_category = params["search_category"];
-      if(search_term){
-        this.$gtag.event('submitSearchTerm', {label: search_term});
-      }
-      if(search_location){
-        this.$gtag.event('submitSearchLocation', {label: search_location});
-      }
-      if(search_category){
-        this.$gtag.event('submitSearchCategory', {category: search_category});
-      }
       if(this.results.length == 0) {
         this.$gtag.event('noResults');
       }
