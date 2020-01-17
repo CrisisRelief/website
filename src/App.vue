@@ -4,8 +4,9 @@
     <div class="content-wrap">
       <div class="container">
         <div class="intro">
-          <h2>Find Resources Near You</h2>
-          <p>In a natural disaster emergency, we help you find help or where and how you can help. Listings may have errors or out-dated information, please verify services with the poster.</p>
+          <h2>Need help or want to help?</h2>
+          <p>Use the directory to find resources or services you need in an emergency, or where and how you can help.<p>
+          <p>If you have a resource or service to offer, add a listing using our <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">online form</a>.</p>
         </div>
         <SearchBox
           @updated="onSearchBoxUpdate"
@@ -16,7 +17,7 @@
       <div id="results" class="container">
         <span id="hits">
           <span v-if="results.length > 0">{{ results.length }} results</span>
-          <span v-else-if="filterParams">No results</span>
+          <span v-else-if="filterParams">No results. Please try a different search.</span>
         </span>
         <SearchResult
           v-for="(result, index) in results"
@@ -32,6 +33,8 @@
           :address="result.address"
           :link="result.link"
         />
+        
+          <p>Note: While every effort is being made to ensure the information is accurate, this is a community-sourced directory. Please do your own checks.</p>
       </div>
     </div>
     <Footer />
