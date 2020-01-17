@@ -68,8 +68,4 @@ nav h1 {
     display:block;
 }
 </style>
-<script>
-$(".menu-toggle").click(function() {
-  $("body").toggleClass("menu-open");
-});
-</script>
+
