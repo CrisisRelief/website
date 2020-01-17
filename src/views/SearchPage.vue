@@ -25,7 +25,7 @@
         :category="result.category"
         :category_sub="result.category_sub"
         :category_sub_sub="result.category_sub_sub"
-        :location="result.lga"
+        :location="result.address"
         :description="result.description"
         :phone="result.phone"
         :email="result.email"
