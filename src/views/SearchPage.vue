@@ -282,12 +282,12 @@ export default {
       }
       const search_category = this.filterParams["category"];
       var categories;
-      if (!search_category || search_category == null) { return orgs }
-      else if (search_category instanceof Array) {
-        if (!search_category.length) { return orgs }
-        categories = search_category
-      }
-      else {
+      if (!search_category || search_category == null) {
+        return orgs
+      } else if (search_category instanceof Array) {
+        categories = search_category.filter((category)=>{ Object.entries(category).length })
+        if (!categories.length) { return orgs }
+      } else {
         if (!Object.entries(search_category).length) { return orgs }
         categories = [search_category]
       }
@@ -298,11 +298,14 @@ export default {
         }
         return true;
       });
+
+      // console.log(`result ${JSON.stringify(result)}`)
       return result
     },
     orgInCategories(org, categories) {
       var result = false
       categories.forEach((category_spec) => {
+        if (!category_spec || !Object.entries(category_spec).length) { return }
         if (org.category != category_spec.category) { return }
         if (org.category_sub != category_spec.subcategory_1) { return }
         if (org.category_sub_sub != category_spec.subcategory_2) { return }
@@ -333,7 +336,8 @@ export default {
           ],
           shouldSort: true
         });
-        orgs = fuse.search(search_term);
+        let result = fuse.search(search_term);
+        return result
       }
       return orgs;
     },
