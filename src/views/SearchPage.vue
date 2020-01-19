@@ -25,7 +25,7 @@
         :category="result.category"
         :category_sub="result.category_sub"
         :category_sub_sub="result.category_sub_sub"
-        :location="result.lga"
+        :location="result.address"
         :description="result.description"
         :phone="result.phone"
         :email="result.email"
@@ -64,7 +64,8 @@ export default {
         categories: [],
         locations: []
       },
-      showResults: false
+      showResults: false,
+      showSubSubCategories: false
     };
   },
   computed: {
@@ -140,16 +141,21 @@ export default {
         }
         if (org.category_sub && !Object.keys(categories[org.category]).includes(org.category_sub)) {
           categories[org.category][org.category_sub] = [];
+          if (!this.showSubSubCategories) {
+            categories[org.category][org.category_sub].push('')
+          }
         }
         if (org.category_sub_sub && !categories[org.category][org.category_sub].includes(org.category_sub_sub)) {
-          categories[org.category][org.category_sub].push(org.category_sub_sub)
+          if (this.showSubSubCategories) {
+            categories[org.category][org.category_sub].push(org.category_sub_sub)
+          }
         }
       });
       const category_options = Object.entries(categories).map((entry) => {
         const sub_categories = []
         if(Object.entries(entry[1]).length === 0) {
-          entry[1][entry[0]] = []
-          entry[1][entry[0]].push("")
+          entry[1][''] = []
+          entry[1][''].push("")
         }
         Object.entries(entry[1]).forEach((sub_entry) => {
           if(sub_entry[1].length === 0) {
@@ -237,12 +243,10 @@ export default {
       }
       const search_location = this.filterParams["location"];
       if (search_location) {
-        console.log(`search_location ${search_location}`)
         var location = search_location
         if (search_location instanceof Array) {
           location = search_location[0]
         }
-        console.log(`location ${JSON.stringify(location)}`)
         if (location.lat && location.long) {
           position = [location.long, location.lat]
         } else if (location.location) {
@@ -283,29 +287,34 @@ export default {
         return orgs;
       }
       const search_category = this.filterParams["category"];
-      if (!search_category) {
-        return orgs;
+      var categories;
+      if (!search_category || search_category == null) {
+        return orgs
+      } else if (search_category instanceof Array) {
+        categories = search_category.filter((category)=>{ Object.entries(category).length })
+        if (!categories.length) { return orgs }
+      } else {
+        if (!Object.entries(search_category).length) { return orgs }
+        categories = [search_category]
       }
 
-      var categories = [search_category]
-      if (search_category instanceof Array) {
-        categories = search_category
-      }
-      if (categories) {
-        return orgs.filter(org => {
-          if (!this.orgInCategories(org, categories)) {
-            return false;
-          }
-          return true;
-        });
-      }
+      let result = orgs.filter(org => {
+        if (!this.orgInCategories(org, categories)) {
+          return false;
+        }
+        return true;
+      });
+
+      // console.log(`result ${JSON.stringify(result)}`)
+      return result
     },
     orgInCategories(org, categories) {
       var result = false
       categories.forEach((category_spec) => {
+        if (!category_spec || !Object.entries(category_spec).length) { return }
         if (org.category != category_spec.category) { return }
         if (org.category_sub != category_spec.subcategory_1) { return }
-        if (org.category_sub_sub != category_spec.subcategory_2) { return }
+        if (this.showSubSubCategories && org.category_sub_sub != category_spec.subcategory_2) { return }
         result = true
       })
       return result
@@ -331,9 +340,12 @@ export default {
             "address",
             "link"
           ],
-          shouldSort: true
+          shouldSort: true,
+          // tokenize: true,
+          threshold: 0.3
         });
-        orgs = fuse.search(search_term);
+        let result = fuse.search(search_term);
+        return result
       }
       return orgs;
     },
@@ -351,7 +363,6 @@ export default {
       if(search_category){
         newQuery['cat'] = search_category
       }
-      console.log(`newQuery ${JSON.stringify(newQuery)}`)
       this.$router.replace({
         query: newQuery
       })
