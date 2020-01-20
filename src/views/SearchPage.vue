@@ -57,8 +57,8 @@ export default {
       orgJSONURI: 'https://' + process.env.VUE_APP_HOSTNAME + '/' + process.env.VUE_APP_ORG_JSON_PATH,
       regionCoords: undefined,
       filterParams: {
-        category: {},
-        location: {}
+        category: null,
+        location: null
       },
       filterOptions: {
         categories: [],
