@@ -64,9 +64,9 @@ export default {
       type: Object,
       default() {
         return {
-          location: {},
+          location: null,
           term: "",
-          category: {}
+          category: null
         }
       }
     }
