@@ -291,8 +291,10 @@ export default {
       if (!search_category || search_category == null) {
         return orgs
       } else if (search_category instanceof Array) {
-        categories = search_category.filter((category)=>{ Object.entries(category).length })
-        if (!categories.length) { return orgs }
+        categories = search_category.filter((category)=>{
+          return Object.entries(category).length > 0
+        })
+        if (!categories.length > 0) { return orgs }
       } else {
         if (!Object.entries(search_category).length) { return orgs }
         categories = [search_category]
