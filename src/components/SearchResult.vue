@@ -9,7 +9,7 @@
       <div class="search-result-categories">
         <span v-for="(category, index) in categories" :key="index" class="search-result-category">
           {{ category }}
-          <span v-if="index+1 < categories.length">/</span>
+          <span v-if="index+1 < categories.length"> > </span>
         </span>
       </div>
       <div class="search-result-location">{{ location }}</div>
@@ -43,8 +43,7 @@ export default {
   props: {
     title: {},
     category: {},
-    category_sub: {},
-    category_sub_sub: {},
+    tags: {},
     location: {},
     description: {},
     phone: {},
@@ -57,7 +56,7 @@ export default {
   components: { FontAwesomeIcon },
   computed: {
     categories() {
-      return [this.category, this.category_sub, this.category_sub_sub].filter(
+      return [this.category, this.tags.join(', ')].filter(
         (elem) => {
           return elem !== undefined && elem.length > 0;
         }

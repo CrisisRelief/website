@@ -23,8 +23,7 @@
         :key="index"
         :title="result.title"
         :category="result.category"
-        :category_sub="result.category_sub"
-        :category_sub_sub="result.category_sub_sub"
+        :tags="result.tags"
         :location="result.address"
         :description="result.description"
         :phone="result.phone"
@@ -65,7 +64,6 @@ export default {
         locations: []
       },
       showResults: false,
-      showSubSubCategories: false
     };
   },
   computed: {
@@ -99,7 +97,7 @@ export default {
       }),
       axios.get(this.orgJSONURI).then(response => {
         console.log("loading org json from", this.orgJSONURI);
-        this.rawData = response.data;
+        this.rawData = response.data.map(this.parseSingleRawOrg)
         this.refreshCatFilterOptions();
       })
     ]
@@ -110,6 +108,17 @@ export default {
     callAfterAwait(promises, this.refreshResults)
   },
   methods: {
+    parseSingleRawOrg(org) {
+      // console.log(`org ${JSON.stringify(org)}`)
+      const defaults = {subcategory_1: '', subcategory_2: ''}
+      const {subcategory_1, subcategory_2} = Object.assign(defaults, org)
+      var tags = []
+      Array(subcategory_1, subcategory_2).forEach((subcategory) => {
+        tags.push(...subcategory.split(', '))
+      })
+      org.tags = tags.filter(tag => { return tag.length > 0 })
+      return org
+    },
     checkUri(){
       const href = window.location.href;
       const queryStr = href.split('?')[1];
@@ -133,47 +142,32 @@ export default {
       })
     },
     refreshCatFilterOptions() {
-      // TODO: rewrite with lodash
-      const categories = [];
+      const categories = {};
       this.rawData.forEach(org => {
         if (org.category && !Object.keys(categories).includes(org.category)) {
-          categories[org.category] = {}
+          categories[org.category] = []
         }
-        if (org.category_sub && !Object.keys(categories[org.category]).includes(org.category_sub)) {
-          categories[org.category][org.category_sub] = [];
-          if (!this.showSubSubCategories) {
-            categories[org.category][org.category_sub].push('')
-          }
-        }
-        if (org.category_sub_sub && !categories[org.category][org.category_sub].includes(org.category_sub_sub)) {
-          if (this.showSubSubCategories) {
-            categories[org.category][org.category_sub].push(org.category_sub_sub)
-          }
-        }
-      });
-      const category_options = Object.entries(categories).map((entry) => {
-        const sub_categories = []
-        if(Object.entries(entry[1]).length === 0) {
-          entry[1][''] = []
-          entry[1][''].push("")
-        }
-        Object.entries(entry[1]).forEach((sub_entry) => {
-          if(sub_entry[1].length === 0) {
-            sub_entry[1].push("")
-          }
-          sub_entry[1].forEach((sub_sub_entry) => {
-            sub_categories.push({
-              category: entry[0],
-              subcategory_1: sub_entry[0],
-              subcategory_2: sub_sub_entry,
-            })
+        if (org.tags && org.tags instanceof Array) {
+          org.tags.forEach((tag) => {
+            if(tag && !categories[org.category].includes(tag)) {
+              categories[org.category].push(tag)
+            }
           })
-        })
-        return {
-          category: entry[0],
-          subcategories: sub_categories
         }
-      });
+      })
+      // console.log(`categories ${JSON.stringify(categories)}`)
+      const category_options = Object.entries(categories).map((entry) => {
+        const [category, children] = entry
+        var subcategories = children.map((tag) => { return { category, tag } })
+        if (subcategories.length == 0) {
+          subcategories = Array({category, tag: ''})
+        }
+        return {
+          category,
+          subcategories
+        }
+      })
+      // console.log(`category_options ${JSON.stringify(category_options)}`)
       this.filterOptions.categories = category_options;
     },
     refreshLocationFilterOptions() {
@@ -192,19 +186,12 @@ export default {
         }
       });
       const location_options = Object.entries(locations).map((entry) => {
-        const sub_locations = []
-        if(Object.entries(entry[1]).length === 0) {
-          entry[1][entry[0]] = []
-          entry[1][entry[0]].push("")
-        }
-        entry[1].forEach((sub_entry) => {
-          sub_locations.push({
-            location: entry[0],
-            ...sub_entry,
-          })
+        const [location, children] = entry
+        var sub_locations = children.map((child) => {
+          return { location, ...child }
         })
         return {
-          location: entry[0],
+          location,
           sublocations: sub_locations
         }
       });
@@ -301,10 +288,7 @@ export default {
       }
 
       let result = orgs.filter(org => {
-        if (!this.orgInCategories(org, categories)) {
-          return false;
-        }
-        return true;
+        return this.orgInCategories(org, categories)
       });
 
       // console.log(`result ${JSON.stringify(result)}`)
@@ -314,9 +298,8 @@ export default {
       var result = false
       categories.forEach((category_spec) => {
         if (!category_spec || !Object.entries(category_spec).length) { return }
-        if (org.category != category_spec.category) { return }
-        if (org.category_sub != category_spec.subcategory_1) { return }
-        if (this.showSubSubCategories && org.category_sub_sub != category_spec.subcategory_2) { return }
+        if (category_spec.category && org.category != category_spec.category) { return }
+        if (category_spec.tag && !org.tags.includes(category_spec.tag)) { return }
         result = true
       })
       return result
@@ -332,8 +315,8 @@ export default {
           keys: [
             "title",
             "category",
-            "category_sub",
-            "category_sub_sub",
+            "subcategory_1",
+            "subcategory_2",
             "location",
             "lga",
             "description",

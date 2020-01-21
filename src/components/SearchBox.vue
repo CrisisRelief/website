@@ -109,17 +109,10 @@ export default {
       // return location.locality
     },
     categoryLabel(category) {
-      const components = []
-      if (category.subcategory_1) {
-        components.push(category.subcategory_1)
+      if (category.tag.length > 0) {
+        return category.tag
       }
-      if (category.subcategory_2) {
-        components.push(category.subcategory_2)
-      }
-      if (components.length == 0) {
-        components.push(category.category)
-      }
-      return components.join(' > ')
+      return category.category
     }
   }
 };
