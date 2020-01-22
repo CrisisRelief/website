@@ -23,7 +23,7 @@
         :key="index"
         :title="result.title"
         :category="result.category"
-        :tags="result.tags"
+        :tags_flat="result.tags_flat"
         :location="result.address"
         :description="result.description"
         :phone="result.phone"
@@ -110,13 +110,17 @@ export default {
   methods: {
     parseSingleRawOrg(org) {
       // console.log(`org ${JSON.stringify(org)}`)
-      const defaults = {subcategory_1: '', subcategory_2: ''}
-      const {subcategory_1, subcategory_2} = Object.assign(defaults, org)
+      const defaults = {subcategory_1: '', subcategory_2: '', other_categories: '' }
+      const {subcategory_1, subcategory_2, other_categories} = Object.assign(defaults, org)
       var tags = []
       Array(subcategory_1, subcategory_2).forEach((subcategory) => {
         tags.push(...subcategory.split(', '))
       })
       org.tags = tags.filter(tag => { return tag.length > 0 })
+      org.tags_flat = org.tags.concat(other_categories).filter(
+        (tag) => {return tag.length > 0}
+      ).join(', ')
+
       return org
     },
     checkUri(){
@@ -315,8 +319,7 @@ export default {
           keys: [
             "title",
             "category",
-            "subcategory_1",
-            "subcategory_2",
+            "tags_flat",
             "location",
             "lga",
             "description",

@@ -43,7 +43,7 @@ export default {
   props: {
     title: {},
     category: {},
-    tags: {},
+    tags_flat: {},
     location: {},
     description: {},
     phone: {},
@@ -56,7 +56,7 @@ export default {
   components: { FontAwesomeIcon },
   computed: {
     categories() {
-      return [this.category, this.tags.join(', ')].filter(
+      return [this.category, this.tags_flat].filter(
         (elem) => {
           return elem !== undefined && elem.length > 0;
         }
