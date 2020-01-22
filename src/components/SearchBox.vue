@@ -27,6 +27,7 @@
             label="location"
             :custom-label="locationLabel"
             placeholder="Location"
+            :show-labels="false"
           />
         </div>
 
@@ -41,6 +42,7 @@
             label="concat"
             :custom-label="categoryLabel"
             placeholder="Category"
+            :show-labels="false"
           />
         </div>
 
@@ -107,23 +109,21 @@ export default {
       // return location.locality
     },
     categoryLabel(category) {
-      const components = []
-      if (category.subcategory_1) {
-        components.push(category.subcategory_1)
+      if (category.tag.length > 0) {
+        return category.tag
       }
-      if (category.subcategory_2) {
-        components.push(category.subcategory_2)
-      }
-      if (components.length == 0) {
-        components.push(category.category)
-      }
-      return components.join(' > ')
+      return category.category
     }
   }
 };
 </script>
 
+<style>
+@import '../../node_modules/@fortawesome/fontawesome-pro/css/all.css';
+</style>
+
 <style scoped>
+
 .row.no-gutter {
   margin: 0;
 }
@@ -151,54 +151,52 @@ export default {
 .search.form .form-item + .form-submit {
   margin-left: 15px;
 }
-.search.form .multiselect__input:focus {
-    border-bottom: 2px solid #02909e;
-    padding:0;
-}
 @media screen and (max-width: 575px) {
   .search.form .form-item + .form-item,
   .search.form .form-item + .form-submit {
     margin-left: 0;
   }
 }
+
 </style>
 <style>
-.search.form .multiselect__element {
-  display:block;
-}
-.search.form .multiselect__element .multiselect__option {
-  background: none;
-  display:block;
-  padding:10px 40px 10px 30px;
-  white-space:normal;
-}
-.search.form .multiselect__element .multiselect__option.multiselect__option--group {
-    background:none;
-    color: #02909e;
-    padding-left:20px;
-}
-.search.form .multiselect__input:focus {
+
+.search.form .multiselect__input {
   border-bottom: 2px solid #02909e;
   padding:0;
 }
+
+/* .search.form .multiselect__single {
+  display: none;
+} */
+
+.search.form .multiselect__option--highlight,
 .search.form .multiselect__option--highlight:after {
-  background: #02909e !important;
+  background: #02909e;
 }
-.search.form .multiselect__option--highlight {
-  background: #02909e !important;
-  color:#fff !important;
+
+.search.form .multiselect__content,
+.search.form .multiselect__element,
+.search.form .multiselect__option {
+  width: 100%
 }
-.search.form .multiselect__option--highlight::after {
-    background:none!important;
-    content: "";
+
+.search.form .multiselect__option span {
+  display: block;
+  width: 100%;
+  word-break: break-word;
+  white-space: normal;
 }
-.search.form .multiselect__option--selected.multiselect__option--highlight::after {
-    content: "\f00d";
-    font-family: "Font Awesome 5 Pro";
-    margin-right: 2px;
-}
+
+.search.form .multiselect__option--group-selected::after,
 .search.form .multiselect__option--selected::after {
-    content: "\f00c";
-    font-family: "Font Awesome 5 Pro";
+  content: "\f00d";
+  font-family: "Font Awesome 5 Pro";
+  margin-right: 2px;
+}
+
+.search.form .multiselect__option--highlight:not(.multiselect__option--selected):not(.multiselect__option--group-selected)::after {
+  content: "\f00c";
+  font-family: "Font Awesome 5 Pro";
 }
 </style>
