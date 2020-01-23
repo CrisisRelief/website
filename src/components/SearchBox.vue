@@ -22,6 +22,7 @@
             v-model="value.location"
             :options="location_options"
             :group-select="true"
+            :loading="loading.location"
             group-values="sublocations"
             group-label="location"
             label="location"
@@ -37,6 +38,7 @@
             v-model="value.category"
             :options="category_options"
             :group-select="true"
+            :loading="loading.category"
             group-values="subcategories"
             group-label="category"
             label="concat"
@@ -69,6 +71,14 @@ export default {
           location: null,
           term: "",
           category: null
+        }
+      }
+    },
+    loading: {
+      default() {
+        return {
+          category: true,
+          location: true
         }
       }
     }

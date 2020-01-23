@@ -10,6 +10,7 @@
         @updated="onSearchBoxUpdate"
         :location_options="filterOptions.locations"
         :category_options="filterOptions.categories"
+        :loading="loading"
         :value="filterParams"
       />
     </div>
@@ -64,6 +65,10 @@ export default {
         locations: []
       },
       showResults: false,
+      loading: {
+        category: true,
+        location: true
+      }
     };
   },
   computed: {
@@ -94,11 +99,13 @@ export default {
       axios.get("/australian_postcodes.json").then(response => {
         this.locationCoords = response.data;
         this.refreshLocationFilterOptions();
+        this.loading.location = false
       }),
       axios.get(this.orgJSONURI).then(response => {
         console.log("loading org json from", this.orgJSONURI);
         this.rawData = response.data.map(this.parseSingleRawOrg)
         this.refreshCatFilterOptions();
+        this.loading.category = false
       })
     ]
     async function callAfterAwait(promises, cb) {
