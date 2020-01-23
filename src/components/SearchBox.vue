@@ -20,7 +20,7 @@
         <div class="col-12 col-sm-4 form-item">
           <multiselect
             v-model="value.location"
-            :options="location_options"
+            :options="comp_location_options"
             :group-select="true"
             :loading="loading.location"
             group-values="sublocations"
@@ -29,7 +29,14 @@
             :custom-label="locationLabel"
             placeholder="Location"
             :show-labels="false"
-          />
+          >
+            <template slot="beforeList">
+              <button v-if="has_geolocation" type="button" class="btn btn-info" v-on:click="onToggleLocation">
+                <span v-if="!useBrowserLocation">Use my current location</span>
+                <span v-else>Search for a location</span>
+              </button>
+            </template>
+          </multiselect>
         </div>
 
         <!-- Category -->
@@ -86,6 +93,22 @@ export default {
           location: true
         }
       }
+    },
+  },
+  data() {
+    return {
+      useBrowserLocation: false,
+    }
+  },
+  computed: {
+    comp_location_options() {
+      if (this.useBrowserLocation) {
+        return []
+      }
+      return this.location_options
+    },
+    has_geolocation() {
+      return navigator.geolocation
     }
   },
   methods: {
@@ -119,7 +142,16 @@ export default {
     onClickSearch() {
       this.$emit("updated", this.value);
     },
+    onToggleLocation() {
+      this.useBrowserLocation = !this.useBrowserLocation
+      if (this.useBrowserLocation) {
+        this.value.location = [{"currentLocation":true}]
+      }
+    },
     locationLabel(location) {
+      if (location.currentLocation) {
+        return 'Use my current location'
+      }
       const components = []
       if (location.postcode) {
         // components.push('<pre class="location-postcode">' + location.postcode + "<pre/>")
