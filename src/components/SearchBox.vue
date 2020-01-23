@@ -35,7 +35,7 @@
         <!-- Category -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
-            v-model="value.category"
+            :value="value.category"
             :options="category_options"
             :group-select="true"
             :loading="loading.category"
@@ -45,6 +45,11 @@
             :custom-label="categoryLabel"
             placeholder="Category"
             :show-labels="false"
+            :multiple="true"
+            :close-on-select="false"
+            :reset-after="true"
+            @select="onSelectCategory"
+            @remove="onRemoveCategory"
           />
         </div>
 
@@ -83,25 +88,34 @@ export default {
       }
     }
   },
-  computed: {
-    internal: {
-      get() { return this.value },
-      set(newValue) {this.$emit('input', newValue)}
-    }
-  },
   methods: {
-    // onUpdateSearchTerm(value) {
-    //   console.log('onUpdateSearchTerm')
-    //   this.value.term = value;
-    // },
-    // onUpdateSearchLocation(value) {
-    //   console.log('onUpdateSearchLocation')
-    //   this.value.location = value;
-    // },
-    // onUpdateSearchCategory(value) {
-    //   console.log('onUpdateSearchCategory')
-    //   this.value.category = value;
-    // },
+    onSelectCategory(selectCat) {
+      var selectCats = [selectCat]
+      if (selectCat instanceof Array) {
+        selectCats = selectCat
+      }
+      if( this.value.category == null) {
+        this.value.category = []
+      }
+      selectCats.forEach((selectCat) => {
+        if (! this.value.category.includes(selectCat)) {
+          this.value.category.push(selectCat)
+        }
+      })
+    },
+    onRemoveCategory(removeCat) {
+      var removeCats = [removeCat]
+      if (removeCat instanceof Array) {
+        removeCats = removeCat
+      }
+      this.value.category = this.value.category.filter((cat) => {
+        var result = true
+        removeCats.forEach((removeCat) => {
+          if (JSON.stringify(cat) === JSON.stringify(removeCat)) { result = false }
+        })
+        return result
+      })
+    },
     onClickSearch() {
       this.$emit("updated", this.value);
     },
@@ -119,7 +133,7 @@ export default {
       // return location.locality
     },
     categoryLabel(category) {
-      if (category.tag.length > 0) {
+      if (category.tag && category.tag.length > 0) {
         return category.tag
       }
       return category.category
