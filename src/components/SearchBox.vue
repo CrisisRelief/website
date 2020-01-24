@@ -20,29 +20,43 @@
         <div class="col-12 col-sm-4 form-item">
           <multiselect
             v-model="value.location"
-            :options="location_options"
+            :options="comp_location_options"
             :group-select="true"
+            :loading="loading.location"
             group-values="sublocations"
             group-label="location"
             label="location"
             :custom-label="locationLabel"
             placeholder="Location"
             :show-labels="false"
-          />
+          >
+            <template slot="beforeList">
+              <button v-if="has_geolocation" type="button" class="btn btn-info" v-on:click="onToggleLocation">
+                <span v-if="!useBrowserLocation">Use my current location</span>
+                <span v-else>Search for a location</span>
+              </button>
+            </template>
+          </multiselect>
         </div>
 
         <!-- Category -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
-            v-model="value.category"
+            :value="value.category"
             :options="category_options"
             :group-select="true"
+            :loading="loading.category"
             group-values="subcategories"
             group-label="category"
             label="concat"
             :custom-label="categoryLabel"
             placeholder="Category"
             :show-labels="false"
+            :multiple="true"
+            :close-on-select="false"
+            :reset-after="true"
+            @select="onSelectCategory"
+            @remove="onRemoveCategory"
           />
         </div>
 
@@ -71,31 +85,73 @@ export default {
           category: null
         }
       }
+    },
+    loading: {
+      default() {
+        return {
+          category: true,
+          location: true
+        }
+      }
+    },
+  },
+  data() {
+    return {
+      useBrowserLocation: false,
     }
   },
   computed: {
-    internal: {
-      get() { return this.value },
-      set(newValue) {this.$emit('input', newValue)}
+    comp_location_options() {
+      if (this.useBrowserLocation) {
+        return []
+      }
+      return this.location_options
+    },
+    has_geolocation() {
+      return navigator.geolocation
     }
   },
   methods: {
-    // onUpdateSearchTerm(value) {
-    //   console.log('onUpdateSearchTerm')
-    //   this.value.term = value;
-    // },
-    // onUpdateSearchLocation(value) {
-    //   console.log('onUpdateSearchLocation')
-    //   this.value.location = value;
-    // },
-    // onUpdateSearchCategory(value) {
-    //   console.log('onUpdateSearchCategory')
-    //   this.value.category = value;
-    // },
+    onSelectCategory(selectCat) {
+      var selectCats = [selectCat]
+      if (selectCat instanceof Array) {
+        selectCats = selectCat
+      }
+      if( this.value.category == null) {
+        this.value.category = []
+      }
+      selectCats.forEach((selectCat) => {
+        if (! this.value.category.includes(selectCat)) {
+          this.value.category.push(selectCat)
+        }
+      })
+    },
+    onRemoveCategory(removeCat) {
+      var removeCats = [removeCat]
+      if (removeCat instanceof Array) {
+        removeCats = removeCat
+      }
+      this.value.category = this.value.category.filter((cat) => {
+        var result = true
+        removeCats.forEach((removeCat) => {
+          if (JSON.stringify(cat) === JSON.stringify(removeCat)) { result = false }
+        })
+        return result
+      })
+    },
     onClickSearch() {
       this.$emit("updated", this.value);
     },
+    onToggleLocation() {
+      this.useBrowserLocation = !this.useBrowserLocation
+      if (this.useBrowserLocation) {
+        this.value.location = [{"currentLocation":true}]
+      }
+    },
     locationLabel(location) {
+      if (location.currentLocation) {
+        return 'Use my current location'
+      }
       const components = []
       if (location.postcode) {
         // components.push('<pre class="location-postcode">' + location.postcode + "<pre/>")
@@ -109,7 +165,7 @@ export default {
       // return location.locality
     },
     categoryLabel(category) {
-      if (category.tag.length > 0) {
+      if (category.tag && category.tag.length > 0) {
         return category.tag
       }
       return category.category

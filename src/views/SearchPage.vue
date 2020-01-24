@@ -10,10 +10,12 @@
         @updated="onSearchBoxUpdate"
         :location_options="filterOptions.locations"
         :category_options="filterOptions.categories"
+        :loading="loading"
         :value="filterParams"
       />
     </div>
     <div id="results" class="container">
+      <p>Note: While every effort is being made to ensure the information is accurate, this is a community-sourced directory. Please do your own checks.</p>
       <span id="hits">
         <span v-if="results.length > 0">{{ results.length }} results</span>
         <span v-else-if="filterParams">No results</span>
@@ -31,7 +33,6 @@
         :address="result.address"
         :link="result.link"
       />
-      <p>Note: While every effort is being made to ensure the information is accurate, this is a community-sourced directory. Please do your own checks.</p>
     </div>
   </div>
 </template>
@@ -64,6 +65,11 @@ export default {
         locations: []
       },
       showResults: false,
+      loading: {
+        category: true,
+        location: true
+      },
+      browserLocation: null
     };
   },
   computed: {
@@ -84,6 +90,12 @@ export default {
       }
       return search_category
     },
+    needsBrowserLocation() {
+      if(this.filterParams && this.filterParams["location"] && this.filterParams["location"][0]) {
+        return this.filterParams["location"][0].currentLocation
+      }
+      return false
+    },
   },
   mounted() {
     this.checkUri();
@@ -94,22 +106,19 @@ export default {
       axios.get("/australian_postcodes.json").then(response => {
         this.locationCoords = response.data;
         this.refreshLocationFilterOptions();
+        this.loading.location = false
       }),
       axios.get(this.orgJSONURI).then(response => {
         console.log("loading org json from", this.orgJSONURI);
         this.rawData = response.data.map(this.parseSingleRawOrg)
         this.refreshCatFilterOptions();
+        this.loading.category = false
       })
     ]
-    async function callAfterAwait(promises, cb) {
-      await Promise.all(promises)
-      cb()
-    }
-    callAfterAwait(promises, this.refreshResults)
+    Promise.all(promises).catch(e => {console.log(e)})
   },
   methods: {
     parseSingleRawOrg(org) {
-      // console.log(`org ${JSON.stringify(org)}`)
       const defaults = {subcategory_1: '', subcategory_2: '', other_categories: '' }
       const {subcategory_1, subcategory_2, other_categories} = Object.assign(defaults, org)
       var tags = []
@@ -127,9 +136,7 @@ export default {
       const href = window.location.href;
       const queryStr = href.split('?')[1];
       if (!queryStr) { return }
-      // console.log(`queryStr ${queryStr}`)
       let queryParams = queryStr.split('&').reduce((result, hash) => {
-        // console.log(`hash ${hash}`)
         let [key, val] = hash.split('=')
         result[key] = unescape(val)
         return result
@@ -171,7 +178,6 @@ export default {
           subcategories
         }
       })
-      // console.log(`category_options ${JSON.stringify(category_options)}`)
       this.filterOptions.categories = category_options;
     },
     refreshLocationFilterOptions() {
@@ -203,10 +209,21 @@ export default {
     },
     refreshResults() {
       if ( !this.showResults ) { return }
-      this.results = [this.sortOrgs, this.searchOrgs, this.filterOrgs].reduceRight(
+      this.results = [this.searchOrgs, this.filterOrgs].reduceRight(
         (orgs, fn) => fn(orgs),
         this.rawData
       );
+      if (this.needsBrowserLocation) {
+        console.log()
+        navigator.geolocation.getCurrentPosition((location) => {
+          this.browserLocation = [location.coords.longitude, location.coords.latitude]
+          this.results = this.sortOrgs(this.results)
+        }, error => {
+          console.error(error);
+        })
+      } else {
+        this.results = this.sortOrgs(this.results)
+      }
     },
     geocodeState(state) {
       var loc = String(state).toLowerCase();
@@ -228,7 +245,9 @@ export default {
       }
     },
     getSearchPosition() {
-      var position = [145, -37];
+      if (this.needsBrowserLocation && this.browserLocation) {
+        return this.browserLocation
+      }
       if (!this.filterParams) {
         return null;
       }
@@ -239,22 +258,11 @@ export default {
           location = search_location[0]
         }
         if (location.lat && location.long) {
-          position = [location.long, location.lat]
+          return [location.long, location.lat]
         } else if (location.location) {
-          position = this.geocodeState(location.location)
+          return this.geocodeState(location.location)
         }
       }
-
-      // if (navigator.geolocation && this.regionCoords) {
-      //   // Can't get user's actual geolocation unless in a proper HTTPS environment, and they authorise it.
-
-      //   // navigator.geolocation.getCurrentPosition(position => {
-      //   //   this.results = sortOrgsByDistance(response.data, this.regionCoords, position)
-      //   // }, error => {
-      //   //   console.error(error);
-      //   // });
-      // }
-      return position
     },
     sortOrgs(orgs) {
       const position = this.getSearchPosition()
