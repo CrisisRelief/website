@@ -94,6 +94,7 @@ export default {
       if(this.filterParams && this.filterParams["location"] && this.filterParams["location"][0]) {
         return this.filterParams["location"][0].currentLocation
       }
+      return false
     },
   },
   mounted() {
