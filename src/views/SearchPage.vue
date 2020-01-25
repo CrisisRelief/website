@@ -16,12 +16,13 @@
     </div>
     <div id="results" class="container">
       <p>Note: While every effort is being made to ensure the information is accurate, this is a community-sourced directory. Please do your own checks.</p>
-      <span id="hits">
+      <span id="hits" v-if="showResults">
+        <span v-if="needsPagination">{{ (page - 1) * resultsPerPage + 1 }} to {{ page * resultsPerPage + 1 }} of </span>
         <span v-if="results.length > 0">{{ results.length }} results</span>
         <span v-else-if="filterParams">No results</span>
       </span>
       <SearchResult
-        v-for="(result, index) in results"
+        v-for="(result, index) in paginatedResults"
         :key="index"
         :title="result.title"
         :category="result.category"
@@ -33,6 +34,24 @@
         :address="result.address"
         :link="result.link"
       />
+      <hr/>
+      <nav id="pagination" v-if="needsPagination" aria="Page navigation">
+        <Paginate
+          :page-count="Math.ceil(this.results.length / resultsPerPage)"
+          container-class="pagination pagination-lg justify-content-between"
+          page-class="d-none"
+          prev-class="page-item"
+          next-class="page-item"
+          page-link-class="d-none"
+          prev-link-class="page-link"
+          next-link-class="page-link"
+          prev-text="<i class='fas fa-arrow-left'/>"
+          next-text="<i class='fas fa-arrow-right'/>"
+          :click-handler="onPaginate"
+          :force-page="page"
+        >
+        </Paginate>
+      </nav>
     </div>
   </div>
 </template>
@@ -44,11 +63,14 @@ import SearchBox from "../components/SearchBox.vue";
 import axios from "axios";
 import cheapRuler from "cheap-ruler";
 import Fuse from "fuse.js";
+import Paginate from 'vuejs-paginate';
+
 
 export default {
   components: {
     SearchResult,
-    SearchBox
+    SearchBox,
+    Paginate,
   },
   data() {
     return {
@@ -69,7 +91,9 @@ export default {
         category: true,
         location: true
       },
-      browserLocation: null
+      browserLocation: null,
+      resultsPerPage: 20,
+      page: 1
     };
   },
   computed: {
@@ -96,6 +120,17 @@ export default {
       }
       return false
     },
+    needsPagination() {
+      return this.results.length > this.resultsPerPage
+    },
+    paginatedResults() {
+      if (this.needsPagination) {
+        return this.results.slice(
+          (this.page - 1) * this.resultsPerPage, this.page * this.resultsPerPage
+        )
+      }
+      return this.results
+    }
   },
   mounted() {
     this.checkUri();
@@ -115,7 +150,13 @@ export default {
         this.loading.category = false
       })
     ]
-    Promise.all(promises).catch(e => {console.log(e)})
+    Promise.all(promises).then(()=>{
+      if(Object.values(this.filterParams).some((value) => {return value !== null})) {
+        // Filter params were set from URI
+        this.showResults = true
+        this.refreshResults()
+      }
+    }).catch(e => {console.log(e)})
   },
   methods: {
     parseSingleRawOrg(org) {
@@ -358,11 +399,14 @@ export default {
       if(search_category){
         newQuery['cat'] = search_category
       }
+      if(this.needsPagination){
+        newQuery['p'] = this.page
+      }
       this.$router.replace({
         query: newQuery
       })
     },
-    trackSearchQuery() {
+    trackWindowLocation() {
       this.$gtag.pageview({page_path: window.location.href});
     },
     onSearchBoxUpdate(params) {
@@ -371,7 +415,12 @@ export default {
       this.showResults = true
       this.refreshResults();
       this.updateWindowLocation();
-      this.trackSearchQuery();
+      this.trackWindowLocation();
+    },
+    onPaginate(page) {
+      this.page = page
+      this.updateWindowLocation();
+      this.trackWindowLocation();
     }
   }
 };
