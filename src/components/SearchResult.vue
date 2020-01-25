@@ -17,21 +17,9 @@
     <div class="search-result-description" v-html="description"></div>
     <table v-if="Object.entries(contact).length" class="search-result-contact table table-borderless my-2">
       <tr v-for="(item, key, index) in contact" :key="index">
-        <a v-if="key == 'phone'" :href="`tel:${ item.href }`">
-          <td class="py-0 px-2 h5"><FontAwesomeIcon icon="phone-square-alt" /></td>
+        <a :href="item.href">
+          <td class="py-0 px-2 h5"><FontAwesomeIcon :icon="item.icon" /></td>
           <td class="py-0 px-2">{{ item.human }}</td>
-        </a>
-        <a v-if="key == 'link'" :href="item.href">
-          <td class="py-0 px-2 h5"><FontAwesomeIcon icon="address-card" /></td>
-          <td class="py-0 px-2">Visit Website</td>
-        </a>
-        <a v-if="key == 'email'" :href="`mailto:${ item.href }`">
-          <td class="py-0 px-2 h5"><FontAwesomeIcon icon="envelope-square" /></td>
-          <td class="py-0 px-2">{{ item.human }}</td>
-        </a>
-        <a v-if="key == 'address'" :href="item.href">
-          <td class="py-0 px-2 h5"><FontAwesomeIcon icon="directions" /></td>
-          <td class="py-0 px-2">Get Directions</td>
         </a>
       </tr>
     </table>
@@ -68,22 +56,31 @@ export default {
       return ["phone", "email", "address", "link"].reduce((contact, attr) => {
         var human = this[attr]
         var href=human
+        var icon
         if(human) {
           if(attr == "phone") {
-            href = human.replace(/[^0-9]/, '');
+            icon = "phone-square-alt"
+            href = 'tel:' + human.replace(/[^0-9]/g, '');
           }
-          if(attr == "address") {
+          else if(attr == "link") {
+            icon = "address-card"
+            human = "Visit Website"
+          }
+          else if(attr == "email") {
+            icon = "envelope-square"
+            href = "mailto:" + human
+          }
+          else if(attr == "address") {
+            icon = "directions"
             href = 'http://maps.google.com/?q=' + encodeURI(human);
+            human = "Get Directions"
           }
-          contact[attr] = {
-            href: href,
-            human: human
-          }
+          contact[attr] = { href, human, icon }
         }
         return contact;
       }, {});
     }
-  }
+  },
 };
 </script>
 
