@@ -10,7 +10,7 @@
             class="form-control"
             v-model="value.term"
             placeholder="What do you need? eg. food, fuel"
-            v-on:keyup.enter="onClickSearch"
+            @keyup.enter="onClickSearch()"
           />
         </div>
       </div>
@@ -19,19 +19,28 @@
         <!-- Location Selection -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
+            ref="mulselLocation"
             v-model="value.location"
-            :options="comp_location_options"
+            :options="compdLocationOptions"
             :group-select="true"
             :loading="loading.location"
             group-values="sublocations"
             group-label="location"
-            label="location"
             :custom-label="locationLabel"
             placeholder="Location"
             :show-labels="false"
+            :searchable="!useBrowserLocation"
+            :show-no-options="showLocationOptions"
+            :show-no-results="locationLengthOk"
+            @search-change="onLocationSearchChange"
           >
             <template slot="beforeList">
-              <button v-if="has_geolocation" type="button" class="btn btn-info" v-on:click="onToggleLocation">
+              <button
+                v-if="hasGeolocation"
+                type="button"
+                class="btn btn-info"
+                @click="onToggleBrowserLocation()"
+              >
                 <span v-if="!useBrowserLocation">Use my current location</span>
                 <span v-else>Search for a location</span>
               </button>
@@ -42,13 +51,13 @@
         <!-- Category -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
+            ref="mulselCategory"
             :value="value.category"
             :options="category_options"
             :group-select="true"
             :loading="loading.category"
             group-values="subcategories"
             group-label="category"
-            label="concat"
             :custom-label="categoryLabel"
             placeholder="Category"
             :show-labels="false"
@@ -57,12 +66,13 @@
             :reset-after="true"
             @select="onSelectCategory"
             @remove="onRemoveCategory"
+            @search-change="onCategorySearchChange"
           />
         </div>
 
         <!-- Submit Button -->
         <div class="col-12 col-sm-3 form-submit">
-          <button type="button" class="btn btn-info" v-on:click="onClickSearch">Search</button>
+          <button type="button" class="btn btn-info" @click="onClickSearch()">Search</button>
         </div>
       </div>
     </div>
@@ -98,20 +108,40 @@ export default {
   data() {
     return {
       useBrowserLocation: false,
+      search: {
+        location: null,
+        category: null
+      },
+      minSearchLength: 3
     }
   },
   computed: {
-    comp_location_options() {
-      if (this.useBrowserLocation) {
-        return []
+    locationLengthOk() {
+      if(typeof this.search.location == 'string') {
+        return this.search.location.length >= this.minSearchLength
       }
-      return this.location_options
+      return false
     },
-    has_geolocation() {
+    showLocationOptions() {
+      if(this.useBrowserLocation) {
+        return false
+      }
+      return this.locationLengthOk
+    },
+    compdLocationOptions() {
+      return this.showLocationOptions ? this.location_options : []
+    },
+    hasGeolocation() {
       return navigator.geolocation
     }
   },
   methods: {
+    onLocationSearchChange(search) {
+      this.search.location = search
+    },
+    onCategorySearchChange(search) {
+      this.search.category = search
+    },
     onSelectCategory(selectCat) {
       var selectCats = [selectCat]
       if (selectCat instanceof Array) {
@@ -142,10 +172,11 @@ export default {
     onClickSearch() {
       this.$emit("updated", this.value);
     },
-    onToggleLocation() {
+    onToggleBrowserLocation() {
       this.useBrowserLocation = !this.useBrowserLocation
       if (this.useBrowserLocation) {
         this.value.location = [{"currentLocation":true}]
+        this.$refs.mulselLocation.toggle()
       }
     },
     locationLabel(location) {
@@ -174,10 +205,6 @@ export default {
 };
 </script>
 
-<style>
-@import '../../node_modules/@fortawesome/fontawesome-pro/css/all.css';
-</style>
-
 <style scoped>
 
 .row.no-gutter {
@@ -185,6 +212,12 @@ export default {
 }
 .form-control {
   height: 43px !important;
+}
+.form-control::placeholder {
+    color: #02909e;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 .btn-info {
   width: 100%;
@@ -216,7 +249,12 @@ export default {
 
 </style>
 <style>
-
+.search.form .multiselect__placeholder {
+    color: #02909e;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 .search.form .multiselect__input {
   border-bottom: 2px solid #02909e;
   padding:0;
