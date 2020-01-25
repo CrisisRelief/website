@@ -30,16 +30,7 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap");
-
-body div {
-  text-align: left;
-  color: #1b2a49; /* Navy */
-  font-size: 14px;
-}
-
-.content-wrap {
-  padding-bottom: 2.5rem;
-}
+@import '../node_modules/@fortawesome/fontawesome-pro/css/all.css';
 
 #app {
   font-family: "Source Sans Pro", sans-serif;
@@ -48,6 +39,12 @@ body div {
 
   position: relative;
   min-height: 100vh;
+}
+
+body div {
+  text-align: left;
+  color: #1b2a49; /* Navy */
+  font-size: 14px;
 }
 
 body a {
