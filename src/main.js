@@ -9,6 +9,7 @@ import App from './App.vue';
 import './icons.js';
 import AboutPage from "./views/AboutPage.vue";
 import SearchPage from "./views/SearchPage.vue";
+import ContribPage from "./views/ContribPage.vue";
 
 Vue.use(VueGtag, { config: { id: "UA-156077638-1" } })
 Vue.use(VueRouter)
@@ -21,6 +22,7 @@ const router = new VueRouter({
     routes: [
         { path: '/', component: SearchPage },
         { path: '/about', component: AboutPage },
+        { path: '/contrib', component: ContribPage },
     ]
 })
 
