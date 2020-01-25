@@ -465,3 +465,13 @@ function sortOrgsByDistance(results, ourLocation) {
 }
 
 </style>
+<style>
+#pagination .page-link {
+  background-color: #465981;
+  color: #EDF0F0;
+}
+#pagination .disabled .page-link {
+  background-color: #EDF0F0;
+  color: #CAD1D3;
+}
+</style>
