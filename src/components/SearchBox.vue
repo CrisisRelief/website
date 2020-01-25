@@ -182,10 +182,6 @@ export default {
 };
 </script>
 
-<style>
-@import '../../node_modules/@fortawesome/fontawesome-pro/css/all.css';
-</style>
-
 <style scoped>
 
 .row.no-gutter {
