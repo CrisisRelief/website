@@ -186,6 +186,12 @@ export default {
 .form-control {
   height: 43px !important;
 }
+.form-control::placeholder {
+    color: #02909e;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 .btn-info {
   width: 100%;
   height: 43px;
@@ -216,7 +222,12 @@ export default {
 
 </style>
 <style>
-
+.search.form .multiselect__placeholder {
+    color: #02909e;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 .search.form .multiselect__input {
   border-bottom: 2px solid #02909e;
   padding:0;
