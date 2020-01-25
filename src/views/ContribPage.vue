@@ -147,14 +147,14 @@
           </tr>
           <tr>
             <td>
-              <p>Rosie Alliance</p>
+              <p>Kanarikat</p>
             </td>
             <td>
               <p>Crowdsource consulting (hurricanes), Graphic design, Digital resources</p>
             </td>
             <td>
               <p>
-                <a href="https://rosiealliance.com/">https://rosiealliance.com/</a>
+                <a href="https://kanarikat.com">https://kanarikat.com</a>
               </p>
             </td>
           </tr>
