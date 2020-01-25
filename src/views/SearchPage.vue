@@ -34,7 +34,7 @@
         :address="result.address"
         :link="result.link"
       />
-      <hr/>
+      <hr v-if="needsPagination"/>
       <nav id="pagination" v-if="needsPagination" aria="Page navigation">
         <Paginate
           :page-count="Math.ceil(this.results.length / resultsPerPage)"

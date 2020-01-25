@@ -30,7 +30,9 @@
             placeholder="Location"
             :show-labels="false"
             :searchable="!useBrowserLocation"
-            :show-no-options="!useBrowserLocation"
+            :show-no-options="showLocationOptions"
+            :show-no-results="locationLengthOk"
+            @search-change="onLocationSearchChange"
           >
             <template slot="beforeList">
               <button
@@ -64,6 +66,7 @@
             :reset-after="true"
             @select="onSelectCategory"
             @remove="onRemoveCategory"
+            @search-change="onCategorySearchChange"
           />
         </div>
 
@@ -105,20 +108,40 @@ export default {
   data() {
     return {
       useBrowserLocation: false,
+      search: {
+        location: null,
+        category: null
+      },
+      minSearchLength: 3
     }
   },
   computed: {
-    compdLocationOptions() {
-      if (this.useBrowserLocation) {
-        return []
+    locationLengthOk() {
+      if(typeof this.search.location == 'string') {
+        return this.search.location.length >= this.minSearchLength
       }
-      return this.location_options
+      return false
+    },
+    showLocationOptions() {
+      if(this.useBrowserLocation) {
+        return false
+      }
+      return this.locationLengthOk
+    },
+    compdLocationOptions() {
+      return this.showLocationOptions ? this.location_options : []
     },
     hasGeolocation() {
       return navigator.geolocation
     }
   },
   methods: {
+    onLocationSearchChange(search) {
+      this.search.location = search
+    },
+    onCategorySearchChange(search) {
+      this.search.category = search
+    },
     onSelectCategory(selectCat) {
       var selectCats = [selectCat]
       if (selectCat instanceof Array) {
