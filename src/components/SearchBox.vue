@@ -10,7 +10,7 @@
             class="form-control"
             v-model="value.term"
             placeholder="What do you need? eg. food, fuel"
-            v-on:keyup.enter="onClickSearch"
+            @keyup.enter="onClickSearch()"
           />
         </div>
       </div>
@@ -20,18 +20,22 @@
         <div class="col-12 col-sm-4 form-item">
           <multiselect
             v-model="value.location"
-            :options="comp_location_options"
+            :options="compdLocationOptions"
             :group-select="true"
             :loading="loading.location"
             group-values="sublocations"
             group-label="location"
-            label="location"
             :custom-label="locationLabel"
             placeholder="Location"
             :show-labels="false"
           >
             <template slot="beforeList">
-              <button v-if="has_geolocation" type="button" class="btn btn-info" v-on:click="onToggleLocation">
+              <button
+                v-if="hasGeolocation"
+                type="button"
+                class="btn btn-info"
+                @click="onToggleBrowserLocation()"
+              >
                 <span v-if="!useBrowserLocation">Use my current location</span>
                 <span v-else>Search for a location</span>
               </button>
@@ -48,7 +52,6 @@
             :loading="loading.category"
             group-values="subcategories"
             group-label="category"
-            label="concat"
             :custom-label="categoryLabel"
             placeholder="Category"
             :show-labels="false"
@@ -62,7 +65,7 @@
 
         <!-- Submit Button -->
         <div class="col-12 col-sm-3 form-submit">
-          <button type="button" class="btn btn-info" v-on:click="onClickSearch">Search</button>
+          <button type="button" class="btn btn-info" @click="onClickSearch()">Search</button>
         </div>
       </div>
     </div>
@@ -101,13 +104,13 @@ export default {
     }
   },
   computed: {
-    comp_location_options() {
+    compdLocationOptions() {
       if (this.useBrowserLocation) {
         return []
       }
       return this.location_options
     },
-    has_geolocation() {
+    hasGeolocation() {
       return navigator.geolocation
     }
   },
@@ -142,7 +145,7 @@ export default {
     onClickSearch() {
       this.$emit("updated", this.value);
     },
-    onToggleLocation() {
+    onToggleBrowserLocation() {
       this.useBrowserLocation = !this.useBrowserLocation
       if (this.useBrowserLocation) {
         this.value.location = [{"currentLocation":true}]

@@ -214,7 +214,6 @@ export default {
         this.rawData
       );
       if (this.needsBrowserLocation) {
-        console.log()
         navigator.geolocation.getCurrentPosition((location) => {
           this.browserLocation = [location.coords.longitude, location.coords.latitude]
           this.results = this.sortOrgs(this.results)
