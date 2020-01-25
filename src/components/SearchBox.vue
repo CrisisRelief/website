@@ -19,6 +19,7 @@
         <!-- Location Selection -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
+            ref="mulselLocation"
             v-model="value.location"
             :options="compdLocationOptions"
             :group-select="true"
@@ -28,6 +29,8 @@
             :custom-label="locationLabel"
             placeholder="Location"
             :show-labels="false"
+            :searchable="!useBrowserLocation"
+            :show-no-options="!useBrowserLocation"
           >
             <template slot="beforeList">
               <button
@@ -46,6 +49,7 @@
         <!-- Category -->
         <div class="col-12 col-sm-4 form-item">
           <multiselect
+            ref="mulselCategory"
             :value="value.category"
             :options="category_options"
             :group-select="true"
@@ -149,6 +153,7 @@ export default {
       this.useBrowserLocation = !this.useBrowserLocation
       if (this.useBrowserLocation) {
         this.value.location = [{"currentLocation":true}]
+        this.$refs.mulselLocation.toggle()
       }
     },
     locationLabel(location) {
