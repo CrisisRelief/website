@@ -17,7 +17,7 @@
     <div id="results" class="container">
       <p>Note: While every effort is being made to ensure the information is accurate, this is a community-sourced directory. Please do your own checks.</p>
       <span id="hits" v-if="showResults">
-        <span v-if="needsPagination">{{ (page - 1) * resultsPerPage + 1 }} to {{ page * resultsPerPage + 1 }} of </span>
+        <span v-if="needsPagination">{{ (page - 1) * resultsPerPage + 1 }} to {{ page * resultsPerPage }} of </span>
         <span v-if="results.length > 0">{{ results.length }} results</span>
         <span v-else-if="filterParams">No results</span>
       </span>
