@@ -15,24 +15,26 @@
       <div class="search-result-location">{{ location }}</div>
     </div>
     <div class="search-result-description" v-html="description"></div>
-    <div class="search-result-contact">
-      <div v-for="(item, key, index) in contact" :key="index">
+    <table v-if="Object.entries(contact).length" class="search-result-contact table table-borderless my-2">
+      <tr v-for="(item, key, index) in contact" :key="index">
         <a v-if="key == 'phone'" :href="`tel:${ item.href }`">
-          <FontAwesomeIcon icon="phone-square-alt" />
-          {{ item.human }}
+          <td class="py-0 px-2 h5"><FontAwesomeIcon icon="phone-square-alt" /></td>
+          <td class="py-0 px-2">{{ item.human }}</td>
         </a>
         <a v-if="key == 'link'" :href="item.href">
-          <FontAwesomeIcon icon="address-card" /> Visit Website
+          <td class="py-0 px-2 h5"><FontAwesomeIcon icon="address-card" /></td>
+          <td class="py-0 px-2">Visit Website</td>
         </a>
         <a v-if="key == 'email'" :href="`mailto:${ item.href }`">
-          <FontAwesomeIcon icon="envelope-square" />
-          {{ item.human }}
+          <td class="py-0 px-2 h5"><FontAwesomeIcon icon="envelope-square" /></td>
+          <td class="py-0 px-2">{{ item.human }}</td>
         </a>
         <a v-if="key == 'address'" :href="item.href">
-          <FontAwesomeIcon icon="directions" /> Get Directions
+          <td class="py-0 px-2 h5"><FontAwesomeIcon icon="directions" /></td>
+          <td class="py-0 px-2">Get Directions</td>
         </a>
-      </div>
-    </div>
+      </tr>
+    </table>
   </div>
 </template>
 
