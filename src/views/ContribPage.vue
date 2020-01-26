@@ -147,14 +147,14 @@
           </tr>
           <tr>
             <td>
-              <p>Kanarikat</p>
+              <p>Skyover</p>
             </td>
             <td>
               <p>Crowdsource consulting (hurricanes), Graphic design, Digital resources</p>
             </td>
             <td>
               <p>
-                <a href="https://kanarikat.com">https://kanarikat.com</a>
+                <a href="https://skyover.co">https://skyover.co</a>
               </p>
             </td>
           </tr>
