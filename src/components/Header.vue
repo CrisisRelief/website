@@ -1,44 +1,48 @@
 <template>
-<header>
+  <header>
     <nav class="navbar navbar-light bg-light">
       <h1 class="navbar-brand mb-0">
-        <a href="/" style="border:none"><img src="/images/logo.png" alt="Crisis App"></a>
+        <a href="/" style="border:none">
+          <img src="/images/logo.png" alt="Crisis App" />
+        </a>
       </h1>
       <!-- <div style="text-align:center" class="alert alert-primary w-100" role="alert">
           This website is still under active development, go-live should only be a few hours away &lt;3
-      </div> -->
+      </div>-->
       <div id="links" class="menu" role="navigation">
         <Slide right>
           <router-link to="/">Search</router-link>
           <router-link to="/about">About</router-link>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</a>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform"
+          >Submit a Resource</a>
           <a href="https://firemap.atlassian.net/servicedesk/customer/portal/2">Support Portal</a>
           <router-link to="/contrib">Contributors</router-link>
         </Slide>
       </div>
     </nav>
-</header>
+  </header>
 </template>
 
 <script>
-import { Slide } from 'vue-burger-menu'
+import { Slide } from "vue-burger-menu";
 export default {
   components: {
     Slide
   }
-}
+};
 </script>
 
 <style scoped>
 header {
-  margin-bottom:30px;
+  margin-bottom: 30px;
 }
 nav h1 {
   font-size: xx-large;
   font-weight: bold;
 }
 nav h1 img {
-    max-width:250px;
+  max-width: 250px;
 }
 #header-start {
   color: #02909e;
@@ -49,30 +53,29 @@ nav h1 img {
 .bm-item-list a {
   color: #fff;
 }
-
 </style>
 <style>
 .bm-overlay {
-    background:none;
+  background: none;
 }
 .bm-overlay::before {
-    content: "";
-    background: #000;
-    opacity: 0.7;
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    z-index: 9;
+  content: "";
+  background: #000;
+  opacity: 0.7;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9;
 }
 .menu .bm-burger-button {
-    height:20px;
-    top:25px;
+  height: 20px;
+  top: 25px;
 }
 .menu .bm-burger-button .bm-burger-bars {
-    background: #02909e;
-    border-radius: 45px;
+  background: #02909e;
+  border-radius: 45px;
 }
 .bm-item-list .bm-menu a:hover {
-    color:#fff;
+  color: #fff;
 }
 </style>

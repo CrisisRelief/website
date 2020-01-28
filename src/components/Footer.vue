@@ -2,13 +2,16 @@
   <footer id="footer" class="footer">
     <nav id="socials" class="d-flex justify-content-around p-2">
       <span v-for="(social, index) in socials" :key="index" class="m-2 h2">
-        <a :aria="social.alt" :href="social.link"><i :class="social.icon"/></a>
+        <a :aria="social.alt" :href="social.link">
+          <i :class="social.icon" />
+        </a>
       </span>
     </nav>
     <nav id="license">
       <div class="d-flex justify-content-center px-auto">
         <span class="p-2">
-          We <FontAwesomeIcon icon="heart" /> Open
+          We
+          <FontAwesomeIcon icon="heart" />Open
         </span>
         <span class="p-2">
           <a
@@ -58,14 +61,13 @@ export default {
           alt: "linkedin"
         }
       ]
-    }
+    };
   }
 };
 </script>
 
 <style scoped>
-
 #socials {
-  background:#f5f5f5;
+  background: #f5f5f5;
 }
 </style>
