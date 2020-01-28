@@ -1,6 +1,6 @@
 <template>
   <div class="search form">
-    <h3>Search</h3>
+    <h3>Search here</h3>
 
     <div class="row no-gutter">
       <!-- Search Term Input -->

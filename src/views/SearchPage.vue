@@ -3,14 +3,12 @@
     <div class="container">
       <div class="intro">
         <h2>Need help or want to help?</h2>
-        <p>Use the directory to find resources or services you need in an emergency, or where and how you can help.</p>
-        <p></p>
-        <p>
-          If you have a resource or service to offer, add a listing using our
-          <a
+        <p>Need to evacuate? Transport your horses? Or do you want to drop off donations or
+          volunteer to help with recovery efforts? Search here for up-to-date resources,
+          offers and requests for help.</p>
+        <p>If you have a resource or service to offer, <a
             href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform"
-          >online form</a>.
-        </p>
+          >add a listing using our online form</a>.</p>
       </div>
       <SearchBox
         @updated="onSearchBoxUpdate"
