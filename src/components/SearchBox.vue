@@ -1,28 +1,24 @@
 <template>
-    <div class="search form">
-      <h3 id="search-label">Search</h3>
+  <div class="search form">
+    <h3>Search here</h3>
 
-      <div class="row no-gutter">
-        <!-- Search Term Input -->
-        <div class="col-12 col-md-10 form-item">
-          <input
-            type="text"
-            class="form-control"
-            v-model="value.term"
-            placeholder="What do you need? eg. food, fuel"
-            aria-labelledby="search-label"
-            @keyup.enter="onClickSearch()"
-          />
-        </div>
+    <div class="row no-gutter">
+      <!-- Search Term Input -->
+      <div class="col-12 col-md-10 form-item">
+        <input
+          type="text"
+          class="form-control"
+          v-model="value.term"
+          placeholder="What do you need? eg. food, fuel"
+          @keyup.enter="onClickSearch()"
+        />
       </div>
     </div>
 
     <div class="row no-gutter">
       <!-- Location Selection -->
       <div class="col-12 col-sm-4 form-item">
-        <label class="visually-hidden" for="location-select">Location</label>
         <multiselect
-          id="location-select"
           ref="mulselLocation"
           v-model="value.location"
           :options="compdLocationOptions"
@@ -54,9 +50,7 @@
 
       <!-- Category -->
       <div class="col-12 col-sm-4 form-item">
-        <label class="visually-hidden" for="category-select">Category</label>
         <multiselect
-          id="category-select"
           ref="mulselCategory"
           :value="value.category"
           :options="category_options"
@@ -299,19 +293,5 @@ export default {
   .multiselect__option--highlight:not(.multiselect__option--selected):not(.multiselect__option--group-selected)::after {
   content: "\f00c";
   font-family: "Font Awesome 5 Pro";
-}
-/*
-  A style for visually hiding elements but keeping them
-  available for screen readers and other assistive technologies
-*/
-.visually-hidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
 }
 </style>
