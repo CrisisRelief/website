@@ -9,30 +9,25 @@
       <div class="search-result-categories">
         <span v-for="(category, index) in categories" :key="index" class="search-result-category">
           {{ category }}
-          <span v-if="index+1 < categories.length">/</span>
+          <span v-if="index+1 < categories.length">></span>
         </span>
       </div>
       <div class="search-result-location">{{ location }}</div>
     </div>
     <div class="search-result-description" v-html="description"></div>
-    <div class="search-result-contact">
-      <div v-for="(item, key, index) in contact" :key="index">
-        <a v-if="key == 'phone'" :href="`tel:${ item.href }`">
-          <FontAwesomeIcon icon="phone-square-alt" />
-          {{ item.human }}
+    <table
+      v-if="Object.entries(contact).length"
+      class="search-result-contact table table-borderless my-2"
+    >
+      <tr v-for="(item, key, index) in contact" :key="index">
+        <a :href="item.href">
+          <td class="py-0 px-2 h5">
+            <FontAwesomeIcon :icon="item.icon" />
+          </td>
+          <td class="py-0 px-2">{{ item.human }}</td>
         </a>
-        <a v-if="key == 'link'" :href="item.href">
-          <FontAwesomeIcon icon="address-card" /> Visit Website
-        </a>
-        <a v-if="key == 'email'" :href="`mailto:${ item.href }`">
-          <FontAwesomeIcon icon="envelope-square" />
-          {{ item.human }}
-        </a>
-        <a v-if="key == 'address'" :href="item.href">
-          <FontAwesomeIcon icon="directions" /> Get Directions
-        </a>
-      </div>
-    </div>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -43,8 +38,7 @@ export default {
   props: {
     title: {},
     category: {},
-    category_sub: {},
-    category_sub_sub: {},
+    tags_flat: {},
     location: {},
     description: {},
     phone: {},
@@ -57,27 +51,31 @@ export default {
   components: { FontAwesomeIcon },
   computed: {
     categories() {
-      return [this.category, this.category_sub, this.category_sub_sub].filter(
-        (elem) => {
-          return elem !== undefined && elem.length > 0;
-        }
-      );
+      return [this.category, this.tags_flat].filter(elem => {
+        return elem !== undefined && elem.length > 0;
+      });
     },
     contact() {
       return ["phone", "email", "address", "link"].reduce((contact, attr) => {
-        var human = this[attr]
-        var href=human
-        if(human) {
-          if(attr == "phone") {
-            href = human.replace(/[^0-9]/, '');
+        var human = this[attr];
+        var href = human;
+        var icon;
+        if (human) {
+          if (attr == "phone") {
+            icon = "phone-square-alt";
+            href = "tel:" + human.replace(/[^0-9]/g, "");
+          } else if (attr == "link") {
+            icon = "address-card";
+            human = "Visit Website";
+          } else if (attr == "email") {
+            icon = "envelope-square";
+            href = "mailto:" + human;
+          } else if (attr == "address") {
+            icon = "directions";
+            href = "http://maps.google.com/?q=" + encodeURI(human);
+            human = "Get Directions";
           }
-          if(attr == "address") {
-            href = 'http://maps.google.com/?q=' + encodeURI(human);
-          }
-          contact[attr] = {
-            href: href,
-            human: human
-          }
+          contact[attr] = { href, human, icon };
         }
         return contact;
       }, {});
