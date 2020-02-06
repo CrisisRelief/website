@@ -15,7 +15,6 @@
           />
         </div>
       </div>
-    </div>
 
     <div class="row no-gutter">
       <!-- Location Selection -->
