@@ -13,6 +13,7 @@
           @keyup.enter="onClickSearch()"
         />
       </div>
+    </div>
 
     <div class="row no-gutter">
       <!-- Location Selection -->
