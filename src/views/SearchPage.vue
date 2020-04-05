@@ -7,7 +7,7 @@
           volunteer to help with recovery efforts? Search here for up-to-date resources,
           offers and requests for help.</p>
         <p>If you have a resource or service to offer, <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform"
+            href="https://crisis.app/addresource"
           >add a listing using our online form</a>.</p>
       </div>
       <SearchBox

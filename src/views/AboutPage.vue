@@ -19,7 +19,7 @@
       <h3>How it works</h3>
       <p>
         You can offer resources on our
-        <a href="https://lnkd.in/e3qqeHG">web form</a>, and find help in our searchable
+        <a href="https://crisis.app/addresource">web form</a>, and find help in our searchable
         <a href="https://crisis.app">web app</a> which is mobile friendly.
       </p>
       <p>

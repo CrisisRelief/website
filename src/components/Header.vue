@@ -14,7 +14,7 @@
           <router-link to="/">Search</router-link>
           <router-link to="/about">About</router-link>
           <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform"
+            href="https://crisis.app/addresource"
           >Submit a Resource</a>
           <a href="https://firemap.atlassian.net/servicedesk/customer/portal/2">Support Portal</a>
           <router-link to="/contrib">Contributors</router-link>
