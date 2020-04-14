@@ -9,7 +9,6 @@
       </div> -->
       <div id="links" class="menu" role="navigation">
         <Slide right>
-          <router-link to="/">Search</router-link>
           <a href="https://crisis.app/our-story">About</a>
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">Submit a Resource</a>
           <a href="https://firemap.atlassian.net/servicedesk/customer/portal/2">Support Portal</a>
