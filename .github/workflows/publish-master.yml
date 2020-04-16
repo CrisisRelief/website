@@ -29,7 +29,7 @@ jobs:
         with:
           local: dist/
           remote: /var/www/crisis.app/
-          host: crisis.app
+          host: search.crisis.app
           username: ${{ secrets.FTP_USERNAME }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           passphrase: ${{ secrets. DEPLOY_KEY_PASSWORD }}
