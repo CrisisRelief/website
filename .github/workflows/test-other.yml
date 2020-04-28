@@ -24,3 +24,7 @@ jobs:
         uses: CultureHQ/actions-yarn@master
         with:
           args: build
+      - name: Lint
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: lint
