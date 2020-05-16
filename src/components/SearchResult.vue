@@ -22,7 +22,7 @@
       <tr v-for="(item, key, index) in contact" :key="index">
         <a :href="item.href">
           <td class="py-0 px-2 h5">
-            <FontAwesomeIcon :icon="item.icon" />
+            <FontAwesomeIcon :icon="item.icon" :title="item.title" />
           </td>
           <td class="py-0 px-2">{{ item.human }}</td>
         </a>
@@ -57,25 +57,33 @@ export default {
     },
     contact() {
       return ["phone", "email", "address", "link"].reduce((contact, attr) => {
-        var human = this[attr];
-        var href = human;
-        var icon;
-        if (human) {
-          if (attr == "phone") {
-            icon = "phone-square-alt";
-            href = "tel:" + human.replace(/[^0-9]/g, "");
-          } else if (attr == "link") {
-            icon = "address-card";
-            human = "Visit Website";
-          } else if (attr == "email") {
-            icon = "envelope-square";
-            href = "mailto:" + human;
-          } else if (attr == "address") {
-            icon = "directions";
-            href = "http://maps.google.com/?q=" + encodeURI(human);
-            human = "Get Directions";
+        var human = this[attr]
+        var href=human
+        var icon
+        var title
+        if(human) {
+          if(attr == "phone") {
+            icon = "phone-square-alt"
+            title = "Phone Number"
+            href = 'tel:' + human.replace(/[^0-9]/g, '');
           }
-          contact[attr] = { href, human, icon };
+          else if(attr == "link") {
+            icon = "address-card"
+            title = "Website Link"
+            human = "Visit Website"
+          }
+          else if(attr == "email") {
+            icon = "envelope-square"
+            title="Email"
+            href = "mailto:" + human
+          }
+          else if(attr == "address") {
+            icon = "directions"
+            title = "Address"
+            href = 'http://maps.google.com/?q=' + encodeURI(human);
+            human = "Get Directions"
+          }
+          contact[attr] = { href, human, icon, title }
         }
         return contact;
       }, {});
