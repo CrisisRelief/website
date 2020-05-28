@@ -4,6 +4,9 @@ import Footer from "../../src/components/Footer.vue";
 const wrapper = shallowMount(Footer);
 
 describe("Footer", () => {
+    it("should match last snapshot", () => {
+      expect(wrapper.element).toMatchSnapshot();
+    });
     it("should render correct social links and icons", () => {
       const socialData = Footer.data().socials;
       const elements = wrapper.findAll('#socials span a');

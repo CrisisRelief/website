@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer should match last snapshot 1`] = `
+<footer
+  class="footer"
+  id="footer"
+>
+  <nav
+    class="d-flex justify-content-around p-2"
+    id="socials"
+  >
+    <span
+      class="m-2 h2"
+    >
+      <a
+        aria="twitter"
+        href="https://twitter.com/thecrisisapp"
+      >
+        <i
+          class="fab fa-twitter-square"
+        />
+      </a>
+    </span>
+    <span
+      class="m-2 h2"
+    >
+      <a
+        aria="facebook"
+        href="https://www.facebook.com/thecrisisapp/"
+      >
+        <i
+          class="fab fa-facebook-square"
+        />
+      </a>
+    </span>
+    <span
+      class="m-2 h2"
+    >
+      <a
+        aria="instagram"
+        href="https://www.instagram.com/thecrisisapp"
+      >
+        <i
+          class="fab fa-instagram"
+        />
+      </a>
+    </span>
+    <span
+      class="m-2 h2"
+    >
+      <a
+        aria="linkedin"
+        href="https://www.linkedin.com/showcase/crisisapp/"
+      >
+        <i
+          class="fab fa-linkedin"
+        />
+      </a>
+    </span>
+  </nav>
+   
+  <nav
+    id="license"
+  >
+    <div
+      class="d-flex justify-content-center px-auto"
+    >
+      <span
+        class="p-2"
+      >
+        
+        We 
+        <fontawesomeicon-stub
+          icon="heart"
+        />
+         Open
+      
+      </span>
+       
+      <span
+        class="p-2"
+      >
+        <a
+          href="https://opendatacommons.org/licenses/odbl/1.0/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          ODBL
+        </a>
+      </span>
+       
+      <span
+        class="p-2"
+      >
+        <a
+          href="https://opendatacommons.org/licenses/dbcl/1.0/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          DBCL
+        </a>
+      </span>
+    </div>
+  </nav>
+</footer>
+`;
