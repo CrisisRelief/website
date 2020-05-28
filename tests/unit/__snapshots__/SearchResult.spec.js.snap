@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchResult should match last snapshot 1`] = `
+<div
+  class="search-result-container"
+>
+  <hr />
+   
+  <h3>
+    
+  </h3>
+   
+  <div
+    class="search-result-meta"
+  >
+    <div
+      class="search-result-categories"
+    />
+     
+    <div
+      class="search-result-location"
+    >
+      
+    </div>
+  </div>
+   
+  <div
+    class="search-result-description"
+  />
+   
+  <!---->
+</div>
+`;

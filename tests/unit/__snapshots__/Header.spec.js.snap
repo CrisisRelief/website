@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header should match last snapshot 1`] = `
+<header>
+  <nav
+    class="navbar navbar-light bg-light"
+  >
+    <h1
+      class="navbar-brand mb-0"
+    >
+      <a
+        href="/"
+      >
+        <img
+          alt="Crisis App"
+          src="/images/logo.png"
+        />
+      </a>
+    </h1>
+     
+    <div
+      class="menu"
+      id="links"
+      role="navigation"
+    >
+      <slide-stub
+        right=""
+      >
+        <a
+          href="https://crisis.app/our-story"
+        >
+          About
+        </a>
+         
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform"
+        >
+          Submit a Resource
+        </a>
+         
+        <a
+          href="https://firemap.atlassian.net/servicedesk/customer/portal/2"
+        >
+          Support Portal
+        </a>
+         
+        <a
+          href="https://crisis.app/our-story/contributors"
+        >
+          Contributors
+        </a>
+      </slide-stub>
+    </div>
+  </nav>
+</header>
+`;
