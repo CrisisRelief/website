@@ -2,7 +2,9 @@
   <footer id="footer" class="footer">
     <nav id="socials" class="d-flex justify-content-around p-2">
       <span v-for="(social, index) in socials" :key="index" class="m-2 h2">
-        <a :aria="social.alt" :href="social.link"><i :class="social.icon"/></a>
+        <a :aria="social.alt" :href="social.link">
+          <i v-bind:class="['fab', social.icon]" />
+        </a>
       </span>
     </nav>
     <nav id="license">
@@ -39,22 +41,22 @@ export default {
       socials: [
         {
           link: "https://twitter.com/thecrisisapp",
-          icon: "fab fa-twitter-square",
+          icon: "fa-twitter-square",
           alt: "twitter"
         },
         {
           link: "https://www.facebook.com/thecrisisapp/",
-          icon: "fab fa-facebook-square",
+          icon: "fa-facebook-square",
           alt: "facebook"
         },
         {
           link: "https://www.instagram.com/thecrisisapp",
-          icon: "fab fa-instagram",
+          icon: "fa-instagram",
           alt: "instagram"
         },
         {
           link: "https://www.linkedin.com/showcase/crisisapp/",
-          icon: "fab fa-linkedin",
+          icon: "fa-linkedin",
           alt: "linkedin"
         }
       ]
