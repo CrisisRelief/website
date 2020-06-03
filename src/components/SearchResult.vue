@@ -72,7 +72,7 @@ export default {
           else if(attr == "email") {
             icon = "envelope-square"
             href = "mailto:" + human
-            title="Email"
+            title = "Email"
           }
           else if(attr == "address") {
             icon = "directions"

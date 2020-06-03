@@ -8,7 +8,7 @@
     <nav id="license">
       <div class="d-flex justify-content-center px-auto">
         <span class="p-2">
-          We <FontAwesomeIcon icon="heart" title="Heart"/> Open
+          We <FontAwesomeIcon icon="heart" title="Heart" /> Open
         </span>
         <span class="p-2">
           <a
