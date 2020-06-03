@@ -18,7 +18,7 @@
     <table v-if="Object.entries(contact).length" class="search-result-contact table table-borderless my-2">
       <tr v-for="(item, key, index) in contact" :key="index">
         <a :href="item.href">
-          <td class="py-0 px-2 h5"><FontAwesomeIcon :icon="item.icon" /></td>
+          <td class="py-0 px-2 h5"><FontAwesomeIcon :icon="item.icon" :title="item.title" /></td>
           <td class="py-0 px-2">{{ item.human }}</td>
         </a>
       </tr>
@@ -57,25 +57,30 @@ export default {
         var human = this[attr]
         var href=human
         var icon
+        var title
         if(human) {
           if(attr == "phone") {
             icon = "phone-square-alt"
             href = 'tel:' + human.replace(/[^0-9]/g, '');
+            title = "Phone Number"
           }
           else if(attr == "link") {
             icon = "address-card"
             human = "Visit Website"
+            title = "Website Link"
           }
           else if(attr == "email") {
             icon = "envelope-square"
             href = "mailto:" + human
+            title = "Email"
           }
           else if(attr == "address") {
             icon = "directions"
             href = 'http://maps.google.com/?q=' + encodeURI(human);
             human = "Get Directions"
+            title = "Address"
           }
-          contact[attr] = { href, human, icon }
+          contact[attr] = { href, human, icon, title }
         }
         return contact;
       }, {});
