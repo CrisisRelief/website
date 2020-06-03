@@ -61,7 +61,7 @@ export default {
         if(human) {
           if(attr == "phone") {
             icon = "phone-square-alt"
-            href = 'tel:' + human.replace(/[^0-9]/g, '');
+            href = "tel:" + human.replace(/[^0-9]/g, "");
             title = "Phone Number"
           }
           else if(attr == "link") {
@@ -76,7 +76,7 @@ export default {
           }
           else if(attr == "address") {
             icon = "directions"
-            href = 'http://maps.google.com/?q=' + encodeURI(human);
+            href = "http://maps.google.com/?q=" + encodeURI(human);
             human = "Get Directions"
             title = "Address"
           }

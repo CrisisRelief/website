@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     locationLengthOk() {
-      if(typeof this.search.location == 'string') {
+      if(typeof this.search.location == "string") {
         return this.search.location.length >= this.minSearchLength
       }
       return false
@@ -181,7 +181,7 @@ export default {
     },
     locationLabel(location) {
       if (location.currentLocation) {
-        return 'Use my current location'
+        return "Use my current location"
       }
       const components = []
       if (location.postcode) {
@@ -192,7 +192,7 @@ export default {
         // components.push('<pre class="location-locality">' + location.locality + "<pre/>");
         components.push(location.locality)
       }
-      return components.join(' - ')
+      return components.join(" - ")
       // return location.locality
     },
     categoryLabel(category) {

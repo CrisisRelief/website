@@ -63,7 +63,7 @@ import SearchBox from "../components/SearchBox.vue";
 import axios from "axios";
 import cheapRuler from "cheap-ruler";
 import Fuse from "fuse.js";
-import Paginate from 'vuejs-paginate';
+import Paginate from "vuejs-paginate";
 
 
 export default {
@@ -76,7 +76,7 @@ export default {
     return {
       rawData: [],
       results: [],
-      orgJSONURI: 'https://' + process.env.VUE_APP_HOSTNAME + '/' + process.env.VUE_APP_ORG_JSON_PATH,
+      orgJSONURI: "https://" + process.env.VUE_APP_HOSTNAME + "/" + process.env.VUE_APP_ORG_JSON_PATH,
       regionCoords: undefined,
       filterParams: {
         category: null,
@@ -160,33 +160,33 @@ export default {
   },
   methods: {
     parseSingleRawOrg(org) {
-      const defaults = {subcategory_1: '', subcategory_2: '', other_categories: '' }
+      const defaults = {subcategory_1: "", subcategory_2: "", other_categories: "" }
       const {subcategory_1, subcategory_2, other_categories} = Object.assign(defaults, org)
       var tags = []
       Array(subcategory_1, subcategory_2).forEach((subcategory) => {
-        tags.push(...subcategory.split(', '))
+        tags.push(...subcategory.split(", "))
       })
       org.tags = tags.filter(tag => { return tag.length > 0 })
       org.tags_flat = org.tags.concat(other_categories).filter(
         (tag) => {return tag.length > 0}
-      ).join(', ')
+      ).join(", ")
 
       return org
     },
     checkUri(){
       const href = window.location.href;
-      const queryStr = href.split('?')[1];
+      const queryStr = href.split("?")[1];
       if (!queryStr) { return }
-      const queryParams = queryStr.split('&').reduce((result, hash) => {
-        const [key, val] = hash.split('=')
+      const queryParams = queryStr.split("&").reduce((result, hash) => {
+        const [key, val] = hash.split("=")
         result[key] = unescape(val)
         return result
       }, {})
 
       Object.entries({
-        q: {filterKey: 'term', parse: false},
-        loc: {filterKey: 'location', parse: true},
-        cat: {filterKey: 'category', parse: true}
+        q: {filterKey: "term", parse: false},
+        loc: {filterKey: "location", parse: true},
+        cat: {filterKey: "category", parse: true}
       }).forEach(([queryKey, {filterKey, parse}]) => {
         if (queryParams[queryKey]) {
           this.filterParams[filterKey] = parse ? JSON.parse(queryParams[queryKey]) : queryParams[queryKey]
@@ -212,7 +212,7 @@ export default {
         const [category, children] = entry
         var subcategories = children.map((tag) => { return { category, tag } })
         if (subcategories.length == 0) {
-          subcategories = Array({category, tag: ''})
+          subcategories = Array({category, tag: ""})
         }
         return {
           category,
@@ -391,16 +391,16 @@ export default {
       const search_location = this.searchLocationString
       const search_category = this.searchCategoryString
       if (search_term) {
-        newQuery['q'] = search_term
+        newQuery["q"] = search_term
       }
       if(search_location){
-        newQuery['loc'] = search_location
+        newQuery["loc"] = search_location
       }
       if(search_category){
-        newQuery['cat'] = search_category
+        newQuery["cat"] = search_category
       }
       if(this.needsPagination){
-        newQuery['p'] = this.page
+        newQuery["p"] = this.page
       }
       this.$router.replace({
         query: newQuery

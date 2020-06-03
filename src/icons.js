@@ -1,4 +1,4 @@
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { library } from "@fortawesome/fontawesome-svg-core"
 import {
   faQuestionCircle,
   faPeopleCarry,
@@ -20,7 +20,7 @@ import {
   faAddressCard,
   faCheck,
   faTimes,
-} from '@fortawesome/free-solid-svg-icons'
+} from "@fortawesome/free-solid-svg-icons"
 import {
   faUsdCircle,
   faHomeHeart,
@@ -30,7 +30,7 @@ import {
   faHandHeart,
   faCars,
   faArrowToRight
-} from '@fortawesome/pro-solid-svg-icons'
+} from "@fortawesome/pro-solid-svg-icons"
 
 library.add(faQuestionCircle)
 library.add(faUsdCircle)

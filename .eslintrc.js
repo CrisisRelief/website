@@ -11,6 +11,7 @@ module.exports = {
     rules: {
         "no-console": 0,
         "prefer-const": 2,
+        "quotes": ["error", "double"]
     },
     parserOptions: {
         parser: "babel-eslint"
