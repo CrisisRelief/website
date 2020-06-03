@@ -143,7 +143,7 @@ export default {
       this.search.category = search
     },
     onSelectCategory(selectCat) {
-      var selectCats = [selectCat]
+      let selectCats = [selectCat]
       if (selectCat instanceof Array) {
         selectCats = selectCat
       }
@@ -157,12 +157,12 @@ export default {
       })
     },
     onRemoveCategory(removeCat) {
-      var removeCats = [removeCat]
+      let removeCats = [removeCat]
       if (removeCat instanceof Array) {
         removeCats = removeCat
       }
       this.value.category = this.value.category.filter((cat) => {
-        var result = true
+        let result = true
         removeCats.forEach((removeCat) => {
           if (JSON.stringify(cat) === JSON.stringify(removeCat)) { result = false }
         })

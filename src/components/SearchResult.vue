@@ -54,10 +54,10 @@ export default {
     },
     contact() {
       return ["phone", "email", "address", "link"].reduce((contact, attr) => {
-        var human = this[attr]
-        var href=human
-        var icon
-        var title
+        let human = this[attr]
+        let href=human
+        let icon
+        let title
         if(human) {
           if(attr == "phone") {
             icon = "phone-square-alt"

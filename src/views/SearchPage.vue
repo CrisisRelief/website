@@ -101,14 +101,14 @@ export default {
       return this.filterParams["term"];
     },
     searchLocationString() {
-      var search_location = this.filterParams["location"];
+      let search_location = this.filterParams["location"];
       if(search_location){
         search_location = JSON.stringify(search_location)
       }
       return search_location
     },
     searchCategoryString() {
-      var search_category = this.filterParams["category"];
+      let search_category = this.filterParams["category"];
       if(search_category){
         search_category = JSON.stringify(search_category)
       }
@@ -134,7 +134,7 @@ export default {
   },
   mounted() {
     this.checkUri();
-    var promises = [
+    const promises = [
       axios.get("/region-coords.json").then(response => {
         this.regionCoords = response.data;
       }),
@@ -162,7 +162,7 @@ export default {
     parseSingleRawOrg(org) {
       const defaults = {subcategory_1: "", subcategory_2: "", other_categories: "" }
       const {subcategory_1, subcategory_2, other_categories} = Object.assign(defaults, org)
-      var tags = []
+      const tags = []
       Array(subcategory_1, subcategory_2).forEach((subcategory) => {
         tags.push(...subcategory.split(", "))
       })
@@ -210,7 +210,7 @@ export default {
       // console.log(`categories ${JSON.stringify(categories)}`)
       const category_options = Object.entries(categories).map((entry) => {
         const [category, children] = entry
-        var subcategories = children.map((tag) => { return { category, tag } })
+        let subcategories = children.map((tag) => { return { category, tag } })
         if (subcategories.length == 0) {
           subcategories = Array({category, tag: ""})
         }
@@ -238,7 +238,7 @@ export default {
       });
       const location_options = Object.entries(locations).map((entry) => {
         const [location, children] = entry
-        var sub_locations = children.map((child) => {
+        const sub_locations = children.map((child) => {
           return { location, ...child }
         })
         return {
@@ -266,7 +266,7 @@ export default {
       }
     },
     geocodeState(state) {
-      var loc = String(state).toLowerCase();
+      let loc = String(state).toLowerCase();
       loc =
         {
           act: "australian capital territory",
@@ -293,7 +293,7 @@ export default {
       }
       const search_location = this.filterParams["location"];
       if (search_location) {
-        var location = search_location
+        let location = search_location
         if (search_location instanceof Array) {
           location = search_location[0]
         }
@@ -307,8 +307,8 @@ export default {
     sortOrgs(orgs) {
       const position = this.getSearchPosition()
       if (position && position[0] && position[1] && orgs.length) {
-        var orgsWithPosition = []
-        var orgsWithOutPosition = []
+        let orgsWithPosition = []
+        const orgsWithOutPosition = []
         orgs.forEach((org) => {
           if(org.lat && org.long) {
             orgsWithPosition.push(org);
@@ -326,7 +326,7 @@ export default {
         return orgs;
       }
       const search_category = this.filterParams["category"];
-      var categories;
+      let categories;
       if (!search_category || search_category == null) {
         return orgs
       } else if (search_category instanceof Array) {
@@ -347,7 +347,7 @@ export default {
       return result
     },
     orgInCategories(org, categories) {
-      var result = false
+      let result = false
       categories.forEach((category_spec) => {
         if (!category_spec || !Object.entries(category_spec).length) { return }
         if (category_spec.category && org.category != category_spec.category) { return }
