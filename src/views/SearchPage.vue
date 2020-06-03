@@ -103,33 +103,33 @@ export default {
     searchLocationString() {
       let search_location = this.filterParams["location"];
       if(search_location){
-        search_location = JSON.stringify(search_location)
+        search_location = JSON.stringify(search_location);
       }
-      return search_location
+      return search_location;
     },
     searchCategoryString() {
       let search_category = this.filterParams["category"];
       if(search_category){
-        search_category = JSON.stringify(search_category)
+        search_category = JSON.stringify(search_category);
       }
-      return search_category
+      return search_category;
     },
     needsBrowserLocation() {
       if(this.filterParams && this.filterParams["location"] && this.filterParams["location"][0]) {
-        return this.filterParams["location"][0].currentLocation
+        return this.filterParams["location"][0].currentLocation;
       }
-      return false
+      return false;
     },
     needsPagination() {
-      return this.results.length > this.resultsPerPage
+      return this.results.length > this.resultsPerPage;
     },
     paginatedResults() {
       if (this.needsPagination) {
         return this.results.slice(
           (this.page - 1) * this.resultsPerPage, this.page * this.resultsPerPage
-        )
+        );
       }
-      return this.results
+      return this.results;
     }
   },
   mounted() {
@@ -141,47 +141,47 @@ export default {
       axios.get("/australian_postcodes.json").then(response => {
         this.locationCoords = response.data;
         this.refreshLocationFilterOptions();
-        this.loading.location = false
+        this.loading.location = false;
       }),
       axios.get(this.orgJSONURI).then(response => {
         console.log("loading org json from", this.orgJSONURI);
-        this.rawData = response.data.map(this.parseSingleRawOrg)
+        this.rawData = response.data.map(this.parseSingleRawOrg);
         this.refreshCatFilterOptions();
-        this.loading.category = false
+        this.loading.category = false;
       })
-    ]
+    ];
     Promise.all(promises).then(()=>{
-      if(Object.values(this.filterParams).some((value) => {return value !== null})) {
+      if(Object.values(this.filterParams).some((value) => {return value !== null;})) {
         // Filter params were set from URI
-        this.showResults = true
-        this.refreshResults()
+        this.showResults = true;
+        this.refreshResults();
       }
-    }).catch(e => {console.log(e)})
+    }).catch(e => {console.log(e);});
   },
   methods: {
     parseSingleRawOrg(org) {
-      const defaults = {subcategory_1: "", subcategory_2: "", other_categories: "" }
-      const {subcategory_1, subcategory_2, other_categories} = Object.assign(defaults, org)
-      const tags = []
+      const defaults = {subcategory_1: "", subcategory_2: "", other_categories: "" };
+      const {subcategory_1, subcategory_2, other_categories} = Object.assign(defaults, org);
+      const tags = [];
       Array(subcategory_1, subcategory_2).forEach((subcategory) => {
-        tags.push(...subcategory.split(", "))
-      })
-      org.tags = tags.filter(tag => { return tag.length > 0 })
+        tags.push(...subcategory.split(", "));
+      });
+      org.tags = tags.filter(tag => { return tag.length > 0; });
       org.tags_flat = org.tags.concat(other_categories).filter(
-        (tag) => {return tag.length > 0}
-      ).join(", ")
+        (tag) => {return tag.length > 0;}
+      ).join(", ");
 
-      return org
+      return org;
     },
     checkUri(){
       const href = window.location.href;
       const queryStr = href.split("?")[1];
-      if (!queryStr) { return }
+      if (!queryStr) { return; }
       const queryParams = queryStr.split("&").reduce((result, hash) => {
-        const [key, val] = hash.split("=")
-        result[key] = unescape(val)
-        return result
-      }, {})
+        const [key, val] = hash.split("=");
+        result[key] = unescape(val);
+        return result;
+      }, {});
 
       Object.entries({
         q: {filterKey: "term", parse: false},
@@ -189,43 +189,43 @@ export default {
         cat: {filterKey: "category", parse: true}
       }).forEach(([queryKey, {filterKey, parse}]) => {
         if (queryParams[queryKey]) {
-          this.filterParams[filterKey] = parse ? JSON.parse(queryParams[queryKey]) : queryParams[queryKey]
+          this.filterParams[filterKey] = parse ? JSON.parse(queryParams[queryKey]) : queryParams[queryKey];
         }
-      })
+      });
     },
     refreshCatFilterOptions() {
       const categories = {};
       this.rawData.forEach(org => {
         if (org.category && !Object.keys(categories).includes(org.category)) {
-          categories[org.category] = []
+          categories[org.category] = [];
         }
         if (org.tags && org.tags instanceof Array) {
           org.tags.forEach((tag) => {
             if(tag && !categories[org.category].includes(tag)) {
-              categories[org.category].push(tag)
+              categories[org.category].push(tag);
             }
-          })
+          });
         }
-      })
+      });
       // console.log(`categories ${JSON.stringify(categories)}`)
       const category_options = Object.entries(categories).map((entry) => {
-        const [category, children] = entry
-        let subcategories = children.map((tag) => { return { category, tag } })
+        const [category, children] = entry;
+        let subcategories = children.map((tag) => { return { category, tag }; });
         if (subcategories.length == 0) {
-          subcategories = Array({category, tag: ""})
+          subcategories = Array({category, tag: ""});
         }
         return {
           category,
           subcategories
-        }
-      })
+        };
+      });
       this.filterOptions.categories = category_options;
     },
     refreshLocationFilterOptions() {
       const locations = {};
       this.locationCoords.forEach(loc => {
         if (loc.state && !Object.keys(locations).includes(loc.state)) {
-          locations[loc.state] = []
+          locations[loc.state] = [];
         }
         if (loc.locality && !locations[loc.state].includes(loc.locality)) {
           locations[loc.state].push({
@@ -237,32 +237,32 @@ export default {
         }
       });
       const location_options = Object.entries(locations).map((entry) => {
-        const [location, children] = entry
+        const [location, children] = entry;
         const sub_locations = children.map((child) => {
-          return { location, ...child }
-        })
+          return { location, ...child };
+        });
         return {
           location,
           sublocations: sub_locations
-        }
+        };
       });
       this.filterOptions.locations = location_options;
     },
     refreshResults() {
-      if ( !this.showResults ) { return }
+      if ( !this.showResults ) { return; }
       this.results = [this.searchOrgs, this.filterOrgs].reduceRight(
         (orgs, fn) => fn(orgs),
         this.rawData
       );
       if (this.needsBrowserLocation) {
         navigator.geolocation.getCurrentPosition((location) => {
-          this.browserLocation = [location.coords.longitude, location.coords.latitude]
-          this.results = this.sortOrgs(this.results)
+          this.browserLocation = [location.coords.longitude, location.coords.latitude];
+          this.results = this.sortOrgs(this.results);
         }, error => {
           console.error(error);
-        })
+        });
       } else {
-        this.results = this.sortOrgs(this.results)
+        this.results = this.sortOrgs(this.results);
       }
     },
     geocodeState(state) {
@@ -286,38 +286,38 @@ export default {
     },
     getSearchPosition() {
       if (this.needsBrowserLocation && this.browserLocation) {
-        return this.browserLocation
+        return this.browserLocation;
       }
       if (!this.filterParams) {
         return null;
       }
       const search_location = this.filterParams["location"];
       if (search_location) {
-        let location = search_location
+        let location = search_location;
         if (search_location instanceof Array) {
-          location = search_location[0]
+          location = search_location[0];
         }
         if (location.lat && location.long) {
-          return [location.long, location.lat]
+          return [location.long, location.lat];
         } else if (location.location) {
-          return this.geocodeState(location.location)
+          return this.geocodeState(location.location);
         }
       }
     },
     sortOrgs(orgs) {
-      const position = this.getSearchPosition()
+      const position = this.getSearchPosition();
       if (position && position[0] && position[1] && orgs.length) {
-        let orgsWithPosition = []
-        const orgsWithOutPosition = []
+        let orgsWithPosition = [];
+        const orgsWithOutPosition = [];
         orgs.forEach((org) => {
           if(org.lat && org.long) {
             orgsWithPosition.push(org);
           } else {
             orgsWithOutPosition.push(org);
           }
-        })
-        orgsWithPosition = sortOrgsByDistance(orgsWithPosition, position)
-        return orgsWithPosition.concat(orgsWithOutPosition)
+        });
+        orgsWithPosition = sortOrgsByDistance(orgsWithPosition, position);
+        return orgsWithPosition.concat(orgsWithOutPosition);
       }
       return orgs;
     },
@@ -328,33 +328,33 @@ export default {
       const search_category = this.filterParams["category"];
       let categories;
       if (!search_category || search_category == null) {
-        return orgs
+        return orgs;
       } else if (search_category instanceof Array) {
         categories = search_category.filter((category)=>{
-          return Object.entries(category).length > 0
-        })
-        if (!categories.length > 0) { return orgs }
+          return Object.entries(category).length > 0;
+        });
+        if (!categories.length > 0) { return orgs; }
       } else {
-        if (!Object.entries(search_category).length) { return orgs }
-        categories = [search_category]
+        if (!Object.entries(search_category).length) { return orgs; }
+        categories = [search_category];
       }
 
       const result = orgs.filter(org => {
-        return this.orgInCategories(org, categories)
+        return this.orgInCategories(org, categories);
       });
 
       // console.log(`result ${JSON.stringify(result)}`)
-      return result
+      return result;
     },
     orgInCategories(org, categories) {
-      let result = false
+      let result = false;
       categories.forEach((category_spec) => {
-        if (!category_spec || !Object.entries(category_spec).length) { return }
-        if (category_spec.category && org.category != category_spec.category) { return }
-        if (category_spec.tag && !org.tags.includes(category_spec.tag)) { return }
-        result = true
-      })
-      return result
+        if (!category_spec || !Object.entries(category_spec).length) { return; }
+        if (category_spec.category && org.category != category_spec.category) { return; }
+        if (category_spec.tag && !org.tags.includes(category_spec.tag)) { return; }
+        result = true;
+      });
+      return result;
     },
     searchOrgs(orgs) {
       if (!this.filterParams) {
@@ -381,30 +381,30 @@ export default {
           threshold: 0.3
         });
         const result = fuse.search(search_term);
-        return result
+        return result;
       }
       return orgs;
     },
     updateWindowLocation() {
-      const newQuery = Object.assign({}, this.$route.query)
-      const search_term = this.searchTermString
-      const search_location = this.searchLocationString
-      const search_category = this.searchCategoryString
+      const newQuery = Object.assign({}, this.$route.query);
+      const search_term = this.searchTermString;
+      const search_location = this.searchLocationString;
+      const search_category = this.searchCategoryString;
       if (search_term) {
-        newQuery["q"] = search_term
+        newQuery["q"] = search_term;
       }
       if(search_location){
-        newQuery["loc"] = search_location
+        newQuery["loc"] = search_location;
       }
       if(search_category){
-        newQuery["cat"] = search_category
+        newQuery["cat"] = search_category;
       }
       if(this.needsPagination){
-        newQuery["p"] = this.page
+        newQuery["p"] = this.page;
       }
       this.$router.replace({
         query: newQuery
-      })
+      });
     },
     trackWindowLocation() {
       this.$gtag.pageview({page_path: window.location.href});
@@ -412,13 +412,13 @@ export default {
     onSearchBoxUpdate(params) {
       console.log("onSearchBoxUpdate", JSON.stringify(params));
       this.filterParams = params;
-      this.showResults = true
+      this.showResults = true;
       this.refreshResults();
       this.updateWindowLocation();
       this.trackWindowLocation();
     },
     onPaginate(page) {
-      this.page = page
+      this.page = page;
       this.updateWindowLocation();
       this.trackWindowLocation();
     }
@@ -434,8 +434,8 @@ function sortOrgsByDistance(results, ourLocation) {
 
   /* For now we are just using centroids of LGAs. */
   function resultCoord(result) {
-    const response = [result.long, result.lat]
-    return response
+    const response = [result.long, result.lat];
+    return response;
   }
 
   function sortFunc(a, b) {

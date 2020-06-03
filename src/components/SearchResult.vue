@@ -54,33 +54,33 @@ export default {
     },
     contact() {
       return ["phone", "email", "address", "link"].reduce((contact, attr) => {
-        let human = this[attr]
-        let href=human
-        let icon
-        let title
+        let human = this[attr];
+        let href=human;
+        let icon;
+        let title;
         if(human) {
           if(attr == "phone") {
-            icon = "phone-square-alt"
+            icon = "phone-square-alt";
             href = "tel:" + human.replace(/[^0-9]/g, "");
-            title = "Phone Number"
+            title = "Phone Number";
           }
           else if(attr == "link") {
-            icon = "address-card"
-            human = "Visit Website"
-            title = "Website Link"
+            icon = "address-card";
+            human = "Visit Website";
+            title = "Website Link";
           }
           else if(attr == "email") {
-            icon = "envelope-square"
-            href = "mailto:" + human
-            title = "Email"
+            icon = "envelope-square";
+            href = "mailto:" + human;
+            title = "Email";
           }
           else if(attr == "address") {
-            icon = "directions"
+            icon = "directions";
             href = "http://maps.google.com/?q=" + encodeURI(human);
-            human = "Get Directions"
-            title = "Address"
+            human = "Get Directions";
+            title = "Address";
           }
-          contact[attr] = { href, human, icon, title }
+          contact[attr] = { href, human, icon, title };
         }
         return contact;
       }, {});

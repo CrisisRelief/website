@@ -9,20 +9,20 @@ import App from "./App.vue";
 import "./icons.js";
 import SearchPage from "./views/SearchPage.vue";
 
-Vue.use(VueGtag, { config: { id: "UA-156077638-1" } })
-Vue.use(VueRouter)
-Vue.use(BootstrapVue)
+Vue.use(VueGtag, { config: { id: "UA-156077638-1" } });
+Vue.use(VueRouter);
+Vue.use(BootstrapVue);
 
-Vue.config.productionTip = false
-Vue.component("FontAwesomeIcon", FontAwesomeIcon)
+Vue.config.productionTip = false;
+Vue.component("FontAwesomeIcon", FontAwesomeIcon);
 
 const router = new VueRouter({
     routes: [
         { path: "/", component: SearchPage },
     ]
-})
+});
 
 new Vue({
     router,
     render: h => h(App),
-}).$mount("#app")
+}).$mount("#app");

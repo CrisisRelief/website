@@ -12,9 +12,10 @@ module.exports = {
         "no-console": 0,
         "prefer-const": 2,
         "no-var": 2,
-        "quotes": ["error", "double"]
+        "quotes": ["error", "double"],
+        "semi": ["error", "always"]
     },
     parserOptions: {
         parser: "babel-eslint"
     }
-}
+};

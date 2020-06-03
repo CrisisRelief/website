@@ -18,11 +18,11 @@ export default {
   },
   computed: {
     fragment() {
-      console.log(this.$route.params)
-      return this.$route.params
+      console.log(this.$route.params);
+      return this.$route.params;
     }
   }
-}
+};
 
 
 </script>

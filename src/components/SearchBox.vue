@@ -93,7 +93,7 @@ export default {
           location: null,
           term: "",
           category: null
-        }
+        };
       }
     },
     loading: {
@@ -101,7 +101,7 @@ export default {
         return {
           category: true,
           location: true
-        }
+        };
       }
     },
   },
@@ -113,93 +113,93 @@ export default {
         category: null
       },
       minSearchLength: 3
-    }
+    };
   },
   computed: {
     locationLengthOk() {
       if(typeof this.search.location == "string") {
-        return this.search.location.length >= this.minSearchLength
+        return this.search.location.length >= this.minSearchLength;
       }
-      return false
+      return false;
     },
     showLocationOptions() {
       if(this.useBrowserLocation) {
-        return false
+        return false;
       }
-      return this.locationLengthOk
+      return this.locationLengthOk;
     },
     compdLocationOptions() {
-      return this.showLocationOptions ? this.location_options : []
+      return this.showLocationOptions ? this.location_options : [];
     },
     hasGeolocation() {
-      return navigator.geolocation
+      return navigator.geolocation;
     }
   },
   methods: {
     onLocationSearchChange(search) {
-      this.search.location = search
+      this.search.location = search;
     },
     onCategorySearchChange(search) {
-      this.search.category = search
+      this.search.category = search;
     },
     onSelectCategory(selectCat) {
-      let selectCats = [selectCat]
+      let selectCats = [selectCat];
       if (selectCat instanceof Array) {
-        selectCats = selectCat
+        selectCats = selectCat;
       }
       if( this.value.category == null) {
-        this.value.category = []
+        this.value.category = [];
       }
       selectCats.forEach((selectCat) => {
         if (! this.value.category.includes(selectCat)) {
-          this.value.category.push(selectCat)
+          this.value.category.push(selectCat);
         }
-      })
+      });
     },
     onRemoveCategory(removeCat) {
-      let removeCats = [removeCat]
+      let removeCats = [removeCat];
       if (removeCat instanceof Array) {
-        removeCats = removeCat
+        removeCats = removeCat;
       }
       this.value.category = this.value.category.filter((cat) => {
-        let result = true
+        let result = true;
         removeCats.forEach((removeCat) => {
-          if (JSON.stringify(cat) === JSON.stringify(removeCat)) { result = false }
-        })
-        return result
-      })
+          if (JSON.stringify(cat) === JSON.stringify(removeCat)) { result = false; }
+        });
+        return result;
+      });
     },
     onClickSearch() {
       this.$emit("updated", this.value);
     },
     onToggleBrowserLocation() {
-      this.useBrowserLocation = !this.useBrowserLocation
+      this.useBrowserLocation = !this.useBrowserLocation;
       if (this.useBrowserLocation) {
-        this.value.location = [{"currentLocation":true}]
-        this.$refs.mulselLocation.toggle()
+        this.value.location = [{"currentLocation":true}];
+        this.$refs.mulselLocation.toggle();
       }
     },
     locationLabel(location) {
       if (location.currentLocation) {
-        return "Use my current location"
+        return "Use my current location";
       }
-      const components = []
+      const components = [];
       if (location.postcode) {
         // components.push('<pre class="location-postcode">' + location.postcode + "<pre/>")
-        components.push(location.postcode)
+        components.push(location.postcode);
       }
       if (location.locality) {
         // components.push('<pre class="location-locality">' + location.locality + "<pre/>");
-        components.push(location.locality)
+        components.push(location.locality);
       }
-      return components.join(" - ")
+      return components.join(" - ");
       // return location.locality
     },
     categoryLabel(category) {
       if (category.tag && category.tag.length > 0) {
-        return category.tag
+        return category.tag;
       }
-      return category.category
+      return category.category;
     }
   }
 };
