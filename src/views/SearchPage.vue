@@ -2,9 +2,19 @@
   <div class="content-wrap">
     <div class="container">
       <div class="intro">
-          <h2>Need help or want to help?</h2>
-          <p>Use the directory to find resources or services you need in an emergency, or where and how you can help.<p>
-          <p>If you have a resource or service to offer, add a listing using our <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform">online form</a>.</p>
+        <h2>Need help or want to help?</h2>
+        <p>
+          Use the directory to find resources or services you need in an
+          emergency, or where and how you can help.
+        </p>
+        <p></p>
+        <p>
+          If you have a resource or service to offer, add a listing using our
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSc_MjrlaZ89Wc2vn_XleAjOoJUZayKNGCTzeX5xNY-xPMDFkg/viewform"
+            >online form</a
+          >.
+        </p>
       </div>
       <SearchBox
         @updated="onSearchBoxUpdate"
@@ -15,9 +25,16 @@
       />
     </div>
     <div id="results" class="container">
-      <p>Note: While every effort is being made to ensure the information is accurate, this is a community-sourced directory. Please do your own checks.</p>
+      <p>
+        Note: While every effort is being made to ensure the information is
+        accurate, this is a community-sourced directory. Please do your own
+        checks.
+      </p>
       <span id="hits" v-if="showResults">
-        <span v-if="needsPagination">{{ (page - 1) * resultsPerPage + 1 }} to {{ page * resultsPerPage }} of </span>
+        <span v-if="needsPagination"
+          >{{ (page - 1) * resultsPerPage + 1 }} to
+          {{ page * resultsPerPage }} of
+        </span>
         <span v-if="results.length > 0">{{ results.length }} results</span>
         <span v-else-if="filterParams">No results</span>
       </span>
@@ -34,7 +51,7 @@
         :address="result.address"
         :link="result.link"
       />
-      <hr v-if="needsPagination"/>
+      <hr v-if="needsPagination" />
       <nav id="pagination" v-if="needsPagination" aria="Page navigation">
         <Paginate
           :page-count="Math.ceil(this.results.length / resultsPerPage)"
@@ -56,7 +73,6 @@
   </div>
 </template>
 
-
 <script>
 import SearchResult from "../components/SearchResult.vue";
 import SearchBox from "../components/SearchBox.vue";
@@ -65,18 +81,21 @@ import cheapRuler from "cheap-ruler";
 import Fuse from "fuse.js";
 import Paginate from "vuejs-paginate";
 
-
 export default {
   components: {
     SearchResult,
     SearchBox,
-    Paginate,
+    Paginate
   },
   data() {
     return {
       rawData: [],
       results: [],
-      orgJSONURI: "https://" + process.env.VUE_APP_HOSTNAME + "/" + process.env.VUE_APP_ORG_JSON_PATH,
+      orgJSONURI:
+        "https://" +
+        process.env.VUE_APP_HOSTNAME +
+        "/" +
+        process.env.VUE_APP_ORG_JSON_PATH,
       regionCoords: undefined,
       filterParams: {
         category: null,
@@ -102,20 +121,24 @@ export default {
     },
     searchLocationString() {
       let search_location = this.filterParams["location"];
-      if(search_location){
+      if (search_location) {
         search_location = JSON.stringify(search_location);
       }
       return search_location;
     },
     searchCategoryString() {
       let search_category = this.filterParams["category"];
-      if(search_category){
+      if (search_category) {
         search_category = JSON.stringify(search_category);
       }
       return search_category;
     },
     needsBrowserLocation() {
-      if(this.filterParams && this.filterParams["location"] && this.filterParams["location"][0]) {
+      if (
+        this.filterParams &&
+        this.filterParams["location"] &&
+        this.filterParams["location"][0]
+      ) {
         return this.filterParams["location"][0].currentLocation;
       }
       return false;
@@ -126,7 +149,8 @@ export default {
     paginatedResults() {
       if (this.needsPagination) {
         return this.results.slice(
-          (this.page - 1) * this.resultsPerPage, this.page * this.resultsPerPage
+          (this.page - 1) * this.resultsPerPage,
+          this.page * this.resultsPerPage
         );
       }
       return this.results;
@@ -150,33 +174,55 @@ export default {
         this.loading.category = false;
       })
     ];
-    Promise.all(promises).then(()=>{
-      if(Object.values(this.filterParams).some((value) => {return value !== null;})) {
-        // Filter params were set from URI
-        this.showResults = true;
-        this.refreshResults();
-      }
-    }).catch(e => {console.log(e);});
+    Promise.all(promises)
+      .then(() => {
+        if (
+          Object.values(this.filterParams).some(value => {
+            return value !== null;
+          })
+        ) {
+          // Filter params were set from URI
+          this.showResults = true;
+          this.refreshResults();
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
   },
   methods: {
     parseSingleRawOrg(org) {
-      const defaults = {subcategory_1: "", subcategory_2: "", other_categories: "" };
-      const {subcategory_1, subcategory_2, other_categories} = Object.assign(defaults, org);
+      const defaults = {
+        subcategory_1: "",
+        subcategory_2: "",
+        other_categories: ""
+      };
+      const { subcategory_1, subcategory_2, other_categories } = Object.assign(
+        defaults,
+        org
+      );
       const tags = [];
-      Array(subcategory_1, subcategory_2).forEach((subcategory) => {
+      Array(subcategory_1, subcategory_2).forEach(subcategory => {
         tags.push(...subcategory.split(", "));
       });
-      org.tags = tags.filter(tag => { return tag.length > 0; });
-      org.tags_flat = org.tags.concat(other_categories).filter(
-        (tag) => {return tag.length > 0;}
-      ).join(", ");
+      org.tags = tags.filter(tag => {
+        return tag.length > 0;
+      });
+      org.tags_flat = org.tags
+        .concat(other_categories)
+        .filter(tag => {
+          return tag.length > 0;
+        })
+        .join(", ");
 
       return org;
     },
-    checkUri(){
+    checkUri() {
       const href = window.location.href;
       const queryStr = href.split("?")[1];
-      if (!queryStr) { return; }
+      if (!queryStr) {
+        return;
+      }
       const queryParams = queryStr.split("&").reduce((result, hash) => {
         const [key, val] = hash.split("=");
         result[key] = unescape(val);
@@ -184,12 +230,14 @@ export default {
       }, {});
 
       Object.entries({
-        q: {filterKey: "term", parse: false},
-        loc: {filterKey: "location", parse: true},
-        cat: {filterKey: "category", parse: true}
-      }).forEach(([queryKey, {filterKey, parse}]) => {
+        q: { filterKey: "term", parse: false },
+        loc: { filterKey: "location", parse: true },
+        cat: { filterKey: "category", parse: true }
+      }).forEach(([queryKey, { filterKey, parse }]) => {
         if (queryParams[queryKey]) {
-          this.filterParams[filterKey] = parse ? JSON.parse(queryParams[queryKey]) : queryParams[queryKey];
+          this.filterParams[filterKey] = parse
+            ? JSON.parse(queryParams[queryKey])
+            : queryParams[queryKey];
         }
       });
     },
@@ -200,19 +248,21 @@ export default {
           categories[org.category] = [];
         }
         if (org.tags && org.tags instanceof Array) {
-          org.tags.forEach((tag) => {
-            if(tag && !categories[org.category].includes(tag)) {
+          org.tags.forEach(tag => {
+            if (tag && !categories[org.category].includes(tag)) {
               categories[org.category].push(tag);
             }
           });
         }
       });
       // console.log(`categories ${JSON.stringify(categories)}`)
-      const category_options = Object.entries(categories).map((entry) => {
+      const category_options = Object.entries(categories).map(entry => {
         const [category, children] = entry;
-        let subcategories = children.map((tag) => { return { category, tag }; });
+        let subcategories = children.map(tag => {
+          return { category, tag };
+        });
         if (subcategories.length == 0) {
-          subcategories = Array({category, tag: ""});
+          subcategories = Array({ category, tag: "" });
         }
         return {
           category,
@@ -236,9 +286,9 @@ export default {
           });
         }
       });
-      const location_options = Object.entries(locations).map((entry) => {
+      const location_options = Object.entries(locations).map(entry => {
         const [location, children] = entry;
-        const sub_locations = children.map((child) => {
+        const sub_locations = children.map(child => {
           return { location, ...child };
         });
         return {
@@ -249,18 +299,26 @@ export default {
       this.filterOptions.locations = location_options;
     },
     refreshResults() {
-      if ( !this.showResults ) { return; }
+      if (!this.showResults) {
+        return;
+      }
       this.results = [this.searchOrgs, this.filterOrgs].reduceRight(
         (orgs, fn) => fn(orgs),
         this.rawData
       );
       if (this.needsBrowserLocation) {
-        navigator.geolocation.getCurrentPosition((location) => {
-          this.browserLocation = [location.coords.longitude, location.coords.latitude];
-          this.results = this.sortOrgs(this.results);
-        }, error => {
-          console.error(error);
-        });
+        navigator.geolocation.getCurrentPosition(
+          location => {
+            this.browserLocation = [
+              location.coords.longitude,
+              location.coords.latitude
+            ];
+            this.results = this.sortOrgs(this.results);
+          },
+          error => {
+            console.error(error);
+          }
+        );
       } else {
         this.results = this.sortOrgs(this.results);
       }
@@ -309,8 +367,8 @@ export default {
       if (position && position[0] && position[1] && orgs.length) {
         let orgsWithPosition = [];
         const orgsWithOutPosition = [];
-        orgs.forEach((org) => {
-          if(org.lat && org.long) {
+        orgs.forEach(org => {
+          if (org.lat && org.long) {
             orgsWithPosition.push(org);
           } else {
             orgsWithOutPosition.push(org);
@@ -330,12 +388,16 @@ export default {
       if (!search_category || search_category == null) {
         return orgs;
       } else if (search_category instanceof Array) {
-        categories = search_category.filter((category)=>{
+        categories = search_category.filter(category => {
           return Object.entries(category).length > 0;
         });
-        if (!categories.length > 0) { return orgs; }
+        if (!categories.length > 0) {
+          return orgs;
+        }
       } else {
-        if (!Object.entries(search_category).length) { return orgs; }
+        if (!Object.entries(search_category).length) {
+          return orgs;
+        }
         categories = [search_category];
       }
 
@@ -348,10 +410,16 @@ export default {
     },
     orgInCategories(org, categories) {
       let result = false;
-      categories.forEach((category_spec) => {
-        if (!category_spec || !Object.entries(category_spec).length) { return; }
-        if (category_spec.category && org.category != category_spec.category) { return; }
-        if (category_spec.tag && !org.tags.includes(category_spec.tag)) { return; }
+      categories.forEach(category_spec => {
+        if (!category_spec || !Object.entries(category_spec).length) {
+          return;
+        }
+        if (category_spec.category && org.category != category_spec.category) {
+          return;
+        }
+        if (category_spec.tag && !org.tags.includes(category_spec.tag)) {
+          return;
+        }
         result = true;
       });
       return result;
@@ -393,13 +461,13 @@ export default {
       if (search_term) {
         newQuery["q"] = search_term;
       }
-      if(search_location){
+      if (search_location) {
         newQuery["loc"] = search_location;
       }
-      if(search_category){
+      if (search_category) {
         newQuery["cat"] = search_category;
       }
-      if(this.needsPagination){
+      if (this.needsPagination) {
         newQuery["p"] = this.page;
       }
       this.$router.replace({
@@ -407,7 +475,7 @@ export default {
       });
     },
     trackWindowLocation() {
-      this.$gtag.pageview({page_path: window.location.href});
+      this.$gtag.pageview({ page_path: window.location.href });
     },
     onSearchBoxUpdate(params) {
       console.log("onSearchBoxUpdate", JSON.stringify(params));
@@ -454,7 +522,6 @@ function sortOrgsByDistance(results, ourLocation) {
 </script>
 
 <style scoped>
-
 #results {
   padding: 20px;
 }
@@ -463,7 +530,6 @@ function sortOrgsByDistance(results, ourLocation) {
   font-weight: bolder;
   font-size: large;
 }
-
 </style>
 <style>
 #pagination .page-link {
@@ -472,6 +538,6 @@ function sortOrgsByDistance(results, ourLocation) {
 }
 #pagination .disabled .page-link {
   background-color: #f5f5f5;
-  color: #CAD1D3;
+  color: #cad1d3;
 }
 </style>

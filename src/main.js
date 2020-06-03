@@ -17,12 +17,10 @@ Vue.config.productionTip = false;
 Vue.component("FontAwesomeIcon", FontAwesomeIcon);
 
 const router = new VueRouter({
-    routes: [
-        { path: "/", component: SearchPage },
-    ]
+  routes: [{ path: "/", component: SearchPage }]
 });
 
 new Vue({
-    router,
-    render: h => h(App),
+  router,
+  render: h => h(App)
 }).$mount("#app");

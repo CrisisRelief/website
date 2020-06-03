@@ -7,18 +7,27 @@
     <h3 v-else>{{ title }}</h3>
     <div class="search-result-meta">
       <div class="search-result-categories">
-        <span v-for="(category, index) in categories" :key="index" class="search-result-category">
+        <span
+          v-for="(category, index) in categories"
+          :key="index"
+          class="search-result-category"
+        >
           {{ category }}
-          <span v-if="index+1 < categories.length"> > </span>
+          <span v-if="index + 1 < categories.length"> > </span>
         </span>
       </div>
       <div class="search-result-location">{{ location }}</div>
     </div>
     <div class="search-result-description" v-html="description"></div>
-    <table v-if="Object.entries(contact).length" class="search-result-contact table table-borderless my-2">
+    <table
+      v-if="Object.entries(contact).length"
+      class="search-result-contact table table-borderless my-2"
+    >
       <tr v-for="(item, key, index) in contact" :key="index">
         <a :href="item.href">
-          <td class="py-0 px-2 h5"><FontAwesomeIcon :icon="item.icon" :title="item.title" /></td>
+          <td class="py-0 px-2 h5">
+            <FontAwesomeIcon :icon="item.icon" :title="item.title" />
+          </td>
           <td class="py-0 px-2">{{ item.human }}</td>
         </a>
       </tr>
@@ -46,35 +55,30 @@ export default {
   components: { FontAwesomeIcon },
   computed: {
     categories() {
-      return [this.category, this.tags_flat].filter(
-        (elem) => {
-          return elem !== undefined && elem.length > 0;
-        }
-      );
+      return [this.category, this.tags_flat].filter(elem => {
+        return elem !== undefined && elem.length > 0;
+      });
     },
     contact() {
       return ["phone", "email", "address", "link"].reduce((contact, attr) => {
         let human = this[attr];
-        let href=human;
+        let href = human;
         let icon;
         let title;
-        if(human) {
-          if(attr == "phone") {
+        if (human) {
+          if (attr == "phone") {
             icon = "phone-square-alt";
             href = "tel:" + human.replace(/[^0-9]/g, "");
             title = "Phone Number";
-          }
-          else if(attr == "link") {
+          } else if (attr == "link") {
             icon = "address-card";
             human = "Visit Website";
             title = "Website Link";
-          }
-          else if(attr == "email") {
+          } else if (attr == "email") {
             icon = "envelope-square";
             href = "mailto:" + human;
             title = "Email";
-          }
-          else if(attr == "address") {
+          } else if (attr == "address") {
             icon = "directions";
             href = "http://maps.google.com/?q=" + encodeURI(human);
             human = "Get Directions";
@@ -85,7 +89,7 @@ export default {
         return contact;
       }, {});
     }
-  },
+  }
 };
 </script>
 

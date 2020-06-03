@@ -1,81 +1,83 @@
 <template>
-    <div class="search form">
-      <h3>Search</h3>
+  <div class="search form">
+    <h3>Search</h3>
 
-      <div class="row no-gutter">
-        <!-- Search Term Input -->
-        <div class="col-12 col-md-10 form-item">
-          <input
-            type="text"
-            class="form-control"
-            v-model="value.term"
-            placeholder="What do you need? eg. food, fuel"
-            @keyup.enter="onClickSearch()"
-          />
-        </div>
-      </div>
-
-      <div class="row no-gutter">
-        <!-- Location Selection -->
-        <div class="col-12 col-sm-4 form-item">
-          <multiselect
-            ref="mulselLocation"
-            v-model="value.location"
-            :options="compdLocationOptions"
-            :group-select="true"
-            :loading="loading.location"
-            group-values="sublocations"
-            group-label="location"
-            :custom-label="locationLabel"
-            placeholder="Location"
-            :show-labels="false"
-            :searchable="!useBrowserLocation"
-            :show-no-options="showLocationOptions"
-            :show-no-results="locationLengthOk"
-            @search-change="onLocationSearchChange"
-          >
-            <template slot="beforeList">
-              <button
-                v-if="hasGeolocation"
-                type="button"
-                class="btn btn-info"
-                @click="onToggleBrowserLocation()"
-              >
-                <span v-if="!useBrowserLocation">Use my current location</span>
-                <span v-else>Search for a location</span>
-              </button>
-            </template>
-          </multiselect>
-        </div>
-
-        <!-- Category -->
-        <div class="col-12 col-sm-4 form-item">
-          <multiselect
-            ref="mulselCategory"
-            :value="value.category"
-            :options="category_options"
-            :group-select="true"
-            :loading="loading.category"
-            group-values="subcategories"
-            group-label="category"
-            :custom-label="categoryLabel"
-            placeholder="Category"
-            :show-labels="false"
-            :multiple="true"
-            :close-on-select="false"
-            :reset-after="true"
-            @select="onSelectCategory"
-            @remove="onRemoveCategory"
-            @search-change="onCategorySearchChange"
-          />
-        </div>
-
-        <!-- Submit Button -->
-        <div class="col-12 col-sm-3 form-submit">
-          <button type="button" class="btn btn-info" @click="onClickSearch()">Search</button>
-        </div>
+    <div class="row no-gutter">
+      <!-- Search Term Input -->
+      <div class="col-12 col-md-10 form-item">
+        <input
+          type="text"
+          class="form-control"
+          v-model="value.term"
+          placeholder="What do you need? eg. food, fuel"
+          @keyup.enter="onClickSearch()"
+        />
       </div>
     </div>
+
+    <div class="row no-gutter">
+      <!-- Location Selection -->
+      <div class="col-12 col-sm-4 form-item">
+        <multiselect
+          ref="mulselLocation"
+          v-model="value.location"
+          :options="compdLocationOptions"
+          :group-select="true"
+          :loading="loading.location"
+          group-values="sublocations"
+          group-label="location"
+          :custom-label="locationLabel"
+          placeholder="Location"
+          :show-labels="false"
+          :searchable="!useBrowserLocation"
+          :show-no-options="showLocationOptions"
+          :show-no-results="locationLengthOk"
+          @search-change="onLocationSearchChange"
+        >
+          <template slot="beforeList">
+            <button
+              v-if="hasGeolocation"
+              type="button"
+              class="btn btn-info"
+              @click="onToggleBrowserLocation()"
+            >
+              <span v-if="!useBrowserLocation">Use my current location</span>
+              <span v-else>Search for a location</span>
+            </button>
+          </template>
+        </multiselect>
+      </div>
+
+      <!-- Category -->
+      <div class="col-12 col-sm-4 form-item">
+        <multiselect
+          ref="mulselCategory"
+          :value="value.category"
+          :options="category_options"
+          :group-select="true"
+          :loading="loading.category"
+          group-values="subcategories"
+          group-label="category"
+          :custom-label="categoryLabel"
+          placeholder="Category"
+          :show-labels="false"
+          :multiple="true"
+          :close-on-select="false"
+          :reset-after="true"
+          @select="onSelectCategory"
+          @remove="onRemoveCategory"
+          @search-change="onCategorySearchChange"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <div class="col-12 col-sm-3 form-submit">
+        <button type="button" class="btn btn-info" @click="onClickSearch()">
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -84,8 +86,8 @@ import Multiselect from "vue-multiselect";
 export default {
   components: { Multiselect },
   props: {
-    location_options: { },
-    category_options: { },
+    location_options: {},
+    category_options: {},
     value: {
       type: Object,
       default() {
@@ -103,7 +105,7 @@ export default {
           location: true
         };
       }
-    },
+    }
   },
   data() {
     return {
@@ -117,13 +119,13 @@ export default {
   },
   computed: {
     locationLengthOk() {
-      if(typeof this.search.location == "string") {
+      if (typeof this.search.location == "string") {
         return this.search.location.length >= this.minSearchLength;
       }
       return false;
     },
     showLocationOptions() {
-      if(this.useBrowserLocation) {
+      if (this.useBrowserLocation) {
         return false;
       }
       return this.locationLengthOk;
@@ -147,11 +149,11 @@ export default {
       if (selectCat instanceof Array) {
         selectCats = selectCat;
       }
-      if( this.value.category == null) {
+      if (this.value.category == null) {
         this.value.category = [];
       }
-      selectCats.forEach((selectCat) => {
-        if (! this.value.category.includes(selectCat)) {
+      selectCats.forEach(selectCat => {
+        if (!this.value.category.includes(selectCat)) {
           this.value.category.push(selectCat);
         }
       });
@@ -161,10 +163,12 @@ export default {
       if (removeCat instanceof Array) {
         removeCats = removeCat;
       }
-      this.value.category = this.value.category.filter((cat) => {
+      this.value.category = this.value.category.filter(cat => {
         let result = true;
-        removeCats.forEach((removeCat) => {
-          if (JSON.stringify(cat) === JSON.stringify(removeCat)) { result = false; }
+        removeCats.forEach(removeCat => {
+          if (JSON.stringify(cat) === JSON.stringify(removeCat)) {
+            result = false;
+          }
         });
         return result;
       });
@@ -175,7 +179,7 @@ export default {
     onToggleBrowserLocation() {
       this.useBrowserLocation = !this.useBrowserLocation;
       if (this.useBrowserLocation) {
-        this.value.location = [{"currentLocation":true}];
+        this.value.location = [{ currentLocation: true }];
         this.$refs.mulselLocation.toggle();
       }
     },
@@ -206,7 +210,6 @@ export default {
 </script>
 
 <style scoped>
-
 .row.no-gutter {
   margin: 0;
 }
@@ -214,10 +217,10 @@ export default {
   height: 43px !important;
 }
 .form-control::placeholder {
-    color: #02909e;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+  color: #02909e;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 .btn-info {
   width: 100%;
@@ -246,18 +249,17 @@ export default {
     margin-left: 0;
   }
 }
-
 </style>
 <style>
 .search.form .multiselect__placeholder {
-    color: #02909e;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+  color: #02909e;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 .search.form .multiselect__input {
   border-bottom: 2px solid #02909e;
-  padding:0;
+  padding: 0;
 }
 
 /* .search.form .multiselect__single {
@@ -272,7 +274,7 @@ export default {
 .search.form .multiselect__content,
 .search.form .multiselect__element,
 .search.form .multiselect__option {
-  width: 100%
+  width: 100%;
 }
 
 .search.form .multiselect__option span {
@@ -289,7 +291,8 @@ export default {
   margin-right: 2px;
 }
 
-.search.form .multiselect__option--highlight:not(.multiselect__option--selected):not(.multiselect__option--group-selected)::after {
+.search.form
+  .multiselect__option--highlight:not(.multiselect__option--selected):not(.multiselect__option--group-selected)::after {
   content: "\f00c";
   font-family: "Font Awesome 5 Pro";
 }
