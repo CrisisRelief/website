@@ -177,8 +177,8 @@ export default {
       const href = window.location.href;
       const queryStr = href.split('?')[1];
       if (!queryStr) { return }
-      let queryParams = queryStr.split('&').reduce((result, hash) => {
-        let [key, val] = hash.split('=')
+      const queryParams = queryStr.split('&').reduce((result, hash) => {
+        const [key, val] = hash.split('=')
         result[key] = unescape(val)
         return result
       }, {})
@@ -339,7 +339,7 @@ export default {
         categories = [search_category]
       }
 
-      let result = orgs.filter(org => {
+      const result = orgs.filter(org => {
         return this.orgInCategories(org, categories)
       });
 
@@ -380,7 +380,7 @@ export default {
           // tokenize: true,
           threshold: 0.3
         });
-        let result = fuse.search(search_term);
+        const result = fuse.search(search_term);
         return result
       }
       return orgs;
