@@ -18,19 +18,17 @@ export default {
   },
   computed: {
     fragment() {
-      console.log(this.$route.params)
-      return this.$route.params
+      console.log(this.$route.params);
+      return this.$route.params;
     }
   }
-}
-
-
+};
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap");
-@import '../node_modules/@fortawesome/fontawesome-pro/css/all.css';
+@import "../node_modules/@fortawesome/fontawesome-pro/css/all.css";
 
 #app {
   font-family: "Source Sans Pro", sans-serif;

@@ -1,81 +1,83 @@
 <template>
-    <div class="search form">
-      <h3>Search</h3>
+  <div class="search form">
+    <h3>Search</h3>
 
-      <div class="row no-gutter">
-        <!-- Search Term Input -->
-        <div class="col-12 col-md-10 form-item">
-          <input
-            type="text"
-            class="form-control"
-            v-model="value.term"
-            placeholder="What do you need? eg. food, fuel"
-            @keyup.enter="onClickSearch()"
-          />
-        </div>
-      </div>
-
-      <div class="row no-gutter">
-        <!-- Location Selection -->
-        <div class="col-12 col-sm-4 form-item">
-          <multiselect
-            ref="mulselLocation"
-            v-model="value.location"
-            :options="compdLocationOptions"
-            :group-select="true"
-            :loading="loading.location"
-            group-values="sublocations"
-            group-label="location"
-            :custom-label="locationLabel"
-            placeholder="Location"
-            :show-labels="false"
-            :searchable="!useBrowserLocation"
-            :show-no-options="showLocationOptions"
-            :show-no-results="locationLengthOk"
-            @search-change="onLocationSearchChange"
-          >
-            <template slot="beforeList">
-              <button
-                v-if="hasGeolocation"
-                type="button"
-                class="btn btn-info"
-                @click="onToggleBrowserLocation()"
-              >
-                <span v-if="!useBrowserLocation">Use my current location</span>
-                <span v-else>Search for a location</span>
-              </button>
-            </template>
-          </multiselect>
-        </div>
-
-        <!-- Category -->
-        <div class="col-12 col-sm-4 form-item">
-          <multiselect
-            ref="mulselCategory"
-            :value="value.category"
-            :options="category_options"
-            :group-select="true"
-            :loading="loading.category"
-            group-values="subcategories"
-            group-label="category"
-            :custom-label="categoryLabel"
-            placeholder="Category"
-            :show-labels="false"
-            :multiple="true"
-            :close-on-select="false"
-            :reset-after="true"
-            @select="onSelectCategory"
-            @remove="onRemoveCategory"
-            @search-change="onCategorySearchChange"
-          />
-        </div>
-
-        <!-- Submit Button -->
-        <div class="col-12 col-sm-3 form-submit">
-          <button type="button" class="btn btn-info" @click="onClickSearch()">Search</button>
-        </div>
+    <div class="row no-gutter">
+      <!-- Search Term Input -->
+      <div class="col-12 col-md-10 form-item">
+        <input
+          type="text"
+          class="form-control"
+          v-model="value.term"
+          placeholder="What do you need? eg. food, fuel"
+          @keyup.enter="onClickSearch()"
+        />
       </div>
     </div>
+
+    <div class="row no-gutter">
+      <!-- Location Selection -->
+      <div class="col-12 col-sm-4 form-item">
+        <multiselect
+          ref="mulselLocation"
+          v-model="value.location"
+          :options="compdLocationOptions"
+          :group-select="true"
+          :loading="loading.location"
+          group-values="sublocations"
+          group-label="location"
+          :custom-label="locationLabel"
+          placeholder="Location"
+          :show-labels="false"
+          :searchable="!useBrowserLocation"
+          :show-no-options="showLocationOptions"
+          :show-no-results="locationLengthOk"
+          @search-change="onLocationSearchChange"
+        >
+          <template slot="beforeList">
+            <button
+              v-if="hasGeolocation"
+              type="button"
+              class="btn btn-info"
+              @click="onToggleBrowserLocation()"
+            >
+              <span v-if="!useBrowserLocation">Use my current location</span>
+              <span v-else>Search for a location</span>
+            </button>
+          </template>
+        </multiselect>
+      </div>
+
+      <!-- Category -->
+      <div class="col-12 col-sm-4 form-item">
+        <multiselect
+          ref="mulselCategory"
+          :value="value.category"
+          :options="category_options"
+          :group-select="true"
+          :loading="loading.category"
+          group-values="subcategories"
+          group-label="category"
+          :custom-label="categoryLabel"
+          placeholder="Category"
+          :show-labels="false"
+          :multiple="true"
+          :close-on-select="false"
+          :reset-after="true"
+          @select="onSelectCategory"
+          @remove="onRemoveCategory"
+          @search-change="onCategorySearchChange"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <div class="col-12 col-sm-3 form-submit">
+        <button type="button" class="btn btn-info" @click="onClickSearch()">
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -84,8 +86,8 @@ import Multiselect from "vue-multiselect";
 export default {
   components: { Multiselect },
   props: {
-    location_options: { },
-    category_options: { },
+    location_options: {},
+    category_options: {},
     value: {
       type: Object,
       default() {
@@ -93,7 +95,7 @@ export default {
           location: null,
           term: "",
           category: null
-        }
+        };
       }
     },
     loading: {
@@ -101,9 +103,9 @@ export default {
         return {
           category: true,
           location: true
-        }
+        };
       }
-    },
+    }
   },
   data() {
     return {
@@ -113,100 +115,101 @@ export default {
         category: null
       },
       minSearchLength: 3
-    }
+    };
   },
   computed: {
     locationLengthOk() {
-      if(typeof this.search.location == 'string') {
-        return this.search.location.length >= this.minSearchLength
+      if (typeof this.search.location == "string") {
+        return this.search.location.length >= this.minSearchLength;
       }
-      return false
+      return false;
     },
     showLocationOptions() {
-      if(this.useBrowserLocation) {
-        return false
+      if (this.useBrowserLocation) {
+        return false;
       }
-      return this.locationLengthOk
+      return this.locationLengthOk;
     },
     compdLocationOptions() {
-      return this.showLocationOptions ? this.location_options : []
+      return this.showLocationOptions ? this.location_options : [];
     },
     hasGeolocation() {
-      return navigator.geolocation
+      return navigator.geolocation;
     }
   },
   methods: {
     onLocationSearchChange(search) {
-      this.search.location = search
+      this.search.location = search;
     },
     onCategorySearchChange(search) {
-      this.search.category = search
+      this.search.category = search;
     },
     onSelectCategory(selectCat) {
-      var selectCats = [selectCat]
+      let selectCats = [selectCat];
       if (selectCat instanceof Array) {
-        selectCats = selectCat
+        selectCats = selectCat;
       }
-      if( this.value.category == null) {
-        this.value.category = []
+      if (this.value.category == null) {
+        this.value.category = [];
       }
-      selectCats.forEach((selectCat) => {
-        if (! this.value.category.includes(selectCat)) {
-          this.value.category.push(selectCat)
+      selectCats.forEach(selectCat => {
+        if (!this.value.category.includes(selectCat)) {
+          this.value.category.push(selectCat);
         }
-      })
+      });
     },
     onRemoveCategory(removeCat) {
-      var removeCats = [removeCat]
+      let removeCats = [removeCat];
       if (removeCat instanceof Array) {
-        removeCats = removeCat
+        removeCats = removeCat;
       }
-      this.value.category = this.value.category.filter((cat) => {
-        var result = true
-        removeCats.forEach((removeCat) => {
-          if (JSON.stringify(cat) === JSON.stringify(removeCat)) { result = false }
-        })
-        return result
-      })
+      this.value.category = this.value.category.filter(cat => {
+        let result = true;
+        removeCats.forEach(removeCat => {
+          if (JSON.stringify(cat) === JSON.stringify(removeCat)) {
+            result = false;
+          }
+        });
+        return result;
+      });
     },
     onClickSearch() {
       this.$emit("updated", this.value);
     },
     onToggleBrowserLocation() {
-      this.useBrowserLocation = !this.useBrowserLocation
+      this.useBrowserLocation = !this.useBrowserLocation;
       if (this.useBrowserLocation) {
-        this.value.location = [{"currentLocation":true}]
-        this.$refs.mulselLocation.toggle()
+        this.value.location = [{ currentLocation: true }];
+        this.$refs.mulselLocation.toggle();
       }
     },
     locationLabel(location) {
       if (location.currentLocation) {
-        return 'Use my current location'
+        return "Use my current location";
       }
-      const components = []
+      const components = [];
       if (location.postcode) {
         // components.push('<pre class="location-postcode">' + location.postcode + "<pre/>")
-        components.push(location.postcode)
+        components.push(location.postcode);
       }
       if (location.locality) {
         // components.push('<pre class="location-locality">' + location.locality + "<pre/>");
-        components.push(location.locality)
+        components.push(location.locality);
       }
-      return components.join(' - ')
+      return components.join(" - ");
       // return location.locality
     },
     categoryLabel(category) {
       if (category.tag && category.tag.length > 0) {
-        return category.tag
+        return category.tag;
       }
-      return category.category
+      return category.category;
     }
   }
 };
 </script>
 
 <style scoped>
-
 .row.no-gutter {
   margin: 0;
 }
@@ -214,10 +217,10 @@ export default {
   height: 43px !important;
 }
 .form-control::placeholder {
-    color: #02909e;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+  color: #02909e;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 .btn-info {
   width: 100%;
@@ -246,18 +249,17 @@ export default {
     margin-left: 0;
   }
 }
-
 </style>
 <style>
 .search.form .multiselect__placeholder {
-    color: #02909e;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+  color: #02909e;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 .search.form .multiselect__input {
   border-bottom: 2px solid #02909e;
-  padding:0;
+  padding: 0;
 }
 
 /* .search.form .multiselect__single {
@@ -272,7 +274,7 @@ export default {
 .search.form .multiselect__content,
 .search.form .multiselect__element,
 .search.form .multiselect__option {
-  width: 100%
+  width: 100%;
 }
 
 .search.form .multiselect__option span {
@@ -289,7 +291,8 @@ export default {
   margin-right: 2px;
 }
 
-.search.form .multiselect__option--highlight:not(.multiselect__option--selected):not(.multiselect__option--group-selected)::after {
+.search.form
+  .multiselect__option--highlight:not(.multiselect__option--selected):not(.multiselect__option--group-selected)::after {
   content: "\f00c";
   font-family: "Font Awesome 5 Pro";
 }

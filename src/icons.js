@@ -1,4 +1,4 @@
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faQuestionCircle,
   faPeopleCarry,
@@ -19,8 +19,8 @@ import {
   faDirections,
   faAddressCard,
   faCheck,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons'
+  faTimes
+} from "@fortawesome/free-solid-svg-icons";
 import {
   faUsdCircle,
   faHomeHeart,
@@ -30,33 +30,33 @@ import {
   faHandHeart,
   faCars,
   faArrowToRight
-} from '@fortawesome/pro-solid-svg-icons'
+} from "@fortawesome/pro-solid-svg-icons";
 
-library.add(faQuestionCircle)
-library.add(faUsdCircle)
-library.add(faHomeHeart)
-library.add(faBedEmpty)
-library.add(faPawAlt)
-library.add(faBoxHeart)
-library.add(faPeopleCarry)
-library.add(faUsers)
-library.add(faHandHeart)
-library.add(faHeart)
-library.add(faCars)
-library.add(faShuttleVan)
-library.add(faArrowToRight)
-library.add(faLocationArrow)
-library.add(faArrowLeft)
-library.add(faArrowRight)
-library.add(faTint)
-library.add(faFireAlt)
-library.add(faListUl)
-library.add(faMap)
-library.add(faBars)
-library.add(faExternalLinkAlt)
-library.add(faPhoneSquareAlt)
-library.add(faEnvelopeSquare)
-library.add(faDirections)
-library.add(faAddressCard)
-library.add(faCheck)
-library.add(faTimes)
+library.add(faQuestionCircle);
+library.add(faUsdCircle);
+library.add(faHomeHeart);
+library.add(faBedEmpty);
+library.add(faPawAlt);
+library.add(faBoxHeart);
+library.add(faPeopleCarry);
+library.add(faUsers);
+library.add(faHandHeart);
+library.add(faHeart);
+library.add(faCars);
+library.add(faShuttleVan);
+library.add(faArrowToRight);
+library.add(faLocationArrow);
+library.add(faArrowLeft);
+library.add(faArrowRight);
+library.add(faTint);
+library.add(faFireAlt);
+library.add(faListUl);
+library.add(faMap);
+library.add(faBars);
+library.add(faExternalLinkAlt);
+library.add(faPhoneSquareAlt);
+library.add(faEnvelopeSquare);
+library.add(faDirections);
+library.add(faAddressCard);
+library.add(faCheck);
+library.add(faTimes);
